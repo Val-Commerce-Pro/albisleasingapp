@@ -26,30 +26,27 @@ const getRequestTemplate = (method: Method) => ({
 });
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const methods: Method[] = [
-    "getZahlungsweisen",
-    "getProduktgruppen",
-    "getVertragsarten",
-    "getRechtsformen",
-  ];
+  const requestUrl = new URL(request.url);
+  const method = requestUrl.searchParams.get("method");
+  console.log("method", method);
 
   try {
-    const fetchDataPromises = methods.map((method) =>
-      fetch(endPoint, getRequestTemplate(method)).then((response) => {
-        console.log(`${method} response`, response);
-        if (!response.ok) {
-          throw new Error(
-            `HTTP error! status: ${response.status} for method: ${method}`,
-          );
-        }
-        return response.json().then((data) => ({ method, data }));
-      }),
+    const methodPromise = await fetch(
+      endPoint,
+      getRequestTemplate(method as Method),
     );
-    const results = await Promise.all(fetchDataPromises);
 
-    console.log(`$results - `, results);
+    if (!methodPromise.ok) {
+      throw new Error(
+        `HTTP error! status: ${methodPromise.status} for method: ${method}`,
+      );
+    }
 
-    return json(results, {
+    const methodData = await methodPromise.json();
+
+    console.log(`$methodData - `, methodData);
+
+    return json(methodData, {
       headers: {
         "Access-Control-Allow-Origin": "*",
       },
