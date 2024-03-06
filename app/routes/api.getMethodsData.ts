@@ -45,8 +45,6 @@ export const loader: LoaderFunction = async ({ request }) => {
         return response.json().then((data) => ({ method, data }));
       }),
     );
-    console.log(`$fetchDataPromises - `, fetchDataPromises);
-
     const results = await Promise.all(fetchDataPromises);
 
     console.log(`$results - `, results);
@@ -58,7 +56,6 @@ export const loader: LoaderFunction = async ({ request }) => {
     });
   } catch (error) {
     console.error("Error fetching data:", error);
-    // Handle errors, e.g., by returning a specific error response
     throw new Response("Internal Server Error", {
       status: 500,
     });
