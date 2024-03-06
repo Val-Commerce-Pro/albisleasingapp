@@ -1,4 +1,4 @@
-import type { LoaderFunction } from "@remix-run/node";
+import type { ActionFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 
 type Method =
@@ -7,9 +7,19 @@ type Method =
   | "getVertragsarten"
   | "getRechtsformen";
 
-const endPoint = `https://testschnittstelle.albis-leasing.de/Shop`;
+type GetRate = {
+  kaufpreis: string;
+  prodgrp: string;
+  mietsz: string;
+  vertragsart: string;
+  zahlweise: string;
+};
+interface RequestBody {
+  method: Method;
+  werte?: GetRate;
+}
 
-const getRequestTemplate = (method: Method) => ({
+const getRequestTemplate = (method: Method, werte?: GetRate) => ({
   method: "POST",
   headers: {
     "Content-Type": "application/json",
@@ -20,20 +30,23 @@ const getRequestTemplate = (method: Method) => ({
     params: {
       login: "test340534@t.de",
       pwd: "Albis1234",
+      werte,
     },
     id: 1,
   }),
 });
 
-export const loader: LoaderFunction = async ({ request }) => {
-  const requestUrl = new URL(request.url);
-  const method = requestUrl.searchParams.get("method");
-  console.log("method", method);
+export const action: ActionFunction = async ({ request }) => {
+  const data = await request.json();
+  console.log("request action data", data);
+  const { method, werte }: RequestBody = data;
+
+  console.log("method - values - ", method, werte);
 
   try {
     const methodPromise = await fetch(
-      endPoint,
-      getRequestTemplate(method as Method),
+      `https://testschnittstelle.albis-leasing.de/Shop`,
+      getRequestTemplate(method, werte),
     );
 
     if (!methodPromise.ok) {
