@@ -1,281 +1,273 @@
-import { useEffect } from "react";
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
-import { useActionData, useNavigation, useSubmit } from "@remix-run/react";
+import type { LoaderFunctionArgs } from "@remix-run/node";
+import { useLoaderData, useSubmit } from "@remix-run/react";
 import {
-  Page,
-  Layout,
-  Text,
-  Card,
-  Button,
+  Badge,
   BlockStack,
   Box,
-  List,
-  Link,
-  InlineStack,
+  Button,
+  Spinner,
+  TextField,
 } from "@shopify/polaris";
+// import db from "../db.server";
 import { authenticate } from "../shopify.server";
 
+import { useState } from "react";
+import type {
+  GetProduktgruppen,
+  GetVertragsarten,
+  GetZahlungsweisen,
+} from "./types/methods";
+import type { AccessData } from "./types/pluginConfigurator";
+
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  await authenticate.admin(request);
+  const { session } = await authenticate.admin(request);
+  // const settings = await getOrCreateConfig(session.shop);
 
-  return null;
-};
+  // const consorsClient = await getConsorsClient(session.shop);
+  // const clientAuth = await consorsClient?.jwt();
 
-export const action = async ({ request }: ActionFunctionArgs) => {
-  const { admin } = await authenticate.admin(request);
-  const color = ["Red", "Orange", "Yellow", "Green"][
-    Math.floor(Math.random() * 4)
-  ];
-  const response = await admin.graphql(
-    `#graphql
-      mutation populateProduct($input: ProductInput!) {
-        productCreate(input: $input) {
-          product {
-            id
-            title
-            handle
-            status
-            variants(first: 10) {
-              edges {
-                node {
-                  id
-                  price
-                  barcode
-                  createdAt
-                }
-              }
-            }
-          }
-        }
-      }`,
-    {
-      variables: {
-        input: {
-          title: `${color} Snowboard`,
-          variants: [{ price: Math.random() * 100 }],
+  const getMethodsData = async (method: string) => {
+    try {
+      const requestBody = { method };
+      const response = await fetch(
+        `https://albisleasingapp.cpro-server.de/api/getMethodsData`,
+        {
+          method: "POST",
+          body: JSON.stringify(requestBody),
         },
-      },
-    },
-  );
-  const responseJson = await response.json();
+      );
 
-  return json({
-    product: responseJson.data?.productCreate?.product,
-  });
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Error fetching AppConfig:", error);
+    }
+  };
+  const [zahlungsweisen, produktgruppen, vertragsarten]: [
+    GetZahlungsweisen,
+    GetProduktgruppen,
+    GetVertragsarten,
+  ] = await Promise.all([
+    getMethodsData("getZahlungsweisen"),
+    getMethodsData("getProduktgruppen"),
+    getMethodsData("getVertragsarten"),
+  ]);
+
+  return {
+    vertragsarten,
+    zahlungsweisen,
+    produktgruppen,
+  };
 };
+
+// export const action = async ({ request }: ActionFunctionArgs) => {
+//   const { session } = await authenticate.admin(request);
+//   const { shop } = session;
+//   const body = await request.formData();
+
+//   const config = await db.config.update({
+//     where: { shop },
+//     data: {
+//       shop: shop,
+//       vendorId: String(body.get("vendorId")),
+//       username: String(body.get("username")),
+//       customerAccountNumber: String(body.get("customerAccountNumber")),
+//       apiKey: String(body.get("apiKey")),
+//       password: String(body.get("password")),
+//       notificationHashKey: String(body.get("notificationHashKey")),
+//     },
+//   });
+//   return config;
+// };
+
+// type AppConfig = {
+//   vendorId: string;
+//   username: string;
+//   password: string;
+//   apiKey: string;
+//   customerAccountNumber: string;
+//   notificationHashKey: string;
+// };
 
 export default function Index() {
-  const nav = useNavigation();
-  const actionData = useActionData<typeof action>();
-  const submit = useSubmit();
-  const isLoading =
-    ["loading", "submitting"].includes(nav.state) && nav.formMethod === "POST";
-  const productId = actionData?.product?.id.replace(
-    "gid://shopify/Product/",
-    "",
-  );
+  // const [savingConfig, setSavingCofig] = useState(false);
+  const [accessData, setAccessData] = useState<AccessData>({
+    apiLink: "",
+    userName: "",
+    password: "",
+  });
+  const loaderData = useLoaderData<typeof loader>();
+  console.log("loaderData", loaderData);
+  // const submit = useSubmit();
 
-  useEffect(() => {
-    if (productId) {
-      shopify.toast.show("Product created");
-    }
-  }, [productId]);
-  const generateProduct = () => submit({}, { replace: true, method: "POST" });
+  const { zahlungsweisen, produktgruppen, vertragsarten } = loaderData;
+
+  console.log("getVertragsarten", vertragsarten);
+  console.log("getZahlungsweisen", zahlungsweisen);
+  console.log("getProduktgruppen", produktgruppen);
+
+  // const [appConfig, setAppConfig] = useState<AppConfig>({
+  //   vendorId: vendorId ?? "",
+  //   username: username ?? "",
+  //   password: password ?? "",
+  //   apiKey: apiKey ?? "",
+  //   customerAccountNumber: customerAccountNumber ?? "",
+  //   notificationHashKey: notificationHashKey ?? "",
+  // });
+
+  function handleSave() {
+    // setSavingCofig(true);
+    // if (id === undefined) {
+    //   console.error("could not load ID from server, cant submit without ID");
+    // } else {
+    //   const data = {
+    //     id,
+    //     shop: shop ?? "",
+    //     ...appConfig,
+    //   };
+    //   submit(data, { method: "post" });
+    // }
+    // setSavingCofig(false);
+  }
 
   return (
-    <Page>
-      <ui-title-bar title="Remix app template">
-        <button variant="primary" onClick={generateProduct}>
-          Generate a product
-        </button>
-      </ui-title-bar>
-      <BlockStack gap="500">
-        <Layout>
-          <Layout.Section>
-            <Card>
-              <BlockStack gap="500">
-                <BlockStack gap="200">
-                  <Text as="h2" variant="headingMd">
-                    Congrats on creating a new Shopify app 🎉
-                  </Text>
-                  <Text variant="bodyMd" as="p">
-                    This embedded app template uses{" "}
-                    <Link
-                      url="https://shopify.dev/docs/apps/tools/app-bridge"
-                      target="_blank"
-                      removeUnderline
-                    >
-                      App Bridge
-                    </Link>{" "}
-                    interface examples like an{" "}
-                    <Link url="/app/additional" removeUnderline>
-                      additional page in the app nav
-                    </Link>
-                    , as well as an{" "}
-                    <Link
-                      url="https://shopify.dev/docs/api/admin-graphql"
-                      target="_blank"
-                      removeUnderline
-                    >
-                      Admin GraphQL
-                    </Link>{" "}
-                    mutation demo, to provide a starting point for app
-                    development.
-                  </Text>
-                </BlockStack>
-                <BlockStack gap="200">
-                  <Text as="h3" variant="headingMd">
-                    Get started with products
-                  </Text>
-                  <Text as="p" variant="bodyMd">
-                    Generate a product with GraphQL and get the JSON output for
-                    that product. Learn more about the{" "}
-                    <Link
-                      url="https://shopify.dev/docs/api/admin-graphql/latest/mutations/productCreate"
-                      target="_blank"
-                      removeUnderline
-                    >
-                      productCreate
-                    </Link>{" "}
-                    mutation in our API references.
-                  </Text>
-                </BlockStack>
-                <InlineStack gap="300">
-                  <Button loading={isLoading} onClick={generateProduct}>
-                    Generate a product
-                  </Button>
-                  {actionData?.product && (
-                    <Button
-                      url={`shopify:admin/products/${productId}`}
-                      target="_blank"
-                      variant="plain"
-                    >
-                      View product
-                    </Button>
-                  )}
-                </InlineStack>
-                {actionData?.product && (
-                  <Box
-                    padding="400"
-                    background="bg-surface-active"
-                    borderWidth="025"
-                    borderRadius="200"
-                    borderColor="border"
-                    overflowX="scroll"
-                  >
-                    <pre style={{ margin: 0 }}>
-                      <code>{JSON.stringify(actionData.product, null, 2)}</code>
-                    </pre>
-                  </Box>
-                )}
-              </BlockStack>
-            </Card>
-          </Layout.Section>
-          <Layout.Section variant="oneThird">
-            <BlockStack gap="500">
-              <Card>
-                <BlockStack gap="200">
-                  <Text as="h2" variant="headingMd">
-                    App template specs
-                  </Text>
-                  <BlockStack gap="200">
-                    <InlineStack align="space-between">
-                      <Text as="span" variant="bodyMd">
-                        Framework
-                      </Text>
-                      <Link
-                        url="https://remix.run"
-                        target="_blank"
-                        removeUnderline
-                      >
-                        Remix
-                      </Link>
-                    </InlineStack>
-                    <InlineStack align="space-between">
-                      <Text as="span" variant="bodyMd">
-                        Database
-                      </Text>
-                      <Link
-                        url="https://www.prisma.io/"
-                        target="_blank"
-                        removeUnderline
-                      >
-                        Prisma
-                      </Link>
-                    </InlineStack>
-                    <InlineStack align="space-between">
-                      <Text as="span" variant="bodyMd">
-                        Interface
-                      </Text>
-                      <span>
-                        <Link
-                          url="https://polaris.shopify.com"
-                          target="_blank"
-                          removeUnderline
-                        >
-                          Polaris
-                        </Link>
-                        {", "}
-                        <Link
-                          url="https://shopify.dev/docs/apps/tools/app-bridge"
-                          target="_blank"
-                          removeUnderline
-                        >
-                          App Bridge
-                        </Link>
-                      </span>
-                    </InlineStack>
-                    <InlineStack align="space-between">
-                      <Text as="span" variant="bodyMd">
-                        API
-                      </Text>
-                      <Link
-                        url="https://shopify.dev/docs/api/admin-graphql"
-                        target="_blank"
-                        removeUnderline
-                      >
-                        GraphQL API
-                      </Link>
-                    </InlineStack>
-                  </BlockStack>
-                </BlockStack>
-              </Card>
-              <Card>
-                <BlockStack gap="200">
-                  <Text as="h2" variant="headingMd">
-                    Next steps
-                  </Text>
-                  <List>
-                    <List.Item>
-                      Build an{" "}
-                      <Link
-                        url="https://shopify.dev/docs/apps/getting-started/build-app-example"
-                        target="_blank"
-                        removeUnderline
-                      >
-                        {" "}
-                        example app
-                      </Link>{" "}
-                      to get started
-                    </List.Item>
-                    <List.Item>
-                      Explore Shopify’s API with{" "}
-                      <Link
-                        url="https://shopify.dev/docs/apps/tools/graphiql-admin-api"
-                        target="_blank"
-                        removeUnderline
-                      >
-                        GraphiQL
-                      </Link>
-                    </List.Item>
-                  </List>
-                </BlockStack>
-              </Card>
-            </BlockStack>
-          </Layout.Section>
-        </Layout>
-      </BlockStack>
-    </Page>
+    <div
+      style={{
+        padding: "32px",
+        backgroundColor: "#F1F1F1",
+        width: "100%",
+        border: "1px solid red",
+      }}
+    >
+      <Box
+        background="bg-fill"
+        padding={{ md: "600" }}
+        width="400px"
+        borderRadius="300"
+      >
+        <ui-title-bar title="Zugangsdaten"> </ui-title-bar>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            marginBottom: "10px",
+          }}
+        >
+          <h2 style={{ fontWeight: "bold", fontSize: "18px" }}>Zugangsdaten</h2>
+          <img
+            src="https://cdn.shopify.com/s/files/1/0758/3137/8199/files/ConsorsFinanzLogo.png?v=1701077799"
+            alt="consors banner"
+            style={{ maxHeight: "80px", maxWidth: "160px" }}
+          />
+        </div>
+
+        <BlockStack gap={"300"}>
+          <TextField
+            id="api-link"
+            label="Albis API Link:"
+            autoComplete="off"
+            value={accessData.apiLink}
+            onChange={(value) =>
+              setAccessData((prev) => ({ ...prev, apiLink: value }))
+            }
+            onBlur={handleSave}
+          />
+          <TextField
+            id="username"
+            label="Benutzer"
+            autoComplete="off"
+            value={accessData.userName}
+            onChange={(value) =>
+              setAccessData((prev) => ({ ...prev, username: value }))
+            }
+            onBlur={handleSave}
+            requiredIndicator
+          />
+          <TextField
+            id="password"
+            label="Passwort"
+            autoComplete="off"
+            type="password"
+            value={accessData.password}
+            onChange={(value) =>
+              setAccessData((prev) => ({
+                ...prev,
+                password: value,
+              }))
+            }
+            onBlur={handleSave}
+          />
+          {/* <TextField
+            id="password"
+            label="Password"
+            autoComplete="off"
+            value={appConfig.password}
+            onChange={(value) =>
+              setAppConfig((prev) => ({ ...prev, password: value }))
+            }
+            onBlur={handleSave}
+            requiredIndicator
+          />
+          <TextField
+            id="x-api-key"
+            label="Api Key"
+            autoComplete="off"
+            value={appConfig.apiKey}
+            onChange={(value) =>
+              setAppConfig((prev) => ({ ...prev, apiKey: value }))
+            }
+            onBlur={handleSave}
+          />
+          <TextField
+            id="notification-hash-key"
+            label="Notification Hash Key"
+            autoComplete="off"
+            value={appConfig.notificationHashKey}
+            onChange={(value) =>
+              setAppConfig((prev) => ({
+                ...prev,
+                notificationHashKey: value,
+              }))
+            }
+            onBlur={handleSave}
+            requiredIndicator
+          />*/}
+        </BlockStack>
+      </Box>
+      {/* <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            marginTop: "10px",
+          }}
+        >
+          {clientDataOk ? (
+            <Badge size="medium" tone="success">
+              Credentials Success
+            </Badge>
+          ) : (
+            <Badge size="medium" tone="attention">
+              Credentials Error
+            </Badge>
+          )}
+          {savingConfig ? (
+            <div
+              style={{
+                marginRight: "25px",
+              }}
+            >
+              <Spinner size="small" accessibilityLabel="Loading Saving data" />
+            </div>
+          ) : (
+            <Button onClick={handleSave}>Save</Button>
+          )}
+        </div>
+      </Box> */}
+    </div>
   );
 }
