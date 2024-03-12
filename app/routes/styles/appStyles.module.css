@@ -1,0 +1,19 @@
+.container {
+  width: 100%;
+  max-width: 800px;
+  background-color: "#FBFBFB";
+}
+.formTitle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+}
+.formTitle h1 {
+  font-weight: 600;
+  font-size: 18px;
+}
+.formTitle p {
+  font-weight: 400;
+  font-size: 16px;
+}

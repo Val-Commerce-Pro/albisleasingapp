@@ -2,7 +2,7 @@
 
 client_id = "d26fcc8d70e2ee344e86b88ff3ea8a89"
 name = "albis"
-application_url = "https://butter-aye-scuba-friend.trycloudflare.com"
+application_url = "https://remarks-yet-spin-devil.trycloudflare.com"
 embedded = true
 
 [build]
@@ -15,9 +15,9 @@ scopes = "write_draft_orders,write_orders,write_products"
 
 [auth]
 redirect_urls = [
-  "https://butter-aye-scuba-friend.trycloudflare.com/auth/callback",
-  "https://butter-aye-scuba-friend.trycloudflare.com/auth/shopify/callback",
-  "https://butter-aye-scuba-friend.trycloudflare.com/api/auth/callback"
+  "https://remarks-yet-spin-devil.trycloudflare.com/auth/callback",
+  "https://remarks-yet-spin-devil.trycloudflare.com/auth/shopify/callback",
+  "https://remarks-yet-spin-devil.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
