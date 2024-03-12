@@ -1,0 +1,14 @@
+.sectionContainer {
+  width: 100%;
+  max-width: 700px;
+  margin-left: 32px;
+  margin-bottom: 16px;
+}
+.fieldAndLabelContainer {
+  display: flex;
+  align-items: center;
+}
+.fieldLabel {
+  width: 350px;
+  font-size: 16px;
+}
