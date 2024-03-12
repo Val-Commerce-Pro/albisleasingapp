@@ -1,5 +1,6 @@
 import type { ActionFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
+import { albisDevApiUrl } from "./utils/urls";
 
 type Method =
   | "getZahlungsweisen"
@@ -37,6 +38,11 @@ const getRequestTemplate = (method: Method, werte?: GetRate) => ({
 });
 
 export const action: ActionFunction = async ({ request }) => {
+  //check for credentials into the database
+  // if does not
+  // throw new Response("Credentials not found!", {
+  //   status: 404,
+  // });
   const data = await request.json();
   console.log("request action data", data);
   const { method, werte }: RequestBody = data;
@@ -45,7 +51,7 @@ export const action: ActionFunction = async ({ request }) => {
 
   try {
     const methodPromise = await fetch(
-      `https://testschnittstelle.albis-leasing.de/Shop`,
+      albisDevApiUrl,
       getRequestTemplate(method, werte),
     );
 
