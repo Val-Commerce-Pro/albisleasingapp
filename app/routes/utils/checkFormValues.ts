@@ -1,5 +1,5 @@
-import type { AccessData } from "../types/pluginConfigurator";
+import type { AccessDataI } from "../types/pluginConfigurator";
 
-export const checkFormValues = (formValues: AccessData) => {
+export const checkFormValues = (formValues: AccessDataI) => {
   return Object.values(formValues).every((inputValue) => !!inputValue);
 };

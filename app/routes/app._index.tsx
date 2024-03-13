@@ -77,6 +77,7 @@ export default function Index() {
     submit(data, { method: "POST" });
     //send data to action and save it into the database
   };
+  console.log("isAppActive", isAppActive);
 
   // const { zahlungsweisen, produktgruppen, vertragsarten } = loaderData;
 
