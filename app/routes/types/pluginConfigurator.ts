@@ -1,6 +1,6 @@
-export interface AccessData {
-  apiLink: string;
-  userName: string;
-  password: string;
-  _action?: string;
-}
+import type { modulEinstellungenInitialValues } from "../components/modulEinstellungen";
+import type { accessDataInitialValues } from "../components/zagangsdaten";
+
+export type AccessDataI = typeof accessDataInitialValues;
+
+export type ModulEinstellungenType = typeof modulEinstellungenInitialValues;
