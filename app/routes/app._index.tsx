@@ -1,14 +1,14 @@
 import type { ActionFunction, LoaderFunction } from "@remix-run/node";
-import { useActionData, useLoaderData } from "@remix-run/react";
+import { useActionData, useLoaderData, useSubmit } from "@remix-run/react";
 
 // import db from "../db.server";
 import { authenticate } from "../shopify.server";
 
+import type { ChangeEvent } from "react";
 import { useState } from "react";
 import { Divider } from "./components/divider";
 import { ModulAktiv } from "./components/modulAktiv";
 import { ModulEinstellungen } from "./components/modulEinstellungen";
-import { Switch } from "./components/switch";
 import { Zagangsdaten, actionZagangsdaten } from "./components/zagangsdaten";
 import styles from "./styles/appStyles.module.css";
 
@@ -27,6 +27,10 @@ export const action: ActionFunction = async ({ request }) => {
         produktgruppen,
         vertragsarten,
       };
+    case "einstellungen":
+      return "Einstellungen No Action";
+    case "modulAktiv":
+      return "modulAktiv No Action";
     default:
       return "No Action";
   }
@@ -47,6 +51,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 export default function Index() {
   //data should come from the database
   const savedCheckboxValue = true;
+
   // const [savingConfig, setSavingCofig] = useState(false);
   // const [accessData, setAccessData] = useState<AccessData>({
   //   apiLink: "",
@@ -59,9 +64,19 @@ export default function Index() {
   console.log("actionData", actionData);
   console.log("loaderData", loaderData);
   // console.log("loaderData", loaderData);
-  // const submit = useSubmit();
+  const submit = useSubmit();
 
   const [isAppActive, setIsAppActive] = useState(savedCheckboxValue ?? false);
+
+  const handleModulAktivChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    setIsAppActive((prev) => !prev);
+    const data = {
+      isAppActive,
+      _action: "modulAktiv",
+    };
+    submit(data, { method: "POST" });
+    //send data to action and save it into the database
+  };
 
   // const { zahlungsweisen, produktgruppen, vertragsarten } = loaderData;
 
@@ -101,8 +116,8 @@ export default function Index() {
       </div>
       <Divider type="main" />
       <ModulAktiv
-        getCurrentValue={setIsAppActive}
-        savedCheckboxValue={savedCheckboxValue}
+        handleOnChange={handleModulAktivChange}
+        checkboxValue={isAppActive}
       />
       {isAppActive && (
         <>

@@ -2,23 +2,20 @@ import { Switch } from "../switch";
 import styles from "./styles.module.css";
 
 type ModulAktiv = {
-  getCurrentValue: (isChecked: boolean) => void;
-  savedCheckboxValue?: boolean;
+  handleOnChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  checkboxValue: boolean;
 };
 
-export const ModulAktiv = ({
-  getCurrentValue,
-  savedCheckboxValue,
-}: ModulAktiv) => {
+export const ModulAktiv = ({ handleOnChange, checkboxValue }: ModulAktiv) => {
+  console.log("modulAkitv", checkboxValue);
   return (
     <div className={`sectionContainer ${styles.modulAktiv}`}>
-      <div className={`fieldAndLabelContainer`}>
-        <label className={`fieldLabel`}>Albis Leasing Modul Aktiv:</label>
-        <Switch
-          getCurrentValue={getCurrentValue}
-          savedCheckboxValue={savedCheckboxValue}
-        />
-      </div>
+      <Switch
+        name={"modulAktiv"}
+        label="Albis Leasing Modul Aktiv:"
+        handleOnChange={handleOnChange}
+        checkboxValue={checkboxValue}
+      />
     </div>
   );
 };

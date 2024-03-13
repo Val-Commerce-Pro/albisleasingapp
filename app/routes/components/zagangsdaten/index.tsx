@@ -1,15 +1,15 @@
 import { Form, useSubmit } from "@remix-run/react";
-import { TextField } from "@shopify/polaris";
 import { useState } from "react";
 import type {
   GetProduktgruppen,
   GetVertragsarten,
   GetZahlungsweisen,
 } from "~/routes/types/methods";
-import type { AccessData } from "~/routes/types/pluginConfigurator";
+import type { AccessDataI } from "~/routes/types/pluginConfigurator";
 import { checkFormValues } from "~/routes/utils/checkFormValues";
 import { baseServerUrl } from "~/routes/utils/urls";
 import { Divider } from "../divider";
+import { TextField } from "../textfield";
 import styles from "./styles.module.css";
 
 export const actionZagangsdaten = async () => {
@@ -43,14 +43,24 @@ export const actionZagangsdaten = async () => {
   return { zahlungsweisen, produktgruppen, vertragsarten };
 };
 
+export const accessDataInitialValues = {
+  apiLink: "",
+  username: "",
+  password: "",
+  _action: "zagangsdaten",
+};
+
 export const Zagangsdaten = () => {
   const submit = useSubmit();
-  const [accessData, setAccessData] = useState<AccessData>({
-    apiLink: "",
-    userName: "",
-    password: "",
-    _action: "zagangsdaten",
-  });
+  const [accessData, setAccessData] = useState<AccessDataI>(
+    accessDataInitialValues,
+  );
+
+  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const name = event.target.id;
+    const value = event.target.value;
+    setAccessData((prev) => ({ ...prev, [name]: value }));
+  }
 
   function handleSave() {
     if (checkFormValues(accessData)) {
@@ -62,39 +72,28 @@ export const Zagangsdaten = () => {
       <Divider title="Zugangsdaten" type="section" />
       <Form title="Zagangsdaten" method="POST" className={styles.formContainer}>
         <TextField
-          id="api-link"
+          name="apiLink"
           label="Albis API Link:"
-          autoComplete="off"
-          value={accessData.apiLink}
-          onChange={(value) =>
-            setAccessData((prev) => ({ ...prev, apiLink: value }))
-          }
-          onBlur={handleSave}
+          type="text"
+          handleOnChange={handleChange}
+          handleOnBlur={handleSave}
+          textFieldValue={accessData.apiLink}
         />
         <TextField
-          id="username"
-          label="Benutzer"
-          autoComplete="off"
-          value={accessData.userName}
-          onChange={(value) =>
-            setAccessData((prev) => ({ ...prev, userName: value }))
-          }
-          onBlur={handleSave}
-          requiredIndicator
+          name="username"
+          label="Benutzer:"
+          type="text"
+          handleOnChange={handleChange}
+          handleOnBlur={handleSave}
+          textFieldValue={accessData.username}
         />
         <TextField
-          id="password"
-          label="Passwort"
-          autoComplete="off"
+          name="password"
+          label="Passwort:"
           type="password"
-          value={accessData.password}
-          onChange={(value) =>
-            setAccessData((prev) => ({
-              ...prev,
-              password: value,
-            }))
-          }
-          onBlur={handleSave}
+          handleOnChange={handleChange}
+          handleOnBlur={handleSave}
+          textFieldValue={accessData.password}
         />
       </Form>
     </div>
