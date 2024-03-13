@@ -20,7 +20,7 @@ export const modulEinstellungenInitialValues = {
   objektVersicherung: false,
   auswahlObjektVersicherungAnzeigen: false,
   mietsonderzahlung: "",
-  eingabeSonderzahlungErmöglichen: false,
+  eingabeSonderzahlungErmoglichen: false,
   pInfoseiteZeigeAlle: false,
   antragOhneArtikelMoglich: false,
   kundeKannFinanzierungsbetragAndern: false,
@@ -36,9 +36,14 @@ export const ModulEinstellungen = () => {
   }
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-    console.log("event", event);
-    const name = event.target.id;
-    const value = event.target.value;
+    const { name, type } = event.target;
+    let value: string | boolean;
+
+    if (type === "checkbox") {
+      value = event.target.checked;
+    } else {
+      value = event.target.value;
+    }
     setModulEinstellungenData((prev) => ({ ...prev, [name]: value }));
   }
   return (
@@ -139,10 +144,10 @@ export const ModulEinstellungen = () => {
           textFieldValue={modulEinstellungenData.mietsonderzahlung}
         />
         <Switch
-          name={"eingabeSonderzahlungErmöglichen"}
+          name={"eingabeSonderzahlungErmoglichen"}
           label="Eingabe Sonderzahlung ermöglichen:"
           handleOnChange={handleChange}
-          checkboxValue={modulEinstellungenData.eingabeSonderzahlungErmöglichen}
+          checkboxValue={modulEinstellungenData.eingabeSonderzahlungErmoglichen}
         />
         <Switch
           name={"pInfoseiteZeigeAlle"}

@@ -2,7 +2,7 @@
 
 client_id = "d26fcc8d70e2ee344e86b88ff3ea8a89"
 name = "albis"
-application_url = "https://way-developed-visa-predict.trycloudflare.com"
+application_url = "https://frame-edges-wonder-dairy.trycloudflare.com"
 embedded = true
 
 [build]
@@ -15,9 +15,9 @@ scopes = "write_draft_orders,write_orders,write_products"
 
 [auth]
 redirect_urls = [
-  "https://way-developed-visa-predict.trycloudflare.com/auth/callback",
-  "https://way-developed-visa-predict.trycloudflare.com/auth/shopify/callback",
-  "https://way-developed-visa-predict.trycloudflare.com/api/auth/callback"
+  "https://frame-edges-wonder-dairy.trycloudflare.com/auth/callback",
+  "https://frame-edges-wonder-dairy.trycloudflare.com/auth/shopify/callback",
+  "https://frame-edges-wonder-dairy.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
