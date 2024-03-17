@@ -7,7 +7,7 @@ type ModulAktiv = {
 };
 
 export const ModulAktiv = ({ handleOnChange, checkboxValue }: ModulAktiv) => {
-  console.log("modulAkitv", checkboxValue);
+  // console.log("modulAkitv", checkboxValue);
   return (
     <div className={`sectionContainer ${styles.modulAktiv}`}>
       <Switch

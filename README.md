@@ -202,6 +202,7 @@ pnpm run deploy
 
 This template registers webhooks after OAuth completes, using the `afterAuth` hook when calling `shopifyApp`.
 The package calls that hook in 2 scenarios:
+
 - After installing the app
 - When an access token expires
 
@@ -214,7 +215,7 @@ That will force the OAuth process and call the `afterAuth` hook.
 
 Webhooks subscriptions created in the [Shopify admin](https://help.shopify.com/en/manual/orders/notifications/webhooks) will fail HMAC validation. This is because the webhook payload is not signed with your app's secret key.
 
-Create [webhook subscriptions]((https://shopify.dev/docs/api/shopify-app-remix/v1/guide-webhooks)) using the `shopifyApp` object instead.
+Create [webhook subscriptions](<(https://shopify.dev/docs/api/shopify-app-remix/v1/guide-webhooks)>) using the `shopifyApp` object instead.
 
 Test your webhooks with the [Shopify CLI](https://shopify.dev/docs/apps/tools/cli/commands#webhook-trigger) or by triggering events manually in the Shopify admin(e.g. Updating the product title to trigger a `PRODUCTS_UPDATE`).
 
@@ -263,3 +264,5 @@ This template uses [Remix](https://remix.run). The following Shopify tools are a
 - [App extensions](https://shopify.dev/docs/apps/app-extensions/list)
 - [Shopify Functions](https://shopify.dev/docs/api/functions)
 - [Getting started with internationalizing your app](https://shopify.dev/docs/apps/best-practices/internationalization/getting-started)
+
+docker exec -it albisleasingapp_db mysql -u root -p

@@ -7,7 +7,7 @@ import { authenticate } from "../shopify.server";
 import type { ChangeEvent } from "react";
 import { useState } from "react";
 import { getOrCreatePluginConfiguration } from "~/models/methods.server";
-import { getOrCreateModulAktiv } from "~/models/modulAktiv.server";
+import { updateOrCreateModulAktiv } from "~/models/modulAktiv.server";
 import { Divider } from "./components/divider";
 import { ModulAktiv } from "./components/modulAktiv";
 import { ModulEinstellungen } from "./components/modulEinstellungen";
@@ -25,7 +25,7 @@ export const action: ActionFunction = async ({ request }) => {
     case "modulAktiv":
       console.log("modulAktiv _action, values - ", _action, values);
 
-      const modulAktivData = await getOrCreateModulAktiv({
+      const modulAktivData = await updateOrCreateModulAktiv({
         shop: session.shop,
       });
       return modulAktivData;
@@ -52,8 +52,8 @@ export const action: ActionFunction = async ({ request }) => {
 export const loader: LoaderFunction = async ({ request }) => {
   const { session } = await authenticate.admin(request);
   const pluginConfData = await getOrCreatePluginConfiguration(session.shop);
-  console.log("pluginConfData", pluginConfData);
-  console.log("Loader function renders");
+  // console.log("pluginConfData", pluginConfData);
+  // console.log("Loader function renders");
   // const { zahlungsweisen, produktgruppen, vertragsarten } =
   //   await getAllMethodData();
 
@@ -83,15 +83,18 @@ export default function Index() {
   const [isAppActive, setIsAppActive] = useState(savedCheckboxValue ?? false);
 
   const handleModulAktivChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    console.log("handleModulAktivChange renders");
     setIsAppActive((prev) => !prev);
+
     const data = {
       isAppActive,
       _action: "modulAktiv",
     };
+    console.log("handleModulAktivChange submitted data", data);
     submit(data, { method: "POST" });
     //send data to action and save it into the database
   };
-  console.log("isAppActive", isAppActive);
+  // console.log("isAppActive", isAppActive);
 
   // const { zahlungsweisen, produktgruppen, vertragsarten } = loaderData;
 

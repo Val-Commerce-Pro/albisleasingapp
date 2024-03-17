@@ -16,7 +16,7 @@ export async function getOrCreatePluginConfiguration(shop: string) {
       ModulEinstellungen: true,
     },
   });
-  console.log("pluginConfiguratorData", pluginConfiguratorData);
+  // console.log("pluginConfiguratorData", pluginConfiguratorData);
   return { modulAktiv, pluginConfiguratorData };
 }
 

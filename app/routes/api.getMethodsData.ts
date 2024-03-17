@@ -44,10 +44,10 @@ export const action: ActionFunction = async ({ request }) => {
   //   status: 404,
   // });
   const data = await request.json();
-  console.log("request action data", data);
+  // console.log("request action data", data);
   const { method, werte }: RequestBody = data;
 
-  console.log("method - values - ", method, werte);
+  // console.log("method - values - ", method, werte);
 
   try {
     const methodPromise = await fetch(
@@ -63,7 +63,7 @@ export const action: ActionFunction = async ({ request }) => {
 
     const methodData = await methodPromise.json();
 
-    console.log(`$methodData - `, methodData);
+    // console.log(`$methodData - `, methodData);
 
     return json(methodData, {
       headers: {

@@ -37,7 +37,7 @@ export async function getModulEinstellungen(shop: string) {
         },
       },
     });
-    console.log("getModulEinstellungen ", modulAktivData);
+    // console.log("getModulEinstellungen ", modulAktivData);
     if (!modulAktivData || modulAktivData?.ModulZugangsdaten)
       return console.error("Modul Einstellungen not found");
 

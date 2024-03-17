@@ -1,21 +1,17 @@
 import db from "../db.server";
 import type { ModulAktivServer } from "./types";
 
-export async function getOrCreateModulAktiv(modulAktivData: ModulAktivServer) {
+export async function updateOrCreateModulAktiv(
+  modulAktivData: ModulAktivServer,
+) {
   try {
-    const data = await db.modulAktiv.findUnique({
-      where: { shop: modulAktivData.shop },
+    const { modulAktiv, shop } = modulAktivData;
+    const data = await db.modulAktiv.update({
+      where: { shop },
+      data: { modulAktiv },
     });
-    if (!data) {
-      const newModulAktivData = await db.modulAktiv.create({
-        data: {
-          shop: modulAktivData.shop,
-          modulAktiv: modulAktivData.modulAktiv ?? false,
-        },
-      });
-      return newModulAktivData;
-    }
-    return data;
+    console.log("updateOrCreateModulAktiv", updateOrCreateModulAktiv);
+    if (!data) return modulAktivData;
   } catch (error) {
     console.error("Create ModulAktiv failed", error);
   }
