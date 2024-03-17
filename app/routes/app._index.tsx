@@ -24,14 +24,20 @@ export const action: ActionFunction = async ({ request }) => {
   switch (_action) {
     case "modulAktiv":
       console.log("modulAktiv _action, values - ", _action, values);
+      const { modulAktiv } = values as unknown as {
+        modulAktiv: { isAppActive: boolean };
+      };
+      console.log("modulAktiv", modulAktiv);
 
       const modulAktivData = await updateOrCreateModulAktiv({
         shop: session.shop,
+        modulAktiv: modulAktiv?.isAppActive ?? false,
       });
       return modulAktivData;
 
     case "zagangsdaten":
       console.log("zagangsdaten _action, values - ", _action, values);
+
       const { zahlungsweisen, produktgruppen, vertragsarten } =
         await getAllMethodData();
 
