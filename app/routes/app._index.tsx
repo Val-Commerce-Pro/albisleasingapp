@@ -28,15 +28,15 @@ export const action: ActionFunction = async ({ request }) => {
       for (const [key, value] of Object.entries(values)) {
         console.log("key, value", key, value.valueOf());
       }
-      // console.log("values - ", { ...values });
       const { isAppActive } = values;
       console.log("isAppActive:", isAppActive);
 
       const modulAktivData = await updateOrCreateModulAktiv({
         shop: session.shop,
-        // modulAktiv: isAppActive,
+        modulAktiv: !!isAppActive,
       });
-      return modulAktivData;
+      console.log("modulAktivData RESPONSE", modulAktivData);
+      return modulAktivData ?? false;
 
     case "zagangsdaten":
       console.log("zagangsdaten _action, values - ", _action, values);

@@ -1,12 +1,15 @@
 import type {
-  // ModulAktiv,
+  ModulAktiv,
   ModulEinstellungen,
   ModulZugangsdaten,
 } from "@prisma/client";
 
-// export type ModulAktivServer = Omit<ModulAktiv, "id" | "ModulZugangsdaten">;
+export type UpdateOrCreateModulAktivServer = Omit<
+  ModulAktiv,
+  "id" | "ModulZugangsdaten"
+>;
 
-export type ModulAktivServer = {
+export type GetModulAktivServer = {
   shop: string;
   modulAktiv?: boolean;
 };
