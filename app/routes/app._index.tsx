@@ -23,13 +23,14 @@ export const action: ActionFunction = async ({ request }) => {
 
   switch (_action) {
     case "modulAktiv":
+      console.log("values", values);
       console.log(" Object.entries(values)", Object.entries(values));
       for (const [key, value] of Object.entries(values)) {
-        console.log("key, value", key, value);
+        console.log("key, value", key, value.valueOf());
       }
       // console.log("values - ", { ...values });
-      // const { isAppActive } = values;
-      // console.log("isAppActive:", isAppActive);
+      const { isAppActive } = values;
+      console.log("isAppActive:", isAppActive);
 
       const modulAktivData = await updateOrCreateModulAktiv({
         shop: session.shop,
