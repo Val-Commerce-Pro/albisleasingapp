@@ -8,6 +8,7 @@ type TextField = {
   textFieldValue: string;
   handleOnChange: (event: ChangeEvent<HTMLInputElement>) => void;
   handleOnBlur?: () => void;
+  required?: boolean;
   type?: "text" | "password";
   hidden?: boolean;
 };
@@ -18,6 +19,7 @@ export const TextField = ({
   type = "text",
   hidden = false,
   textFieldValue,
+  required = false,
   handleOnChange,
   handleOnBlur,
 }: TextField) => {
@@ -33,6 +35,7 @@ export const TextField = ({
         onBlur={handleOnBlur}
         value={textFieldValue}
         style={{ visibility: hidden ? "hidden" : "visible" }}
+        required={required}
       />
     </div>
   );

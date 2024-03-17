@@ -11,38 +11,39 @@ import { getOrCreateModulAktiv } from "~/models/modulAktiv.server";
 import { Divider } from "./components/divider";
 import { ModulAktiv } from "./components/modulAktiv";
 import { ModulEinstellungen } from "./components/modulEinstellungen";
-import { Zagangsdaten, actionZagangsdaten } from "./components/zagangsdaten";
+import { Zagangsdaten } from "./components/zagangsdaten";
 import styles from "./styles/appStyles.module.css";
+import { getAllMethodData } from "./utils/getMethodsData";
 
 export const action: ActionFunction = async ({ request }) => {
   const { session } = await authenticate.admin(request);
   const formData = await request.formData();
   const { _action, ...values } = Object.fromEntries(formData);
-  console.log("action", _action);
-  console.log("values", values);
+  console.log("action function renders");
 
   switch (_action) {
+    case "modulAktiv":
+      console.log("modulAktiv _action, values - ", _action, values);
+
+      const modulAktivData = await getOrCreateModulAktiv({
+        shop: session.shop,
+      });
+      return modulAktivData;
+
     case "zagangsdaten":
-      const { zahlungsweisen, produktgruppen, vertragsarten } =
-        await actionZagangsdaten();
       console.log("zagangsdaten _action, values - ", _action, values);
+      const { zahlungsweisen, produktgruppen, vertragsarten } =
+        await getAllMethodData();
+
       return {
         zahlungsweisen,
         produktgruppen,
         vertragsarten,
+        isCredentialsValid: zahlungsweisen && produktgruppen && vertragsarten,
       };
     case "einstellungen":
       console.log("einstellungen _action, values - ", _action, values);
       return "Einstellungen No Action";
-    case "modulAktiv":
-      console.log("modulAktiv _action, values - ", values);
-      // const getModulAktivData = async () => {
-      //   const modulAktivData = await getOrCreateModulAktiv({
-      //     shop: session.shop,
-      //   });
-      //   return;
-      // };
-      return "modulAktiv No Action";
     default:
       return "No Action";
   }
@@ -52,14 +53,13 @@ export const loader: LoaderFunction = async ({ request }) => {
   const { session } = await authenticate.admin(request);
   const pluginConfData = await getOrCreatePluginConfiguration(session.shop);
   console.log("pluginConfData", pluginConfData);
+  console.log("Loader function renders");
+  // const { zahlungsweisen, produktgruppen, vertragsarten } =
+  //   await getAllMethodData();
 
-  //Check if the credentials exists into the database, if yes, call actionZagangsdaten
-  //   return {
-  //     vertragsarten,
-  //     zahlungsweisen,
-  //     produktgruppen,
-  //   };
-  return null;
+  return {
+    pluginConfData,
+  };
 };
 
 export default function Index() {
@@ -86,7 +86,7 @@ export default function Index() {
     setIsAppActive((prev) => !prev);
     const data = {
       isAppActive,
-      formAction: "modulAktiv",
+      _action: "modulAktiv",
     };
     submit(data, { method: "POST" });
     //send data to action and save it into the database
