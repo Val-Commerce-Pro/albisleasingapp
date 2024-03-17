@@ -6,8 +6,10 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:dev.sqlite"
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+  // provider = "sqlite"
+  // url      = "file:dev.sqlite"
 }
 
 model Session {
@@ -19,4 +21,43 @@ model Session {
   expires     DateTime?
   accessToken String
   userId      BigInt?
+}
+
+model ModulAktiv {
+  id                Int                @id @default(autoincrement())
+  shop              String             @unique
+  modulAktiv        Boolean
+  ModulZugangsdaten ModulZugangsdaten?
+}
+
+model ModulZugangsdaten {
+  id                 Int                 @id @default(autoincrement())
+  apiLink            String
+  benutzer           String
+  passwort           String
+  ModulEinstellungen ModulEinstellungen?
+  modulAktivId       Int                 @unique
+  modulAktiv         ModulAktiv          @relation(fields: [modulAktivId], references: [id])
+}
+
+model ModulEinstellungen {
+  id                                 Int               @id @default(autoincrement())
+  vertragsart                        String
+  restwertInBeiTAVertrag             Boolean?
+  produktgruppe                      String
+  zahlungsweisen                     String
+  auswahlZahlungsweiseAnzeigen       Boolean
+  minLeasingsumme                    String
+  servicePauschaleNetto              String
+  albisServiceGebuhrNetto            String
+  provisionsangabe                   String
+  objektVersicherung                 Boolean
+  auswahlObjektVersicherungAnzeigen  Boolean
+  mietsonderzahlung                  String
+  eingabeSonderzahlungErmoglichen    Boolean
+  pInfoseiteZeigeAlle                Boolean
+  antragOhneArtikelMoglich           Boolean
+  kundeKannFinanzierungsbetragAndern Boolean
+  zugangsdatenId                     Int               @unique
+  zugangsdaten                       ModulZugangsdaten @relation(fields: [zugangsdatenId], references: [id])
 }
