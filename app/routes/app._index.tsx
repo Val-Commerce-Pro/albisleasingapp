@@ -23,15 +23,17 @@ export const action: ActionFunction = async ({ request }) => {
 
   switch (_action) {
     case "modulAktiv":
-      console.log("values - ", { ...values });
-      const { modulAktiv } = values as unknown as {
-        modulAktiv: { isAppActive: boolean };
-      };
-      console.log("modulAktiv", modulAktiv);
+      console.log(" Object.entries(values)", Object.entries(values));
+      for (const [key, value] of Object.entries(values)) {
+        console.log("key, value", key, value);
+      }
+      // console.log("values - ", { ...values });
+      // const { isAppActive } = values;
+      // console.log("isAppActive:", isAppActive);
 
       const modulAktivData = await updateOrCreateModulAktiv({
         shop: session.shop,
-        modulAktiv: modulAktiv?.isAppActive ?? false,
+        // modulAktiv: isAppActive,
       });
       return modulAktivData;
 
