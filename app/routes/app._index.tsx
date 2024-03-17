@@ -6,6 +6,8 @@ import { authenticate } from "../shopify.server";
 
 import type { ChangeEvent } from "react";
 import { useState } from "react";
+import { getOrCreatePluginConfiguration } from "~/models/methods.server";
+import { getOrCreateModulAktiv } from "~/models/modulAktiv.server";
 import { Divider } from "./components/divider";
 import { ModulAktiv } from "./components/modulAktiv";
 import { ModulEinstellungen } from "./components/modulEinstellungen";
@@ -13,6 +15,7 @@ import { Zagangsdaten, actionZagangsdaten } from "./components/zagangsdaten";
 import styles from "./styles/appStyles.module.css";
 
 export const action: ActionFunction = async ({ request }) => {
+  const { session } = await authenticate.admin(request);
   const formData = await request.formData();
   const { _action, ...values } = Object.fromEntries(formData);
   console.log("action", _action);
@@ -22,14 +25,23 @@ export const action: ActionFunction = async ({ request }) => {
     case "zagangsdaten":
       const { zahlungsweisen, produktgruppen, vertragsarten } =
         await actionZagangsdaten();
+      console.log("zagangsdaten _action, values - ", _action, values);
       return {
         zahlungsweisen,
         produktgruppen,
         vertragsarten,
       };
     case "einstellungen":
+      console.log("einstellungen _action, values - ", _action, values);
       return "Einstellungen No Action";
     case "modulAktiv":
+      console.log("modulAktiv _action, values - ", values);
+      // const getModulAktivData = async () => {
+      //   const modulAktivData = await getOrCreateModulAktiv({
+      //     shop: session.shop,
+      //   });
+      //   return;
+      // };
       return "modulAktiv No Action";
     default:
       return "No Action";
@@ -38,6 +50,8 @@ export const action: ActionFunction = async ({ request }) => {
 
 export const loader: LoaderFunction = async ({ request }) => {
   const { session } = await authenticate.admin(request);
+  const pluginConfData = await getOrCreatePluginConfiguration(session.shop);
+  console.log("pluginConfData", pluginConfData);
 
   //Check if the credentials exists into the database, if yes, call actionZagangsdaten
   //   return {
@@ -72,7 +86,7 @@ export default function Index() {
     setIsAppActive((prev) => !prev);
     const data = {
       isAppActive,
-      _action: "modulAktiv",
+      formAction: "modulAktiv",
     };
     submit(data, { method: "POST" });
     //send data to action and save it into the database
@@ -85,29 +99,20 @@ export default function Index() {
   // console.log("getZahlungsweisen", zahlungsweisen);
   // console.log("getProduktgruppen", produktgruppen);
 
-  // const [appConfig, setAppConfig] = useState<AppConfig>({
-  //   vendorId: vendorId ?? "",
-  //   username: username ?? "",
-  //   password: password ?? "",
-  //   apiKey: apiKey ?? "",
-  //   customerAccountNumber: customerAccountNumber ?? "",
-  //   notificationHashKey: notificationHashKey ?? "",
-  // });
-
-  function handleSave() {
-    // setSavingCofig(true);
-    // if (id === undefined) {
-    //   console.error("could not load ID from server, cant submit without ID");
-    // } else {
-    //   const data = {
-    //     id,
-    //     shop: shop ?? "",
-    //     ...appConfig,
-    //   };
-    //   submit(data, { method: "post" });
-    // }
-    // setSavingCofig(false);
-  }
+  // function handleSave() {
+  // setSavingCofig(true);
+  // if (id === undefined) {
+  //   console.error("could not load ID from server, cant submit without ID");
+  // } else {
+  //   const data = {
+  //     id,
+  //     shop: shop ?? "",
+  //     ...appConfig,
+  //   };
+  //   submit(data, { method: "post" });
+  // }
+  // setSavingCofig(false);
+  // }
 
   return (
     <div className={styles.container}>
