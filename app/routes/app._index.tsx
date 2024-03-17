@@ -23,7 +23,7 @@ export const action: ActionFunction = async ({ request }) => {
 
   switch (_action) {
     case "modulAktiv":
-      console.log("modulAktiv _action, values - ", _action, values);
+      console.log("values - ", { ...values });
       const { modulAktiv } = values as unknown as {
         modulAktiv: { isAppActive: boolean };
       };
