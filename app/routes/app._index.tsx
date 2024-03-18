@@ -20,18 +20,20 @@ export const action: ActionFunction = async ({ request }) => {
   const { session } = await authenticate.admin(request);
   const formData = await request.formData();
   const { _action, ...values } = Object.fromEntries(formData);
-  console.log("action function renders");
 
   switch (_action) {
     case "modulAktiv":
       console.log("values", values);
 
       const { isAppActive } = values;
+      console.log("values[isAppActive]", values["isAppActive"]);
       console.log("isAppActive:", isAppActive);
+      const isModulAktiv = !!isAppActive;
+      console.log("isModulAktiv:", isModulAktiv);
 
       const modulAktivData = await updateOrCreateModulAktiv({
         shop: session.shop,
-        isModulAktiv: !!isAppActive,
+        isModulAktiv,
       });
       console.log("modulAktivData RESPONSE", modulAktivData);
       return modulAktivData ?? false;

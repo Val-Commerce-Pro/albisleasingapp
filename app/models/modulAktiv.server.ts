@@ -19,6 +19,7 @@ export async function updateOrCreateModulAktiv(
   modulAktivData: UpdateOrCreateModulAktivServer,
 ) {
   try {
+    console.log("updateOrCreateModulAktiv modulAktivData", modulAktivData);
     const data = await updateModulAktiv(modulAktivData);
     console.log("updateOrCreateModulAktiv", data);
     if (data) return data;
