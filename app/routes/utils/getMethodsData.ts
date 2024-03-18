@@ -3,11 +3,15 @@ import type {
   GetVertragsarten,
   GetZahlungsweisen,
 } from "../types/methods";
+import type { ModulZugangsdatenData } from "../types/pluginConfigurator";
 import { baseServerUrl } from "./urls";
 
-const getMethodsData = async (method: string) => {
+const getMethodsData = async (
+  method: string,
+  credentials: ModulZugangsdatenData,
+) => {
   try {
-    const requestBody = { method };
+    const requestBody = { method, credentials };
     const response = await fetch(`${baseServerUrl}/api/getMethodsData`, {
       method: "POST",
       headers: {
@@ -27,15 +31,15 @@ const getMethodsData = async (method: string) => {
   }
 };
 
-export const getAllMethodData = async () => {
+export const getAllMethodData = async (credentials: ModulZugangsdatenData) => {
   const [zahlungsweisen, produktgruppen, vertragsarten]: [
     GetZahlungsweisen,
     GetProduktgruppen,
     GetVertragsarten,
   ] = await Promise.all([
-    getMethodsData("getZahlungsweisen"),
-    getMethodsData("getProduktgruppen"),
-    getMethodsData("getVertragsarten"),
+    getMethodsData("getZahlungsweisen", credentials),
+    getMethodsData("getProduktgruppen", credentials),
+    getMethodsData("getVertragsarten", credentials),
   ]);
 
   return { zahlungsweisen, produktgruppen, vertragsarten };

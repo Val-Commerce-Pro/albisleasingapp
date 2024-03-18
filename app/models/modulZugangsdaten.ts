@@ -1,73 +1,72 @@
-// import db from "../db.server";
-// import { getModulAktiv } from "./modulAktiv.server";
-// import type { ModulZugangsdatenServer } from "./types";
+import type { ModulZugangsdatenData } from "~/routes/types/pluginConfigurator";
+import db from "../db.server";
 
-// export async function getOrCreateModulZugangsdaten(
-//   shop: string,
-//   modulZugangsdaten?: ModulZugangsdatenServer,
-// ) {
-//   try {
-//     const data = await getModulZugangsdaten(shop);
-//     console.log("createModulZugangsdaten", data);
+async function createModulZugangsdaten(
+  modulAktivId: number,
+  modulZugangsdaten: ModulZugangsdatenData,
+) {
+  const newModulZugangsdaten = await db.modulZugangsdaten.create({
+    data: {
+      apiLink: modulZugangsdaten.apiLink,
+      benutzer: modulZugangsdaten.username,
+      passwort: modulZugangsdaten.password,
+      modulAktiv: {
+        connect: { id: modulAktivId },
+      },
+    },
+  });
+  return newModulZugangsdaten;
+}
+async function updateModulZugangsdaten(
+  modulAktivId: number,
+  modulZugangsdaten: ModulZugangsdatenData,
+) {
+  try {
+    const updatedData = await db.modulZugangsdaten.update({
+      where: { id: modulAktivId },
+      data: { ...modulZugangsdaten },
+    });
+    return updatedData;
+  } catch (error) {
+    console.error("Update Zugangsdaten failed", error);
+  }
+}
 
-// if (!data?.modulAktivData) {
-//   const newModulZugangsdatenData = await db.modulZugangsdaten.create({
-//     data: {
-//       ...modulZugangsdaten,
-//       modulAktiv: {
-//         connect: { id: data.id },
-//       },
-//     },
-//   });
-//       return data;
-//     }
+export async function updateOrCreateModulZugangsdaten(
+  shop: string,
+  modulZugangsdaten: ModulZugangsdatenData,
+) {
+  try {
+    const data = await getModulZugangsdaten(shop);
+    if (!data) return null;
 
-//     const updatedData = await db.modulZugangsdaten.update({
-//       where: { id: data.id },
-//       data: { ...modulZugangsdaten },
-//     });
-//     return updatedData;
-//   } catch (error) {
-//     console.error("Create ModulZugangsdaten failed", error);
-//   }
-// }
+    const updatedData = await updateModulZugangsdaten(
+      data.id,
+      modulZugangsdaten,
+    );
+    console.log("createModulZugangsdaten", updatedData);
+    if (updatedData) return updatedData;
 
-// export async function getModulZugangsdaten(shop: string) {
-//   try {
-//     const modulAktivData = await db.modulAktiv.findUnique({
-//       where: { shop },
-//       include: {
-//         ModulZugangsdaten: true,
-//       },
-//     });
-//     if (!modulAktivData) {
-//       console.error("Modul Aktiv not found");
-//       return null;
-//     }
+    const newModulZugangsdaten = await createModulZugangsdaten(
+      data.id,
+      modulZugangsdaten,
+    );
+    return newModulZugangsdaten;
+  } catch (error) {
+    console.error("Update Or Create ModulZugangsdaten failed", error);
+  }
+}
 
-//     return { modulAktivData };
-//   } catch (error) {
-//     console.error("Create Zugangsdaten failed", error);
-//   }
-// }
-
-// export async function updateModulZugangsdaten(
-//   shop: string,
-//   modulZugangsdaten: ModulZugangsdatenServer,
-// ) {
-//   try {
-//     const data = await getModulZugangsdaten(shop);
-//     if (!data) {
-//       console.error("Modul Zugangsdaten not found");
-//       return null;
-//     }
-
-//     const updatedData = await db.modulZugangsdaten.update({
-//       where: { id: data.id },
-//       data: { ...modulZugangsdaten },
-//     });
-//     return updatedData;
-//   } catch (error) {
-//     console.error("Update Zugangsdaten failed", error);
-//   }
-// }
+export async function getModulZugangsdaten(shop: string) {
+  try {
+    const modulAktivData = await db.modulAktiv.findUnique({
+      where: { shop },
+      include: {
+        ModulZugangsdaten: true,
+      },
+    });
+    return modulAktivData;
+  } catch (error) {
+    console.error("Get Zugangsdaten failed", error);
+  }
+}

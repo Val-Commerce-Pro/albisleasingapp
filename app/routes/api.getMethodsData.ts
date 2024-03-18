@@ -1,6 +1,6 @@
 import type { ActionFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { albisDevApiUrl } from "./utils/urls";
+import type { ModulZugangsdatenData } from "./types/pluginConfigurator";
 
 type Method =
   | "getZahlungsweisen"
@@ -17,21 +17,22 @@ type GetRate = {
 };
 interface RequestBody {
   method: Method;
+  credentials: ModulZugangsdatenData;
   werte?: GetRate;
 }
 
-const getRequestTemplate = (method: Method, werte?: GetRate) => ({
+const getRequestTemplate = (template: RequestBody) => ({
   method: "POST",
   headers: {
     "Content-Type": "application/json",
   },
   body: JSON.stringify({
     jsonrpc: "2.0",
-    method: method,
+    method: template.method,
     params: {
-      login: "test340534@t.de",
-      pwd: "Albis1234",
-      werte,
+      login: template.credentials.username,
+      pwd: template.credentials.password,
+      werte: template?.werte,
     },
     id: 1,
   }),
@@ -45,14 +46,14 @@ export const action: ActionFunction = async ({ request }) => {
   // });
   const data = await request.json();
   // console.log("request action data", data);
-  const { method, werte }: RequestBody = data;
+  const { method, credentials, werte }: RequestBody = data;
 
   // console.log("method - values - ", method, werte);
 
   try {
     const methodPromise = await fetch(
-      albisDevApiUrl,
-      getRequestTemplate(method, werte),
+      credentials.apiLink,
+      getRequestTemplate({ method, credentials, werte }),
     );
 
     if (!methodPromise.ok) {

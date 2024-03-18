@@ -1,15 +1,15 @@
 import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { useActionData, useLoaderData, useSubmit } from "@remix-run/react";
 
-// import db from "../db.server";
 import { authenticate } from "../shopify.server";
 
 import type { ChangeEvent } from "react";
 import { useState } from "react";
-// import type { PluginConfiguratorMockData } from "~/mockData/pluginConfiguratorMockData";
+
 import type { PluginConfData } from "~/mockData/pluginConfiguratorMockData";
 import { getPluginConf } from "~/models/methods.server";
 import { updateOrCreateModulAktiv } from "~/models/modulAktiv.server";
+import { updateOrCreateModulZugangsdaten } from "~/models/modulZugangsdaten";
 import { Divider } from "./components/divider";
 import { ModulAktiv } from "./components/modulAktiv";
 import { ModulEinstellungen } from "./components/modulEinstellungen";
@@ -35,22 +35,31 @@ export const action: ActionFunction = async ({ request }) => {
       console.log("zagangsdaten _action, values - ", _action, values);
       const castedValues = Object.entries(values).reduce(
         (acc, [key, value]) => {
-          acc[key] = value.toString(); // Convert each FormDataEntryValue to string
+          acc[key] = value.toString();
           return acc;
         },
         {} as { [key: string]: string },
       );
       const credentials = castedValues as ModulZugangsdatenData;
-      console.log("credentials zagangsdaten", credentials);
+
+      await updateOrCreateModulZugangsdaten(session.shop, credentials);
 
       const { zahlungsweisen, produktgruppen, vertragsarten } =
-        await getAllMethodData();
+        await getAllMethodData(credentials);
+
+      console.log(
+        " zahlungsweisen, produktgruppen, vertragsarten",
+        zahlungsweisen,
+        produktgruppen,
+        vertragsarten,
+      );
 
       return {
         zahlungsweisen,
         produktgruppen,
         vertragsarten,
-        credentialsValid: zahlungsweisen && produktgruppen && vertragsarten,
+        credentialsValid:
+          !!zahlungsweisen && !!produktgruppen && !!vertragsarten,
       };
     case "einstellungen":
       console.log("einstellungen _action, values - ", _action, values);
