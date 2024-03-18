@@ -19,13 +19,10 @@ export async function updateOrCreateModulAktiv(
   modulAktivData: UpdateOrCreateModulAktivServer,
 ) {
   try {
-    console.log("updateOrCreateModulAktiv modulAktivData", modulAktivData);
     const data = await updateModulAktiv(modulAktivData);
-    console.log("updateOrCreateModulAktiv", data);
     if (data) return data;
 
     const newModulAktiv = createModulAktiv(modulAktivData);
-    console.log("newModulAktiv", newModulAktiv);
     return newModulAktiv;
   } catch (error) {
     console.error("Create ModulAktiv failed", error);

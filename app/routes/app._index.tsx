@@ -15,6 +15,7 @@ import { ModulAktiv } from "./components/modulAktiv";
 import { ModulEinstellungen } from "./components/modulEinstellungen";
 import { Zagangsdaten } from "./components/zagangsdaten";
 import styles from "./styles/appStyles.module.css";
+import type { ModulZugangsdatenData } from "./types/pluginConfigurator";
 import { getAllMethodData } from "./utils/getMethodsData";
 
 export const action: ActionFunction = async ({ request }) => {
@@ -25,17 +26,22 @@ export const action: ActionFunction = async ({ request }) => {
   switch (_action) {
     case "modulAktiv":
       const isModulAktiv: boolean = values["isAppActive"] === "true";
-      console.log("isModulAktiv:", isModulAktiv);
-
       const modulAktivData = await updateOrCreateModulAktiv({
         shop: session.shop,
         isModulAktiv,
       });
-      console.log("modulAktivData RESPONSE", modulAktivData);
       return modulAktivData ?? false;
-
     case "zagangsdaten":
       console.log("zagangsdaten _action, values - ", _action, values);
+      const castedValues = Object.entries(values).reduce(
+        (acc, [key, value]) => {
+          acc[key] = value.toString(); // Convert each FormDataEntryValue to string
+          return acc;
+        },
+        {} as { [key: string]: string },
+      );
+      const credentials = castedValues as ModulZugangsdatenData;
+      console.log("credentials zagangsdaten", credentials);
 
       const { zahlungsweisen, produktgruppen, vertragsarten } =
         await getAllMethodData();
@@ -44,7 +50,7 @@ export const action: ActionFunction = async ({ request }) => {
         zahlungsweisen,
         produktgruppen,
         vertragsarten,
-        isCredentialsValid: zahlungsweisen && produktgruppen && vertragsarten,
+        credentialsValid: zahlungsweisen && produktgruppen && vertragsarten,
       };
     case "einstellungen":
       console.log("einstellungen _action, values - ", _action, values);
@@ -53,10 +59,6 @@ export const action: ActionFunction = async ({ request }) => {
       return "No Action";
   }
 };
-
-// type LoaderResponse = {
-//   pluginConfData: PluginConfiguratorMockData | string;
-// };
 
 export const loader: LoaderFunction = async ({
   request,
@@ -72,10 +74,6 @@ export const loader: LoaderFunction = async ({
   //   await getAllMethodData();
 
   return { modulAktivData };
-
-  // return {
-  //   pluginConfData,
-  // };
 };
 
 export default function Index() {
