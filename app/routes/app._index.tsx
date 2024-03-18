@@ -6,7 +6,6 @@ import { authenticate } from "../shopify.server";
 import type { ChangeEvent } from "react";
 import { useState } from "react";
 
-import type { PluginConfData } from "~/mockData/pluginConfiguratorMockData";
 import { getPluginConf } from "~/models/methods.server";
 import { updateOrCreateModulAktiv } from "~/models/modulAktiv.server";
 import { updateOrCreateModulZugangsdaten } from "~/models/modulZugangsdaten";
@@ -15,7 +14,11 @@ import { ModulAktiv } from "./components/modulAktiv";
 import { ModulEinstellungen } from "./components/modulEinstellungen";
 import { Zagangsdaten } from "./components/zagangsdaten";
 import styles from "./styles/appStyles.module.css";
-import type { ModulZugangsdatenData } from "./types/pluginConfigurator";
+import type {
+  ModulAktivData,
+  ModulZugangsdatenData,
+  PluginConfData,
+} from "./types/pluginConfigurator";
 import { getAllMethodData } from "./utils/getMethodsData";
 
 export const action: ActionFunction = async ({ request }) => {
@@ -68,30 +71,45 @@ export const action: ActionFunction = async ({ request }) => {
 
 export const loader: LoaderFunction = async ({
   request,
-}): Promise<PluginConfData | null> => {
+}): Promise<PluginConfData | ModulAktivData | null> => {
   const { session } = await authenticate.admin(request);
   const pluginConfData = await getPluginConf(session.shop);
-  if (!pluginConfData || !pluginConfData.modulAktivData) return null;
+  if (!pluginConfData) return null;
+
   const { modulAktivData } = pluginConfData;
+  if (!modulAktivData?.isModulAktiv) return modulAktivData;
+
+  const { ModulZugangsdaten, isModulAktiv, shop } = modulAktivData;
+
   console.log("pluginConfData", pluginConfData);
   // console.log("pluginConfData", pluginConfData);
   // console.log("Loader function renders");
   // const { zahlungsweisen, produktgruppen, vertragsarten } =
   //   await getAllMethodData();
 
-  return { modulAktivData };
+  return {
+    modulAktiv: {
+      isModulAktiv,
+      shop,
+    },
+    modulZugangsdaten: {
+      apiLink: ModulZugangsdaten?.apiLink ?? "",
+      benutzer: ModulZugangsdaten?.benutzer ?? "",
+      passwort: ModulZugangsdaten?.passwort ?? "",
+    },
+  };
 };
 
 export default function Index() {
   const loaderData = useLoaderData<PluginConfData>();
-  const { modulAktivData } = loaderData;
+  const { modulAktiv, modulZugangsdaten } = loaderData;
   const actionData = useActionData<typeof action>();
   console.log("actionData", actionData);
   console.log("loaderData", loaderData);
   // console.log("loaderData", loaderData);
   const submit = useSubmit();
 
-  const [isAppActive, setIsAppActive] = useState(modulAktivData.isModulAktiv);
+  const [isAppActive, setIsAppActive] = useState(modulAktiv.isModulAktiv);
 
   const handleModulAktivChange = (e: ChangeEvent<HTMLInputElement>): void => {
     console.log("handleModulAktivChange renders");
@@ -142,7 +160,9 @@ export default function Index() {
       />
       {isAppActive && (
         <>
-          <Zagangsdaten />
+          <Zagangsdaten
+            initialValues={modulZugangsdaten as ModulZugangsdatenData}
+          />
           <ModulEinstellungen />
         </>
       )}

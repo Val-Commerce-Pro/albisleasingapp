@@ -5,6 +5,9 @@ import db from "../db.server";
 export async function getPluginConf(shop: string) {
   const modulAktivData = await db.modulAktiv.findUnique({
     where: { shop },
+    include: {
+      ModulZugangsdaten: true,
+    },
     // include: {
     //   ModulZugangsdaten: {
     //     include: {

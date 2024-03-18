@@ -6,12 +6,16 @@ import { Divider } from "../divider";
 import { TextField } from "../textfield";
 import styles from "./styles.module.css";
 
-export const Zagangsdaten = () => {
+type ZagangsdatenProps = {
+  initialValues?: ModulZugangsdatenData;
+};
+
+export const Zagangsdaten = ({ initialValues }: ZagangsdatenProps) => {
   const submit = useSubmit();
   const [accessData, setAccessData] = useState<ModulZugangsdatenData>({
-    apiLink: "",
-    benutzer: "",
-    passwort: "",
+    apiLink: initialValues?.apiLink ?? "",
+    benutzer: initialValues?.benutzer ?? "",
+    passwort: initialValues?.passwort ?? "",
   });
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
