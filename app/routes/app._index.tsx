@@ -47,12 +47,9 @@ export const action: ActionFunction = async ({ request }) => {
       const { zahlungsweisen, produktgruppen, vertragsarten } =
         await getAllMethodData(credentials);
 
-      console.log(
-        " zahlungsweisen, produktgruppen, vertragsarten",
-        zahlungsweisen,
-        produktgruppen,
-        vertragsarten,
-      );
+      if (!zahlungsweisen || !produktgruppen || !vertragsarten) {
+        return { error: true };
+      }
 
       return {
         zahlungsweisen,

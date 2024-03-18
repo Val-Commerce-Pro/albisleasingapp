@@ -7,9 +7,7 @@ async function createModulZugangsdaten(
 ) {
   const newModulZugangsdaten = await db.modulZugangsdaten.create({
     data: {
-      apiLink: modulZugangsdaten.apiLink,
-      benutzer: modulZugangsdaten.username,
-      passwort: modulZugangsdaten.password,
+      ...modulZugangsdaten,
       modulAktiv: {
         connect: { id: modulAktivId },
       },

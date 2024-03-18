@@ -1,5 +1,8 @@
-import type { AccessDataI } from "../types/pluginConfigurator";
+import type { ModulZugangsdatenData } from "../types/pluginConfigurator";
 
-export const checkFormValues = (formValues: AccessDataI) => {
-  return Object.values(formValues).every((inputValue) => !!inputValue);
+export const checkFormValues = (formValues: ModulZugangsdatenData) => {
+  const isFormValid = Object.values(formValues).every(
+    (inputValue) => !!inputValue,
+  );
+  return isFormValid;
 };

@@ -1,23 +1,18 @@
 import { Form, useSubmit } from "@remix-run/react";
 import { useState } from "react";
-import type { AccessDataI } from "~/routes/types/pluginConfigurator";
+import type { ModulZugangsdatenData } from "~/routes/types/pluginConfigurator";
 import { checkFormValues } from "~/routes/utils/checkFormValues";
 import { Divider } from "../divider";
 import { TextField } from "../textfield";
 import styles from "./styles.module.css";
 
-export const accessDataInitialValues = {
-  apiLink: "",
-  username: "",
-  password: "",
-  _action: "zagangsdaten",
-};
-
 export const Zagangsdaten = () => {
   const submit = useSubmit();
-  const [accessData, setAccessData] = useState<AccessDataI>(
-    accessDataInitialValues,
-  );
+  const [accessData, setAccessData] = useState<ModulZugangsdatenData>({
+    apiLink: "",
+    benutzer: "",
+    passwort: "",
+  });
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     const name = event.target.id;
@@ -27,7 +22,7 @@ export const Zagangsdaten = () => {
 
   function handleSave() {
     if (checkFormValues(accessData)) {
-      submit({ ...accessData }, { method: "post" });
+      submit({ ...accessData, _action: "zagangsdaten" }, { method: "POST" });
     }
   }
   return (
@@ -49,7 +44,7 @@ export const Zagangsdaten = () => {
           type="text"
           handleOnChange={handleChange}
           handleOnBlur={handleSave}
-          textFieldValue={accessData.username}
+          textFieldValue={accessData.benutzer}
           required
         />
         <TextField
@@ -58,7 +53,7 @@ export const Zagangsdaten = () => {
           type="password"
           handleOnChange={handleChange}
           handleOnBlur={handleSave}
-          textFieldValue={accessData.password}
+          textFieldValue={accessData.passwort}
           required
         />
       </Form>
