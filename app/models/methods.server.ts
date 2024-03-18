@@ -3,12 +3,23 @@ import { pluginConfiguratorMockData } from "../mockData/pluginConfiguratorMockDa
 
 const { modulAktiv } = pluginConfiguratorMockData;
 export async function getOrCreatePluginConfiguration(shop: string) {
-  const modulAktivData = await db.modulAktiv.findUnique({ where: { shop } });
+  const modulAktivData = await db.modulAktiv.findUnique({
+    where: { shop },
+    include: {
+      ModulZugangsdaten: {
+        include: {
+          ModulEinstellungen: true,
+        },
+      },
+    },
+  });
   if (!modulAktivData) {
     const entry = await createMockPluginConfiguration(shop);
     return entry;
   }
+  console.log("getOrCreatePluginConfiguration", modulAktivData);
   const { modulAktiv, id } = modulAktivData;
+
   if (!modulAktiv) return modulAktiv;
   const pluginConfiguratorData = await db.modulZugangsdaten.findUnique({
     where: { modulAktivId: id },
@@ -29,10 +40,8 @@ export async function createMockPluginConfiguration(shop: string) {
     modulAktiv,
     ModulZugangsdaten: {
       create: {
-        ...modulZugangsdaten,
-        ModulEinstellungen: {
-          create: modulEinstellungen,
-        },
+        modulZugangsdaten,
+        ModulEinstellungen: modulEinstellungen,
       },
     },
   };

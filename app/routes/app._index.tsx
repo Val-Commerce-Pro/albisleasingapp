@@ -6,6 +6,7 @@ import { authenticate } from "../shopify.server";
 
 import type { ChangeEvent } from "react";
 import { useState } from "react";
+// import type { PluginConfiguratorMockData } from "~/mockData/pluginConfiguratorMockData";
 import { getOrCreatePluginConfiguration } from "~/models/methods.server";
 import { updateOrCreateModulAktiv } from "~/models/modulAktiv.server";
 import { Divider } from "./components/divider";
@@ -24,10 +25,7 @@ export const action: ActionFunction = async ({ request }) => {
   switch (_action) {
     case "modulAktiv":
       console.log("values", values);
-      console.log(" Object.entries(values)", Object.entries(values));
-      for (const [key, value] of Object.entries(values)) {
-        console.log("key, value", key, value.valueOf());
-      }
+
       const { isAppActive } = values;
       console.log("isAppActive:", isAppActive);
 
@@ -57,6 +55,10 @@ export const action: ActionFunction = async ({ request }) => {
       return "No Action";
   }
 };
+
+// type LoaderResponse = {
+//   pluginConfData: PluginConfiguratorMockData | string;
+// };
 
 export const loader: LoaderFunction = async ({ request }) => {
   const { session } = await authenticate.admin(request);

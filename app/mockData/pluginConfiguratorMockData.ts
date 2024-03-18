@@ -24,3 +24,5 @@ export const pluginConfiguratorMockData = {
     kundeKannFinanzierungsbetragAndern: true,
   },
 };
+
+export type PluginConfiguratorMockData = typeof pluginConfiguratorMockData;
