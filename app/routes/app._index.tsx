@@ -23,12 +23,7 @@ export const action: ActionFunction = async ({ request }) => {
 
   switch (_action) {
     case "modulAktiv":
-      console.log("values", values);
-
-      const { isAppActive } = values;
-      console.log("values[isAppActive]", values["isAppActive"]);
-      console.log("isAppActive:", isAppActive);
-      const isModulAktiv = !!isAppActive;
+      const isModulAktiv: boolean = values["isAppActive"] === "true";
       console.log("isModulAktiv:", isModulAktiv);
 
       const modulAktivData = await updateOrCreateModulAktiv({
