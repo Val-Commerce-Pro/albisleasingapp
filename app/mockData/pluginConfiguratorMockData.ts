@@ -26,3 +26,11 @@ export const pluginConfiguratorMockData = {
 };
 
 export type PluginConfiguratorMockData = typeof pluginConfiguratorMockData;
+
+export type PluginConfData = {
+  modulAktivData: {
+    id: number;
+    shop: string;
+    isModulAktiv: boolean;
+  };
+};

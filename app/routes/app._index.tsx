@@ -7,6 +7,7 @@ import { authenticate } from "../shopify.server";
 import type { ChangeEvent } from "react";
 import { useState } from "react";
 // import type { PluginConfiguratorMockData } from "~/mockData/pluginConfiguratorMockData";
+import type { PluginConfData } from "~/mockData/pluginConfiguratorMockData";
 import { getPluginConf } from "~/models/methods.server";
 import { updateOrCreateModulAktiv } from "~/models/modulAktiv.server";
 import { Divider } from "./components/divider";
@@ -57,29 +58,36 @@ export const action: ActionFunction = async ({ request }) => {
 //   pluginConfData: PluginConfiguratorMockData | string;
 // };
 
-export const loader: LoaderFunction = async ({ request }) => {
+export const loader: LoaderFunction = async ({
+  request,
+}): Promise<PluginConfData | null> => {
   const { session } = await authenticate.admin(request);
   const pluginConfData = await getPluginConf(session.shop);
+  if (!pluginConfData || !pluginConfData.modulAktivData) return null;
+  const { modulAktivData } = pluginConfData;
+  console.log("pluginConfData", pluginConfData);
   // console.log("pluginConfData", pluginConfData);
   // console.log("Loader function renders");
   // const { zahlungsweisen, produktgruppen, vertragsarten } =
   //   await getAllMethodData();
 
-  return pluginConfData;
+  return { modulAktivData };
+
   // return {
   //   pluginConfData,
   // };
 };
 
 export default function Index() {
-  const loaderData = useLoaderData<typeof loader>();
+  const loaderData = useLoaderData<PluginConfData>();
+  const { modulAktivData } = loaderData;
   const actionData = useActionData<typeof action>();
   console.log("actionData", actionData);
   console.log("loaderData", loaderData);
   // console.log("loaderData", loaderData);
   const submit = useSubmit();
 
-  const [isAppActive, setIsAppActive] = useState(false);
+  const [isAppActive, setIsAppActive] = useState(modulAktivData.isModulAktiv);
 
   const handleModulAktivChange = (e: ChangeEvent<HTMLInputElement>): void => {
     console.log("handleModulAktivChange renders");
