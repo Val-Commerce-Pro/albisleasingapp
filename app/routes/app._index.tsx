@@ -7,7 +7,7 @@ import { authenticate } from "../shopify.server";
 import type { ChangeEvent } from "react";
 import { useState } from "react";
 // import type { PluginConfiguratorMockData } from "~/mockData/pluginConfiguratorMockData";
-// import { getOrCreatePluginConfiguration } from "~/models/methods.server";
+import { getPluginConf } from "~/models/methods.server";
 import { updateOrCreateModulAktiv } from "~/models/modulAktiv.server";
 import { Divider } from "./components/divider";
 import { ModulAktiv } from "./components/modulAktiv";
@@ -61,14 +61,14 @@ export const action: ActionFunction = async ({ request }) => {
 // };
 
 export const loader: LoaderFunction = async ({ request }) => {
-  // const { session } = await authenticate.admin(request);
-  // const pluginConfData = await getOrCreatePluginConfiguration(session.shop);
+  const { session } = await authenticate.admin(request);
+  const pluginConfData = await getPluginConf(session.shop);
   // console.log("pluginConfData", pluginConfData);
   // console.log("Loader function renders");
   // const { zahlungsweisen, produktgruppen, vertragsarten } =
   //   await getAllMethodData();
 
-  return "loader";
+  return pluginConfData;
   // return {
   //   pluginConfData,
   // };
@@ -90,7 +90,7 @@ export default function Index() {
     setIsAppActive(e.target.checked);
 
     const data = {
-      isAppActive,
+      isAppActive: e.target.checked,
       _action: "modulAktiv",
     };
     console.log("handleModulAktivChange submitted data", data);

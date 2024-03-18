@@ -1,35 +1,35 @@
-// import db from "../db.server";
+import db from "../db.server";
 // import { pluginConfiguratorMockData } from "../mockData/pluginConfiguratorMockData";
 
 // const { modulAktiv } = pluginConfiguratorMockData;
-// export async function getOrCreatePluginConfiguration(shop: string) {
-//   const modulAktivData = await db.modulAktiv.findUnique({
-//     where: { shop },
-//     include: {
-//       ModulZugangsdaten: {
-//         include: {
-//           ModulEinstellungen: true,
-//         },
-//       },
-//     },
-//   });
-//   if (!modulAktivData) {
-//     const entry = await createMockPluginConfiguration(shop);
-//     return entry;
-//   }
-//   console.log("getOrCreatePluginConfiguration", modulAktivData);
-//   const { modulAktiv, id } = modulAktivData;
+export async function getPluginConf(shop: string) {
+  const modulAktivData = await db.modulAktiv.findUnique({
+    where: { shop },
+    // include: {
+    //   ModulZugangsdaten: {
+    //     include: {
+    //       ModulEinstellungen: true,
+    //     },
+    //   },
+    // },
+  });
+  // if (!modulAktivData) {
+  //   const entry = await createMockPluginConfiguration(shop);
+  //   return entry;
+  // }
+  // console.log("getOrCreatePluginConfiguration", modulAktivData);
+  // const { modulAktiv, id } = modulAktivData;
 
-//   if (!modulAktiv) return modulAktiv;
-//   const pluginConfiguratorData = await db.modulZugangsdaten.findUnique({
-//     where: { modulAktivId: id },
-//     include: {
-//       ModulEinstellungen: true,
-//     },
-//   });
-//   // console.log("pluginConfiguratorData", pluginConfiguratorData);
-//   return { modulAktiv, pluginConfiguratorData };
-// }
+  // if (!modulAktiv) return modulAktiv;
+  // const pluginConfiguratorData = await db.modulZugangsdaten.findUnique({
+  //   where: { modulAktivId: id },
+  //   include: {
+  //     ModulEinstellungen: true,
+  //   },
+  // });
+  // console.log("pluginConfiguratorData", pluginConfiguratorData);
+  return { modulAktivData };
+}
 
 // export async function createMockPluginConfiguration(shop: string) {
 //   const { modulEinstellungen, modulZugangsdaten } = pluginConfiguratorMockData;
