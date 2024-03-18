@@ -3,7 +3,7 @@ import db from "../db.server";
 
 // const { modulAktiv } = pluginConfiguratorMockData;
 export async function getPluginConf(shop: string) {
-  const modulAktivData = await db.modulAktiv.findUnique({
+  const pluginConfData = await db.modulAktiv.findUnique({
     where: { shop },
     include: {
       ModulZugangsdaten: true,
@@ -31,7 +31,8 @@ export async function getPluginConf(shop: string) {
   //   },
   // });
   // console.log("pluginConfiguratorData", pluginConfiguratorData);
-  return { modulAktivData };
+  console.log("pluginConfData - ", pluginConfData);
+  return { ...pluginConfData };
 }
 
 // export async function createMockPluginConfiguration(shop: string) {

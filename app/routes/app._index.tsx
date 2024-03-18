@@ -76,10 +76,7 @@ export const loader: LoaderFunction = async ({
   const pluginConfData = await getPluginConf(session.shop);
   if (!pluginConfData) return null;
 
-  const { modulAktivData } = pluginConfData;
-  if (!modulAktivData?.isModulAktiv) return modulAktivData;
-
-  const { ModulZugangsdaten, isModulAktiv, shop } = modulAktivData;
+  const { ModulZugangsdaten, isModulAktiv, shop } = pluginConfData;
 
   console.log("pluginConfData", pluginConfData);
   // console.log("pluginConfData", pluginConfData);
@@ -89,8 +86,8 @@ export const loader: LoaderFunction = async ({
 
   return {
     modulAktiv: {
-      isModulAktiv,
-      shop,
+      isModulAktiv: isModulAktiv ?? false,
+      shop: shop ?? session.shop,
     },
     modulZugangsdaten: {
       apiLink: ModulZugangsdaten?.apiLink ?? "",

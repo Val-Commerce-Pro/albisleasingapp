@@ -19,7 +19,8 @@ export const Zagangsdaten = ({ initialValues }: ZagangsdatenProps) => {
   });
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const name = event.target.id;
+    console.log("event", event);
+    const name = event.target.name;
     const value = event.target.value;
     setAccessData((prev) => ({ ...prev, [name]: value }));
   }
@@ -43,7 +44,7 @@ export const Zagangsdaten = ({ initialValues }: ZagangsdatenProps) => {
           required
         />
         <TextField
-          name="username"
+          name="benutzer"
           label="Benutzer:"
           type="text"
           handleOnChange={handleChange}
@@ -52,7 +53,7 @@ export const Zagangsdaten = ({ initialValues }: ZagangsdatenProps) => {
           required
         />
         <TextField
-          name="password"
+          name="passwort"
           label="Passwort:"
           type="password"
           handleOnChange={handleChange}
