@@ -31,7 +31,7 @@ export const action: ActionFunction = async ({ request }) => {
 
       const modulAktivData = await updateOrCreateModulAktiv({
         shop: session.shop,
-        modulAktiv: !!isAppActive,
+        isModulAktiv: !!isAppActive,
       });
       console.log("modulAktivData RESPONSE", modulAktivData);
       return modulAktivData ?? false;
@@ -86,10 +86,8 @@ export default function Index() {
 
   const handleModulAktivChange = (e: ChangeEvent<HTMLInputElement>): void => {
     console.log("handleModulAktivChange renders");
-    console.log("before isAppActive", isAppActive);
-    setIsAppActive((prev) => !prev);
-    console.log("after isAppActive", isAppActive);
-    console.log("event ", e.target.checked);
+
+    setIsAppActive(e.target.checked);
 
     const data = {
       isAppActive,

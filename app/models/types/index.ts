@@ -1,8 +1,4 @@
-import type {
-  ModulAktiv,
-  ModulEinstellungen,
-  ModulZugangsdaten,
-} from "@prisma/client";
+import type { ModulAktiv } from "@prisma/client";
 
 export type UpdateOrCreateModulAktivServer = Omit<
   ModulAktiv,
@@ -14,11 +10,11 @@ export type GetModulAktivServer = {
   modulAktiv?: boolean;
 };
 
-export type ModulZugangsdatenServer = Omit<
-  ModulZugangsdaten,
-  "id" | "ModulEinstellungen" | "modulAktivId"
->;
-export type ModulEinstellungenServer = Omit<
-  ModulEinstellungen,
-  "id" | "zugangsdatenId"
->;
+// export type ModulZugangsdatenServer = Omit<
+//   ModulZugangsdaten,
+//   "id" | "ModulEinstellungen" | "modulAktivId"
+// >;
+// export type ModulEinstellungenServer = Omit<
+//   ModulEinstellungen,
+//   "id" | "zugangsdatenId"
+// >;

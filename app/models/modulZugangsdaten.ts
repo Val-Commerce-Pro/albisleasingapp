@@ -1,4 +1,4 @@
-import db from "../db.server";
+// import db from "../db.server";
 // import { getModulAktiv } from "./modulAktiv.server";
 // import type { ModulZugangsdatenServer } from "./types";
 
@@ -32,24 +32,24 @@ import db from "../db.server";
 //   }
 // }
 
-export async function getModulZugangsdaten(shop: string) {
-  try {
-    const modulAktivData = await db.modulAktiv.findUnique({
-      where: { shop },
-      include: {
-        ModulZugangsdaten: true,
-      },
-    });
-    if (!modulAktivData) {
-      console.error("Modul Aktiv not found");
-      return null;
-    }
+// export async function getModulZugangsdaten(shop: string) {
+//   try {
+//     const modulAktivData = await db.modulAktiv.findUnique({
+//       where: { shop },
+//       include: {
+//         ModulZugangsdaten: true,
+//       },
+//     });
+//     if (!modulAktivData) {
+//       console.error("Modul Aktiv not found");
+//       return null;
+//     }
 
-    return { modulAktivData };
-  } catch (error) {
-    console.error("Create Zugangsdaten failed", error);
-  }
-}
+//     return { modulAktivData };
+//   } catch (error) {
+//     console.error("Create Zugangsdaten failed", error);
+//   }
+// }
 
 // export async function updateModulZugangsdaten(
 //   shop: string,
