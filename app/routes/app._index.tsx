@@ -7,7 +7,7 @@ import { authenticate } from "../shopify.server";
 import type { ChangeEvent } from "react";
 import { useState } from "react";
 // import type { PluginConfiguratorMockData } from "~/mockData/pluginConfiguratorMockData";
-import { getOrCreatePluginConfiguration } from "~/models/methods.server";
+// import { getOrCreatePluginConfiguration } from "~/models/methods.server";
 import { updateOrCreateModulAktiv } from "~/models/modulAktiv.server";
 import { Divider } from "./components/divider";
 import { ModulAktiv } from "./components/modulAktiv";
@@ -61,29 +61,20 @@ export const action: ActionFunction = async ({ request }) => {
 // };
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const { session } = await authenticate.admin(request);
-  const pluginConfData = await getOrCreatePluginConfiguration(session.shop);
+  // const { session } = await authenticate.admin(request);
+  // const pluginConfData = await getOrCreatePluginConfiguration(session.shop);
   // console.log("pluginConfData", pluginConfData);
   // console.log("Loader function renders");
   // const { zahlungsweisen, produktgruppen, vertragsarten } =
   //   await getAllMethodData();
 
-  return {
-    pluginConfData,
-  };
+  return "loader";
+  // return {
+  //   pluginConfData,
+  // };
 };
 
 export default function Index() {
-  //data should come from the database
-  const savedCheckboxValue = true;
-
-  // const [savingConfig, setSavingCofig] = useState(false);
-  // const [accessData, setAccessData] = useState<AccessData>({
-  //   apiLink: "",
-  //   userName: "",
-  //   password: "",
-  //   _action: "",
-  // });
   const loaderData = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
   console.log("actionData", actionData);
@@ -91,11 +82,14 @@ export default function Index() {
   // console.log("loaderData", loaderData);
   const submit = useSubmit();
 
-  const [isAppActive, setIsAppActive] = useState(savedCheckboxValue ?? false);
+  const [isAppActive, setIsAppActive] = useState(false);
 
   const handleModulAktivChange = (e: ChangeEvent<HTMLInputElement>): void => {
     console.log("handleModulAktivChange renders");
+    console.log("before isAppActive", isAppActive);
     setIsAppActive((prev) => !prev);
+    console.log("after isAppActive", isAppActive);
+    console.log("event ", e.target.checked);
 
     const data = {
       isAppActive,
