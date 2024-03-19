@@ -1,4 +1,5 @@
 import { Form, useSubmit } from "@remix-run/react";
+import type { ChangeEvent } from "react";
 import { useState } from "react";
 
 import type { ModulEinstellungenData } from "~/routes/types/pluginConfigurator";
@@ -6,25 +7,6 @@ import { Divider } from "../divider";
 import { Switch } from "../switch";
 import { TextField } from "../textfield";
 import styles from "./styles.module.css";
-
-export const modulEinstellungenInitialValues = {
-  vertragsart: "",
-  restwertInBeiTAVertrag: null,
-  produktgruppe: "",
-  zahlungsweisen: "",
-  auswahlZahlungsweiseAnzeigen: false,
-  minLeasingsumme: "",
-  servicePauschaleNetto: "",
-  albisServiceGebuhrNetto: "",
-  provisionsangabe: "",
-  objektVersicherung: false,
-  auswahlObjektVersicherungAnzeigen: false,
-  mietsonderzahlung: "",
-  eingabeSonderzahlungErmoglichen: false,
-  pInfoseiteZeigeAlle: false,
-  antragOhneArtikelMoglich: false,
-  kundeKannFinanzierungsbetragAndern: false,
-};
 
 type ModulEinstellungenProps = {
   initialValues: ModulEinstellungenData;
@@ -44,17 +26,24 @@ export const ModulEinstellungen = ({
     );
   }
 
-  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const { name, type } = event.target;
-    let value: string | boolean;
-
-    if (type === "checkbox") {
-      value = event.target.checked;
-    } else {
-      value = event.target.value;
-    }
+  function handleChange(event: ChangeEvent<HTMLInputElement>) {
+    const { name, value } = event.target;
     setModulEinstellungenData((prev) => ({ ...prev, [name]: value }));
   }
+
+  const handleSwitchOnChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    const { name, checked } = e.target;
+
+    const updatedModulEinstellungenData: ModulEinstellungenData = {
+      ...modulEinstellungenData,
+      [name]: checked,
+    };
+    setModulEinstellungenData(updatedModulEinstellungenData);
+    submit(
+      { updatedModulEinstellungenData, _action: "einstellungen" },
+      { method: "POST" },
+    );
+  };
   return (
     <div className={`sectionContainer`}>
       <Divider title="Modul-Einstellungen" type="section" />
@@ -95,7 +84,7 @@ export const ModulEinstellungen = ({
         <Switch
           name={"auswahlZahlungsweiseAnzeigen"}
           label="Auswahl Zahlungsweise anzeigen"
-          handleOnChange={handleChange}
+          handleOnChange={handleSwitchOnChange}
           checkboxValue={modulEinstellungenData.auswahlZahlungsweiseAnzeigen}
         />
         <TextField
@@ -133,13 +122,13 @@ export const ModulEinstellungen = ({
         <Switch
           name={"objektVersicherung"}
           label="Objekt-Versicherung:"
-          handleOnChange={handleChange}
+          handleOnChange={handleSwitchOnChange}
           checkboxValue={modulEinstellungenData.objektVersicherung}
         />
         <Switch
           name={"auswahlObjektVersicherungAnzeigen"}
           label="Auswahl Objekt-Versicherung anzeigen:"
-          handleOnChange={handleChange}
+          handleOnChange={handleSwitchOnChange}
           checkboxValue={
             modulEinstellungenData.auswahlObjektVersicherungAnzeigen
           }
@@ -155,25 +144,25 @@ export const ModulEinstellungen = ({
         <Switch
           name={"eingabeSonderzahlungErmoglichen"}
           label="Eingabe Sonderzahlung ermöglichen:"
-          handleOnChange={handleChange}
+          handleOnChange={handleSwitchOnChange}
           checkboxValue={modulEinstellungenData.eingabeSonderzahlungErmoglichen}
         />
         <Switch
           name={"pInfoseiteZeigeAlle"}
           label="P-Infoseite zeige alle Monate:"
-          handleOnChange={handleChange}
+          handleOnChange={handleSwitchOnChange}
           checkboxValue={modulEinstellungenData.pInfoseiteZeigeAlle}
         />
         <Switch
           name={"antragOhneArtikelMoglich"}
           label="Antrag ohne Artikel möglich:"
-          handleOnChange={handleChange}
+          handleOnChange={handleSwitchOnChange}
           checkboxValue={modulEinstellungenData.antragOhneArtikelMoglich}
         />
         <Switch
           name={"kundeKannFinanzierungsbetragAndern"}
           label="Kunde kann Finanzierungsbetrag ändern:"
-          handleOnChange={handleChange}
+          handleOnChange={handleSwitchOnChange}
           checkboxValue={
             modulEinstellungenData.kundeKannFinanzierungsbetragAndern
           }

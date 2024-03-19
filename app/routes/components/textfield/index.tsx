@@ -7,7 +7,7 @@ type TextField = {
   name: string;
   textFieldValue: string;
   handleOnChange: (event: ChangeEvent<HTMLInputElement>) => void;
-  handleOnBlur?: () => void;
+  handleOnBlur: () => void;
   required?: boolean;
   type?: "text" | "password";
   hidden?: boolean;
