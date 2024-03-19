@@ -40,6 +40,7 @@ export const action: ActionFunction = async ({ request }) => {
       return { success: true, data: modulAktivData };
     case "zagangsdaten":
       const credentials = formatData(values) as ModulZugangsdatenData;
+      console.log("credentials casted", credentials);
 
       const credentialsDb = await updateOrCreateModulZugangsdaten(
         session.shop,

@@ -65,13 +65,15 @@ export const ModulZagangsdaten = ({
         />
       </Form>
 
-      <div
-        className={styles.flag}
-        style={{
-          backgroundColor: isValidCredentials ? "#73ce8880" : "#f94d4d80",
-        }}
-      >
-        {`Credentials ${isValidCredentials ? "Success" : "Error"}`}
+      <div className={styles.flagContainer}>
+        <div
+          className={styles.flag}
+          style={{
+            backgroundColor: isValidCredentials ? "#73ce8880" : "#f94d4d80",
+          }}
+        >
+          {`Credentials ${isValidCredentials ? "Success" : "Error"}`}
+        </div>
       </div>
     </div>
   );
