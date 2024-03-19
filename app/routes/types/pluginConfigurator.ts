@@ -16,10 +16,12 @@ export type ModulEinstellungenData = Omit<
   "id" | "zugangsdatenId"
 >;
 
+export type ModulZugangsdatenPlugin = {
+  isCredentialsValid: boolean;
+} & ModulZugangsdatenData;
+
 export type PluginConfData = {
   modulAktiv: ModulAktivData;
-  modulZugangsdaten: {
-    isCredentialsValid: boolean;
-  } & ModulZugangsdatenData;
+  modulZugangsdaten: ModulZugangsdatenPlugin;
   modulEinstellungen: ModulEinstellungenData;
 };

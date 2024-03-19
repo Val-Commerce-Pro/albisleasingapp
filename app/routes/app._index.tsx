@@ -44,7 +44,11 @@ export const action: ActionFunction = async ({ request }) => {
 
       const credentialsDb = await updateOrCreateModulZugangsdaten(
         session.shop,
-        credentials,
+        {
+          apiLink: credentials.apiLink,
+          benutzer: credentials.benutzer,
+          passwort: credentials.passwort,
+        },
       );
       console.log("credentialsDb", credentialsDb);
 
@@ -147,7 +151,11 @@ export default function Index() {
       <ModulAktiv initialValue={modulAktiv.isModulAktiv} />
       {modulAktiv.isModulAktiv && (
         <ModulZagangsdaten
-          initialValues={modulZugangsdaten as ModulZugangsdatenData}
+          initialValues={{
+            apiLink: modulZugangsdaten.apiLink,
+            benutzer: modulZugangsdaten.benutzer,
+            passwort: modulZugangsdaten.passwort,
+          }}
           isCredentialsValid={modulZugangsdaten.isCredentialsValid}
         />
       )}
