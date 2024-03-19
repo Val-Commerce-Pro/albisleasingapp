@@ -29,8 +29,9 @@ export const ModulZagangsdaten = ({
   function handleSave() {
     if (checkFormValues(credentials)) {
       submit({ ...credentials, _action: "zagangsdaten" }, { method: "POST" });
+    } else {
+      setIsValidCredentials(false);
     }
-    setIsValidCredentials(false);
   }
   return (
     <div className={`sectionContainer`}>

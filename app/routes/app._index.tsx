@@ -46,6 +46,7 @@ export const action: ActionFunction = async ({ request }) => {
         session.shop,
         credentials,
       );
+      console.log("credentialsDb", credentialsDb);
 
       if (!credentialsDb) {
         return { error: "Error updating ModulZugangsdaten" };
