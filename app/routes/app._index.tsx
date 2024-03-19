@@ -93,16 +93,16 @@ export const loader: LoaderFunction = async ({
     await getAllMethodData(credentials);
 
   const isCredentialsValid =
-    !zahlungsweisen || !produktgruppen || !vertragsarten;
+    !!zahlungsweisen && !!produktgruppen && !!vertragsarten;
 
-  const loaderReturn = {
+  const loaderReturn: PluginConfData = {
     modulAktiv: {
       isModulAktiv: isModulAktiv ?? false,
       shop: shop ?? session.shop,
     },
     modulZugangsdaten: {
-      ...credentials,
       isCredentialsValid,
+      ...credentials,
     },
     modulEinstellungen: {
       vertragsart: "",

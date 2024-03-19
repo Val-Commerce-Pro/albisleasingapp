@@ -64,11 +64,15 @@ export const ModulZagangsdaten = ({
           required
         />
       </Form>
-      {isValidCredentials ? (
-        <div>Credentials Success</div>
-      ) : (
-        <div>Credentials Error</div>
-      )}
+
+      <div
+        className={styles.flag}
+        style={{
+          backgroundColor: isValidCredentials ? "#73ce8880" : "#f94d4d80",
+        }}
+      >
+        {`Credentials ${isValidCredentials ? "Success" : "Error"}`}
+      </div>
     </div>
   );
 };
