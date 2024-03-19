@@ -30,8 +30,8 @@ const getRequestTemplate = (template: RequestBody) => ({
     jsonrpc: "2.0",
     method: template.method,
     params: {
-      login: template.credentials.username,
-      pwd: template.credentials.password,
+      login: template.credentials.benutzer,
+      pwd: template.credentials.passwort,
       werte: template?.werte,
     },
     id: 1,
@@ -51,22 +51,19 @@ export const action: ActionFunction = async ({ request }) => {
   // console.log("method - values - ", method, werte);
 
   try {
-    const methodPromise = await fetch(
+    const methodsPromise = await fetch(
       credentials.apiLink,
       getRequestTemplate({ method, credentials, werte }),
     );
 
-    if (!methodPromise.ok) {
+    if (!methodsPromise.ok) {
       throw new Error(
-        `HTTP error! status: ${methodPromise.status} for method: ${method}`,
+        `HTTP error! status: ${methodsPromise.status} for method: ${method}`,
       );
     }
+    const methodsData = await methodsPromise.json();
 
-    const methodData = await methodPromise.json();
-
-    // console.log(`$methodData - `, methodData);
-
-    return json(methodData, {
+    return json(methodsData, {
       headers: {
         "Access-Control-Allow-Origin": "*",
       },

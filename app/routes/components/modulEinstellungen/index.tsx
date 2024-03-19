@@ -1,7 +1,7 @@
-import { Form } from "@remix-run/react";
+import { Form, useSubmit } from "@remix-run/react";
 import { useState } from "react";
 
-import type { ModulEinstellungenType } from "~/routes/types/pluginConfigurator";
+import type { ModulEinstellungenData } from "~/routes/types/pluginConfigurator";
 import { Divider } from "../divider";
 import { Switch } from "../switch";
 import { TextField } from "../textfield";
@@ -24,15 +24,24 @@ export const modulEinstellungenInitialValues = {
   pInfoseiteZeigeAlle: false,
   antragOhneArtikelMoglich: false,
   kundeKannFinanzierungsbetragAndern: false,
-  _action: "einstellungen",
 };
 
-export const ModulEinstellungen = () => {
+type ModulEinstellungenProps = {
+  initialValues: ModulEinstellungenData;
+};
+
+export const ModulEinstellungen = ({
+  initialValues,
+}: ModulEinstellungenProps) => {
+  const submit = useSubmit();
   const [modulEinstellungenData, setModulEinstellungenData] =
-    useState<ModulEinstellungenType>(modulEinstellungenInitialValues);
+    useState<ModulEinstellungenData>(initialValues);
 
   function handleSave() {
-    //write data into the database
+    submit(
+      { ...modulEinstellungenData, _action: "einstellungen" },
+      { method: "POST" },
+    );
   }
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {

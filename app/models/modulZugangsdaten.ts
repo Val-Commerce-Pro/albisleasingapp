@@ -42,7 +42,6 @@ export async function updateOrCreateModulZugangsdaten(
       data.id,
       modulZugangsdaten,
     );
-    console.log("createModulZugangsdaten", updatedData);
     if (updatedData) return updatedData;
 
     const newModulZugangsdaten = await createModulZugangsdaten(

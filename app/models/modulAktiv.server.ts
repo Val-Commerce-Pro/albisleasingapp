@@ -49,10 +49,6 @@ export async function getModulAktiv(shop: string) {
     const modulAktivData = await db.modulAktiv.findUnique({
       where: { shop },
     });
-    if (!modulAktivData) {
-      console.error("Modul Aktiv not found");
-      return null;
-    }
     return modulAktivData;
   } catch (error) {
     console.error("Create ModulAktiv failed", error);

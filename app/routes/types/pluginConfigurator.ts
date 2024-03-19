@@ -1,5 +1,8 @@
-import type { ModulAktiv, ModulZugangsdaten } from "@prisma/client";
-import type { modulEinstellungenInitialValues } from "../components/modulEinstellungen";
+import type {
+  ModulAktiv,
+  ModulEinstellungen,
+  ModulZugangsdaten,
+} from "@prisma/client";
 
 export type ModulAktivData = Omit<ModulAktiv, "id">;
 
@@ -8,9 +11,15 @@ export type ModulZugangsdatenData = Omit<
   "id" | "modulAktivId"
 >;
 
-export type ModulEinstellungenType = typeof modulEinstellungenInitialValues;
+export type ModulEinstellungenData = Omit<
+  ModulEinstellungen,
+  "id" | "zugangsdatenId"
+>;
 
 export type PluginConfData = {
   modulAktiv: ModulAktivData;
-  modulZugangsdaten: ModulZugangsdatenData;
+  modulZugangsdaten: {
+    isCredentialsValid: boolean;
+  } & ModulZugangsdatenData;
+  modulEinstellungen: ModulEinstellungenData;
 };

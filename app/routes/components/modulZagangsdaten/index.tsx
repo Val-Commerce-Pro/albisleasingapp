@@ -6,29 +6,31 @@ import { Divider } from "../divider";
 import { TextField } from "../textfield";
 import styles from "./styles.module.css";
 
-type ZagangsdatenProps = {
-  initialValues?: ModulZugangsdatenData;
+type ModulZagangsdatenProps = {
+  initialValues: ModulZugangsdatenData;
+  isCredentialsValid: boolean;
 };
 
-export const Zagangsdaten = ({ initialValues }: ZagangsdatenProps) => {
+export const ModulZagangsdaten = ({
+  initialValues,
+  isCredentialsValid,
+}: ModulZagangsdatenProps) => {
   const submit = useSubmit();
-  const [accessData, setAccessData] = useState<ModulZugangsdatenData>({
-    apiLink: initialValues?.apiLink ?? "",
-    benutzer: initialValues?.benutzer ?? "",
-    passwort: initialValues?.passwort ?? "",
-  });
+  const [credentials, setCredentials] =
+    useState<ModulZugangsdatenData>(initialValues);
+  const [isValidCredentials, setIsValidCredentials] =
+    useState(isCredentialsValid);
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-    console.log("event", event);
-    const name = event.target.name;
-    const value = event.target.value;
-    setAccessData((prev) => ({ ...prev, [name]: value }));
+    const { name, value } = event.target;
+    setCredentials((prev) => ({ ...prev, [name]: value }));
   }
 
   function handleSave() {
-    if (checkFormValues(accessData)) {
-      submit({ ...accessData, _action: "zagangsdaten" }, { method: "POST" });
+    if (checkFormValues(credentials)) {
+      submit({ ...credentials, _action: "zagangsdaten" }, { method: "POST" });
     }
+    setIsValidCredentials(false);
   }
   return (
     <div className={`sectionContainer`}>
@@ -40,7 +42,7 @@ export const Zagangsdaten = ({ initialValues }: ZagangsdatenProps) => {
           type="text"
           handleOnChange={handleChange}
           handleOnBlur={handleSave}
-          textFieldValue={accessData.apiLink}
+          textFieldValue={credentials.apiLink}
           required
         />
         <TextField
@@ -49,7 +51,7 @@ export const Zagangsdaten = ({ initialValues }: ZagangsdatenProps) => {
           type="text"
           handleOnChange={handleChange}
           handleOnBlur={handleSave}
-          textFieldValue={accessData.benutzer}
+          textFieldValue={credentials.benutzer}
           required
         />
         <TextField
@@ -58,10 +60,15 @@ export const Zagangsdaten = ({ initialValues }: ZagangsdatenProps) => {
           type="password"
           handleOnChange={handleChange}
           handleOnBlur={handleSave}
-          textFieldValue={accessData.passwort}
+          textFieldValue={credentials.passwort}
           required
         />
       </Form>
+      {isValidCredentials ? (
+        <div>Credentials Success</div>
+      ) : (
+        <div>Credentials Error</div>
+      )}
     </div>
   );
 };
