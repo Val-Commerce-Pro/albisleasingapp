@@ -26,6 +26,7 @@ import { getAllMethodData } from "./utils/getMethodsData";
 export const action: ActionFunction = async ({
   request,
 }): Promise<ActionZugangsdaten | null> => {
+  console.log("request", request);
   const { session } = await authenticate.admin(request);
   const formData = await request.formData();
   const { _action, ...values } = Object.fromEntries(formData);

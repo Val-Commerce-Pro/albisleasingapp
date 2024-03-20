@@ -40,7 +40,7 @@ export const ModulEinstellungen = ({
     };
     setModulEinstellungenData(updatedModulEinstellungenData);
     submit(
-      { updatedModulEinstellungenData, _action: "einstellungen" },
+      { ...updatedModulEinstellungenData, _action: "einstellungen" },
       { method: "POST" },
     );
   };

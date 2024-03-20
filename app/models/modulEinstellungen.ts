@@ -37,7 +37,7 @@ export async function updateOrCreateModulEinstellungen(
   modulEinstellungen: ModulEinstellungenData,
 ) {
   try {
-    console.log("modulEinstellungen", modulEinstellungen);
+    console.log("modulEinstellungen", { ...modulEinstellungen });
     const modulZugangsdatenData = await getModulZugangsdaten(shop);
     if (!modulZugangsdatenData) return null;
     const { id } = modulZugangsdatenData;
