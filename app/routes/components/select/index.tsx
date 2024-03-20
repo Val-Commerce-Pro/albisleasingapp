@@ -24,12 +24,12 @@ export const Select = ({
   required = false,
 }: SelectProps) => {
   return (
-    <div className={styles.textFieldContainer}>
+    <div className={styles.selectContainer}>
       <Label label={label} />
       <select
         id={name}
         name={name}
-        className={styles.textField}
+        className={styles.select}
         onChange={handleOnChange}
         required={required}
       >

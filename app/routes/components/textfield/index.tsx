@@ -8,6 +8,7 @@ type TextFieldProps = {
   textFieldValue: string;
   handleOnChange: (event: ChangeEvent<HTMLInputElement>) => void;
   handleOnBlur: () => void;
+  handleKeyDown: () => void;
   required?: boolean;
   type?: "text" | "password";
   hidden?: boolean;
@@ -22,6 +23,7 @@ export const TextField = ({
   required = false,
   handleOnChange,
   handleOnBlur,
+  handleKeyDown,
 }: TextFieldProps) => {
   return (
     <div className={styles.textFieldContainer}>
@@ -33,6 +35,7 @@ export const TextField = ({
         className={styles.textField}
         onChange={handleOnChange}
         onBlur={handleOnBlur}
+        onKeyDown={(e) => e.key === "Enter" && handleKeyDown()}
         value={textFieldValue}
         style={{ visibility: hidden ? "hidden" : "visible" }}
         required={required}

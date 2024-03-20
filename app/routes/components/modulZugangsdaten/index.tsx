@@ -1,7 +1,6 @@
 import { Form, useSubmit } from "@remix-run/react";
 import { useState } from "react";
 import type { ModulZugangsdatenData } from "~/routes/types/pluginConfigurator";
-import { checkFormValues } from "~/routes/utils/checkFormValues";
 import { Divider } from "../divider";
 import { TextField } from "../textfield";
 import styles from "./styles.module.css";
@@ -25,9 +24,7 @@ export const ModulZugangsdaten = ({
   }
 
   function handleSave() {
-    if (checkFormValues(credentials)) {
-      submit({ ...credentials, _action: "zugangsdaten" }, { method: "POST" });
-    }
+    submit({ ...credentials, _action: "zugangsdaten" }, { method: "POST" });
   }
   return (
     <div className={`sectionContainer`}>
@@ -39,6 +36,7 @@ export const ModulZugangsdaten = ({
           type="text"
           handleOnChange={handleChange}
           handleOnBlur={handleSave}
+          handleKeyDown={handleSave}
           textFieldValue={credentials.apiLink}
           required
         />
@@ -48,6 +46,7 @@ export const ModulZugangsdaten = ({
           type="text"
           handleOnChange={handleChange}
           handleOnBlur={handleSave}
+          handleKeyDown={handleSave}
           textFieldValue={credentials.benutzer}
           required
         />
@@ -57,6 +56,7 @@ export const ModulZugangsdaten = ({
           type="password"
           handleOnChange={handleChange}
           handleOnBlur={handleSave}
+          handleKeyDown={handleSave}
           textFieldValue={credentials.passwort}
           required
         />

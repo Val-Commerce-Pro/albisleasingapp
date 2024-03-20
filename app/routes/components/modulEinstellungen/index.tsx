@@ -86,6 +86,7 @@ export const ModulEinstellungen = ({
           type="text"
           handleOnChange={handleChange}
           handleOnBlur={handleSave}
+          handleKeyDown={handleSave}
           textFieldValue={""}
           hidden={true}
         />
@@ -119,6 +120,7 @@ export const ModulEinstellungen = ({
           type="text"
           handleOnChange={handleChange}
           handleOnBlur={handleSave}
+          handleKeyDown={handleSave}
           textFieldValue={modulEinstellungenData.minLeasingsumme}
         />
         <TextField
@@ -127,6 +129,7 @@ export const ModulEinstellungen = ({
           type="text"
           handleOnChange={handleChange}
           handleOnBlur={handleSave}
+          handleKeyDown={handleSave}
           textFieldValue={modulEinstellungenData.servicePauschaleNetto}
         />
         <TextField
@@ -135,6 +138,7 @@ export const ModulEinstellungen = ({
           type="text"
           handleOnChange={handleChange}
           handleOnBlur={handleSave}
+          handleKeyDown={handleSave}
           textFieldValue={modulEinstellungenData.albisServiceGebuhrNetto}
         />
         <TextField
@@ -143,6 +147,7 @@ export const ModulEinstellungen = ({
           type="text"
           handleOnChange={handleChange}
           handleOnBlur={handleSave}
+          handleKeyDown={handleSave}
           textFieldValue={modulEinstellungenData.provisionsangabe}
         />
         <Switch
@@ -165,6 +170,7 @@ export const ModulEinstellungen = ({
           type="text"
           handleOnChange={handleChange}
           handleOnBlur={handleSave}
+          handleKeyDown={handleSave}
           textFieldValue={modulEinstellungenData.mietsonderzahlung}
         />
         <Switch
