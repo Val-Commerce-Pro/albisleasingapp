@@ -25,7 +25,7 @@ import { getAllMethodData } from "./utils/getMethodsData";
 
 export const action: ActionFunction = async ({
   request,
-}): Promise<ActionZugangsdatenResponse | undefined> => {
+}): Promise<ActionZugangsdatenResponse | null> => {
   const { session } = await authenticate.admin(request);
   const formData = await request.formData();
   const { _action, ...values } = Object.fromEntries(formData);
@@ -42,7 +42,7 @@ export const action: ActionFunction = async ({
         // return { error: "Error modulAktivData ModulZugangsdaten" };
       }
       // return { success: true };
-      break;
+      return null;
     case "zugangsdaten":
       const credentials = formatData(values) as ModulZugangsdatenData;
 
@@ -57,6 +57,7 @@ export const action: ActionFunction = async ({
 
       if (!credentialsDb) {
         console.log("error: Error updating/Creating ModulZugangsdaten");
+        return null;
         // return { error: "Error updating/Creating ModulZugangsdaten" };
       }
 
@@ -64,16 +65,22 @@ export const action: ActionFunction = async ({
         await getAllMethodData(credentials);
 
       const isCredentialsValid =
-        !!zahlungsweisen && !!produktgruppen && !!vertragsarten;
+        !!zahlungsweisen.result &&
+        !!produktgruppen.result &&
+        !!vertragsarten.result;
+
+      const methodsData = isCredentialsValid
+        ? {
+            zahlungsweisen: zahlungsweisen.result,
+            produktgruppen: produktgruppen.result,
+            vertragsarten: vertragsarten.result,
+          }
+        : undefined;
 
       return {
         // success: true,
-        data: {
-          isCredentialsValid,
-          zahlungsweisen,
-          produktgruppen,
-          vertragsarten,
-        },
+        isCredentialsValid,
+        methodsData,
       };
     case "einstellungen":
       const einstellungenData = formatData(
@@ -93,9 +100,9 @@ export const action: ActionFunction = async ({
         // return { error: "Error updating ModulEinstellungen" };
       }
       // return { success: true };
-      break;
+      return null;
     default:
-      break;
+      return null;
     // return { error: "Action not found" };
   }
 };
@@ -120,11 +127,10 @@ export const loader: LoaderFunction = async ({
   if (!isModulAktiv || !ModulZugangsdaten || !shop)
     return getLoaderResponse({
       modulAktiv: {
-        isModulAktiv: false,
-        shop: session.shop,
+        isModulAktiv: isModulAktiv ?? false,
+        shop: shop ?? session.shop,
       },
     });
-  console.log("ModulZugangsdaten", ModulZugangsdaten);
   const credentials = {
     apiLink: ModulZugangsdaten.apiLink,
     benutzer: ModulZugangsdaten.benutzer,
@@ -133,19 +139,10 @@ export const loader: LoaderFunction = async ({
   const { zahlungsweisen, produktgruppen, vertragsarten } =
     await getAllMethodData(credentials);
 
-  console.log(
-    "zahlungsweisen, produktgruppen, vertragsarten",
-    zahlungsweisen,
-    produktgruppen,
-    vertragsarten,
-  );
-
-  console.log(
-    "!!zahlungsweisen && !!produktgruppen && !!vertragsarten;",
-    !!zahlungsweisen && !!produktgruppen && !!vertragsarten,
-  );
   const isCredentialsValid =
-    !!zahlungsweisen && !!produktgruppen && !!vertragsarten;
+    !!zahlungsweisen.result &&
+    !!produktgruppen.result &&
+    !!vertragsarten.result;
 
   const modulAktiv = {
     isModulAktiv,
@@ -158,8 +155,12 @@ export const loader: LoaderFunction = async ({
     ? { ...ModulZugangsdaten.ModulEinstellungen }
     : undefined;
 
-  const methods = isCredentialsValid
-    ? { zahlungsweisen, produktgruppen, vertragsarten }
+  const methodsData = isCredentialsValid
+    ? {
+        zahlungsweisen: zahlungsweisen.result,
+        produktgruppen: produktgruppen.result,
+        vertragsarten: vertragsarten.result,
+      }
     : undefined;
 
   console.log(
@@ -171,7 +172,7 @@ export const loader: LoaderFunction = async ({
     modulZugangsdaten,
     modulEinstellungen,
     isCredentialsValid,
-    methods,
+    methodsData,
   });
 };
 
@@ -194,7 +195,7 @@ export default function Index() {
   if (actionData) {
     console.log(
       "actionData -- data.isCredentialsValid -- ",
-      actionData.data.isCredentialsValid,
+      actionData.isCredentialsValid,
     );
   }
 

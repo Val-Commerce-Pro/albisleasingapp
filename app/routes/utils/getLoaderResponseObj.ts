@@ -1,7 +1,7 @@
 import type {
-  GetProduktgruppen,
-  GetVertragsarten,
-  GetZahlungsweisen,
+  ResultProduktgruppen,
+  ResultVertragsarten,
+  ResultZahlungsweisen,
 } from "../types/methods";
 import type {
   ModulAktivData,
@@ -15,10 +15,10 @@ type GetLoaderResponse = {
   modulZugangsdaten?: ModulZugangsdatenData;
   modulEinstellungen?: ModulEinstellungenData;
   isCredentialsValid?: boolean;
-  methods?: {
-    zahlungsweisen: GetZahlungsweisen;
-    produktgruppen: GetProduktgruppen;
-    vertragsarten: GetVertragsarten;
+  methodsData?: {
+    zahlungsweisen: ResultZahlungsweisen[];
+    produktgruppen: ResultProduktgruppen[];
+    vertragsarten: ResultVertragsarten[];
   };
 };
 
@@ -27,7 +27,7 @@ export const getLoaderResponse = ({
   modulEinstellungen,
   modulZugangsdaten,
   isCredentialsValid,
-  methods,
+  methodsData,
 }: GetLoaderResponse) => {
   const loaderReturn: PluginConfData = {
     modulAktiv: {
@@ -66,9 +66,9 @@ export const getLoaderResponse = ({
         modulEinstellungen?.kundeKannFinanzierungsbetragAndern ?? false,
     },
     methodsData: {
-      zahlungsweisen: methods?.zahlungsweisen,
-      produktgruppen: methods?.produktgruppen,
-      vertragsarten: methods?.vertragsarten,
+      zahlungsweisen: methodsData?.zahlungsweisen ?? [],
+      produktgruppen: methodsData?.produktgruppen ?? [],
+      vertragsarten: methodsData?.vertragsarten ?? [],
     },
   };
 

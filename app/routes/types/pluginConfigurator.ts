@@ -4,9 +4,9 @@ import type {
   ModulZugangsdaten,
 } from "@prisma/client";
 import type {
-  GetProduktgruppen,
-  GetVertragsarten,
-  GetZahlungsweisen,
+  ResultProduktgruppen,
+  ResultVertragsarten,
+  ResultZahlungsweisen,
 } from "./methods";
 
 export type ModulAktivData = Omit<ModulAktiv, "id">;
@@ -29,10 +29,10 @@ export type PluginConfData = {
   modulAktiv: ModulAktivData;
   modulZugangsdaten: ModulZugangsdatenPlugin;
   modulEinstellungen: ModulEinstellungenData;
-  methodsData: {
-    zahlungsweisen?: GetZahlungsweisen;
-    produktgruppen?: GetProduktgruppen;
-    vertragsarten?: GetVertragsarten;
+  methodsData?: {
+    zahlungsweisen: ResultZahlungsweisen[];
+    produktgruppen: ResultProduktgruppen[];
+    vertragsarten: ResultVertragsarten[];
   };
 };
 
@@ -42,11 +42,10 @@ export type ActionResponseDefault = {
 };
 
 export type ActionZugangsdatenResponse = {
-  // success: boolean;
-  data: {
-    isCredentialsValid: boolean;
-    zahlungsweisen: GetZahlungsweisen;
-    produktgruppen: GetProduktgruppen;
-    vertragsarten: GetVertragsarten;
+  isCredentialsValid: boolean;
+  methodsData?: {
+    zahlungsweisen: ResultZahlungsweisen[];
+    produktgruppen: ResultProduktgruppen[];
+    vertragsarten: ResultVertragsarten[];
   };
 };

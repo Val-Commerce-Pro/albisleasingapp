@@ -1,11 +1,11 @@
-interface ResultVertragsarten {
+export interface ResultVertragsarten {
   id: number;
   bezeichnung: string;
   kuerzel: string;
   pos: number;
 }
 
-interface ResultProduktgruppen {
+export interface ResultProduktgruppen {
   id: number;
   bezeichnung: string;
   lz_min: number;
@@ -16,7 +16,7 @@ interface ResultProduktgruppen {
   pos: number;
 }
 
-interface ResultZahlungsweisen {
+export interface ResultZahlungsweisen {
   id: number;
   bezeichnung: string;
   monate: number;
