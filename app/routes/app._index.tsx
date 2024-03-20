@@ -133,6 +133,17 @@ export const loader: LoaderFunction = async ({
   const { zahlungsweisen, produktgruppen, vertragsarten } =
     await getAllMethodData(credentials);
 
+  console.log(
+    "zahlungsweisen, produktgruppen, vertragsarten",
+    zahlungsweisen,
+    produktgruppen,
+    vertragsarten,
+  );
+
+  console.log(
+    "!!zahlungsweisen && !!produktgruppen && !!vertragsarten;",
+    !!zahlungsweisen && !!produktgruppen && !!vertragsarten,
+  );
   const isCredentialsValid =
     !!zahlungsweisen && !!produktgruppen && !!vertragsarten;
 
@@ -143,9 +154,12 @@ export const loader: LoaderFunction = async ({
   const modulZugangsdaten = {
     ...credentials,
   };
-
   const modulEinstellungen = ModulZugangsdaten?.ModulEinstellungen
     ? { ...ModulZugangsdaten.ModulEinstellungen }
+    : undefined;
+
+  const methods = isCredentialsValid
+    ? { zahlungsweisen, produktgruppen, vertragsarten }
     : undefined;
 
   console.log(
@@ -157,6 +171,7 @@ export const loader: LoaderFunction = async ({
     modulZugangsdaten,
     modulEinstellungen,
     isCredentialsValid,
+    methods,
   });
 };
 

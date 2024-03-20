@@ -29,6 +29,11 @@ export type PluginConfData = {
   modulAktiv: ModulAktivData;
   modulZugangsdaten: ModulZugangsdatenPlugin;
   modulEinstellungen: ModulEinstellungenData;
+  methodsData: {
+    zahlungsweisen?: GetZahlungsweisen;
+    produktgruppen?: GetProduktgruppen;
+    vertragsarten?: GetVertragsarten;
+  };
 };
 
 export type ActionResponseDefault = {

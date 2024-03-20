@@ -1,4 +1,9 @@
 import type {
+  GetProduktgruppen,
+  GetVertragsarten,
+  GetZahlungsweisen,
+} from "../types/methods";
+import type {
   ModulAktivData,
   ModulEinstellungenData,
   ModulZugangsdatenData,
@@ -10,6 +15,11 @@ type GetLoaderResponse = {
   modulZugangsdaten?: ModulZugangsdatenData;
   modulEinstellungen?: ModulEinstellungenData;
   isCredentialsValid?: boolean;
+  methods?: {
+    zahlungsweisen: GetZahlungsweisen;
+    produktgruppen: GetProduktgruppen;
+    vertragsarten: GetVertragsarten;
+  };
 };
 
 export const getLoaderResponse = ({
@@ -17,6 +27,7 @@ export const getLoaderResponse = ({
   modulEinstellungen,
   modulZugangsdaten,
   isCredentialsValid,
+  methods,
 }: GetLoaderResponse) => {
   const loaderReturn: PluginConfData = {
     modulAktiv: {
@@ -53,6 +64,11 @@ export const getLoaderResponse = ({
         modulEinstellungen?.antragOhneArtikelMoglich ?? false,
       kundeKannFinanzierungsbetragAndern:
         modulEinstellungen?.kundeKannFinanzierungsbetragAndern ?? false,
+    },
+    methodsData: {
+      zahlungsweisen: methods?.zahlungsweisen,
+      produktgruppen: methods?.produktgruppen,
+      vertragsarten: methods?.vertragsarten,
     },
   };
 
