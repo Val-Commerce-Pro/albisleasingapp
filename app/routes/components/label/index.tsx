@@ -1,10 +1,10 @@
 import styles from "./styles.module.css";
 
-type Label = {
+type LabelProps = {
   label: string;
   htmlFor?: string;
 };
-export const Label = ({ label, htmlFor }: Label) => {
+export const Label = ({ label, htmlFor }: LabelProps) => {
   return (
     <label className={styles.label} htmlFor={htmlFor}>
       {label}

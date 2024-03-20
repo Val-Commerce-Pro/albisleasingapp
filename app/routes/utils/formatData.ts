@@ -1,3 +1,10 @@
+import type { OptionsMethodData } from "../components/select";
+import type {
+  ResultProduktgruppen,
+  ResultVertragsarten,
+  ResultZahlungsweisen,
+} from "../types/methods";
+
 type FormatData = {
   [k: string]: FormDataEntryValue;
 };
@@ -30,4 +37,19 @@ export const formatData = (
     {} as { [key: string]: string | boolean },
   );
   return castedValues;
+};
+
+export const getOptionsMethodData = (
+  methodData:
+    | ResultZahlungsweisen[]
+    | ResultProduktgruppen[]
+    | ResultVertragsarten[],
+  bdSelectedOpt?: string,
+): OptionsMethodData => {
+  const optionsMethodData = methodData.map((item) => ({
+    id: item.id.toString(),
+    labelValue: item.bezeichnung,
+    selected: !!bdSelectedOpt && item.bezeichnung.includes(bdSelectedOpt),
+  }));
+  return optionsMethodData;
 };

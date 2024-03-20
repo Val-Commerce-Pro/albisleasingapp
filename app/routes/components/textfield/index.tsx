@@ -2,7 +2,7 @@ import type { ChangeEvent } from "react";
 import { Label } from "../label";
 import styles from "./styles.module.css";
 
-type TextField = {
+type TextFieldProps = {
   label: string;
   name: string;
   textFieldValue: string;
@@ -22,7 +22,7 @@ export const TextField = ({
   required = false,
   handleOnChange,
   handleOnBlur,
-}: TextField) => {
+}: TextFieldProps) => {
   return (
     <div className={styles.textFieldContainer}>
       <Label label={label} />

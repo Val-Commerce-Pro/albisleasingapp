@@ -1,11 +1,11 @@
 import styles from "./styles.module.css";
 
-type Divider = {
+type DividerProps = {
   type: "main" | "section";
   title?: string;
 };
 
-export const Divider = ({ type = "section", title }: Divider) => {
+export const Divider = ({ type = "section", title }: DividerProps) => {
   return (
     <div>
       {title && <h4 className={styles.sectionTitle}>{title}</h4>}

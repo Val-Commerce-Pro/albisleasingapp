@@ -2,18 +2,25 @@ import { Form, useSubmit } from "@remix-run/react";
 import type { ChangeEvent } from "react";
 import { useState } from "react";
 
-import type { ModulEinstellungenData } from "~/routes/types/pluginConfigurator";
+import type {
+  ModulEinstellungenData,
+  PluginConfData,
+} from "~/routes/types/pluginConfigurator";
+import { getOptionsMethodData } from "~/routes/utils/formatData";
 import { Divider } from "../divider";
+import { Select } from "../select";
 import { Switch } from "../switch";
 import { TextField } from "../textfield";
 import styles from "./styles.module.css";
 
 type ModulEinstellungenProps = {
   initialValues: ModulEinstellungenData;
+  methodsData: PluginConfData["methodsData"];
 };
 
 export const ModulEinstellungen = ({
   initialValues,
+  methodsData,
 }: ModulEinstellungenProps) => {
   const submit = useSubmit();
   const [modulEinstellungenData, setModulEinstellungenData] =
@@ -31,12 +38,13 @@ export const ModulEinstellungen = ({
     setModulEinstellungenData((prev) => ({ ...prev, [name]: value }));
   }
 
-  const handleSwitchOnChange = (e: ChangeEvent<HTMLInputElement>): void => {
-    const { name, checked } = e.target;
-
+  const updateModulEinstellungenDataAndSubmit = (
+    name: string,
+    value: boolean | string,
+  ) => {
     const updatedModulEinstellungenData: ModulEinstellungenData = {
       ...modulEinstellungenData,
-      [name]: checked,
+      [name]: value,
     };
     setModulEinstellungenData(updatedModulEinstellungenData);
     submit(
@@ -44,7 +52,18 @@ export const ModulEinstellungen = ({
       { method: "POST" },
     );
   };
-  return (
+
+  const handleSwitchOnChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    const { name, checked } = e.target;
+    updateModulEinstellungenDataAndSubmit(name, checked);
+  };
+
+  const handleSelectOnChange = (e: ChangeEvent<HTMLSelectElement>): void => {
+    const { name, value } = e.target;
+    updateModulEinstellungenDataAndSubmit(name, value);
+  };
+
+  return methodsData ? (
     <div className={`sectionContainer`}>
       <Divider title="Modul-Einstellungen" type="section" />
       <Form
@@ -52,13 +71,14 @@ export const ModulEinstellungen = ({
         method="POST"
         className={styles.formContainer}
       >
-        <TextField
+        <Select
           name="vertragsart"
           label="Vertragsart:"
-          type="text"
-          handleOnChange={handleChange}
-          handleOnBlur={handleSave}
-          textFieldValue={modulEinstellungenData.vertragsart}
+          handleOnChange={handleSelectOnChange}
+          optionsData={getOptionsMethodData(
+            methodsData.vertragsarten,
+            modulEinstellungenData.vertragsart,
+          )}
         />
         <TextField
           name="restwertInBeiTAVertrag"
@@ -69,21 +89,23 @@ export const ModulEinstellungen = ({
           textFieldValue={""}
           hidden={true}
         />
-        <TextField
+        <Select
           name="produktgruppe"
           label="Produktgruppe:"
-          type="text"
-          handleOnChange={handleChange}
-          handleOnBlur={handleSave}
-          textFieldValue={modulEinstellungenData.produktgruppe}
+          handleOnChange={handleSelectOnChange}
+          optionsData={getOptionsMethodData(
+            methodsData.produktgruppen,
+            modulEinstellungenData.produktgruppe,
+          )}
         />
-        <TextField
+        <Select
           name="zahlungsweisen"
           label="Zahlungsweisen:"
-          type="text"
-          handleOnChange={handleChange}
-          handleOnBlur={handleSave}
-          textFieldValue={modulEinstellungenData.zahlungsweisen}
+          handleOnChange={handleSelectOnChange}
+          optionsData={getOptionsMethodData(
+            methodsData.zahlungsweisen,
+            modulEinstellungenData.zahlungsweisen,
+          )}
         />
         <Switch
           name={"auswahlZahlungsweiseAnzeigen"}
@@ -173,5 +195,7 @@ export const ModulEinstellungen = ({
         />
       </Form>
     </div>
+  ) : (
+    <></>
   );
 };

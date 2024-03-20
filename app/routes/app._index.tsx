@@ -148,7 +148,8 @@ export const loader: LoaderFunction = async ({
 export default function Index() {
   const loaderData = useLoaderData<PluginConfData>();
   const actions = useActionData<ActionZugangsdaten | null>();
-  const { modulAktiv, modulEinstellungen, modulZugangsdaten } = loaderData;
+  const { modulAktiv, modulEinstellungen, modulZugangsdaten, methodsData } =
+    loaderData;
 
   const { apiLink, benutzer, isCredentialsValid, passwort } = modulZugangsdaten;
   const credentials = {
@@ -177,6 +178,7 @@ export default function Index() {
       {modulAktiv.isModulAktiv && modulZugangsdaten.isCredentialsValid && (
         <ModulEinstellungen
           initialValues={modulEinstellungen as ModulEinstellungenData}
+          methodsData={methodsData}
         />
       )}
     </div>

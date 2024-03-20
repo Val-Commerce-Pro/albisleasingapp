@@ -2,7 +2,7 @@ import type { ChangeEvent } from "react";
 import { Label } from "../label";
 import styles from "./styles.module.css";
 
-type Switch = {
+type SwitchProps = {
   handleOnChange: (event: ChangeEvent<HTMLInputElement>) => void;
   checkboxValue?: boolean;
   name: string;
@@ -14,7 +14,7 @@ export const Switch = ({
   checkboxValue,
   label,
   name,
-}: Switch) => {
+}: SwitchProps) => {
   return (
     <div className={styles.switchContainer}>
       {label && <Label label={label} />}
