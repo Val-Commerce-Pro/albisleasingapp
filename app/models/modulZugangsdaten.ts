@@ -41,21 +41,18 @@ export async function updateOrCreateModulZugangsdaten(
 ) {
   try {
     const data = await getModulZugangsdaten(shop);
-    console.log("getModulZugangsdaten", data);
     if (!data) return null;
 
     const updatedData = await updateModulZugangsdaten(
       data.id,
       modulZugangsdaten,
     );
-    console.log("ModulZugangsdaten updatedData", data);
     if (updatedData) return updatedData;
 
     const newModulZugangsdaten = await createModulZugangsdaten(
       data.id,
       modulZugangsdaten,
     );
-    console.log("ModulZugangsdaten newModulZugangsdaten", newModulZugangsdaten);
     return newModulZugangsdaten;
   } catch (error) {
     console.error("Update Or Create ModulZugangsdaten failed", error);

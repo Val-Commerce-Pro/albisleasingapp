@@ -6,15 +6,15 @@ import { Divider } from "../divider";
 import { TextField } from "../textfield";
 import styles from "./styles.module.css";
 
-type ModulZagangsdatenProps = {
+type ModulZugangsdatenProps = {
   initialValues: ModulZugangsdatenData;
   isCredentialsValid: boolean;
 };
 
-export const ModulZagangsdaten = ({
+export const ModulZugangsdaten = ({
   initialValues,
   isCredentialsValid,
-}: ModulZagangsdatenProps) => {
+}: ModulZugangsdatenProps) => {
   const submit = useSubmit();
   const [credentials, setCredentials] =
     useState<ModulZugangsdatenData>(initialValues);
@@ -28,7 +28,7 @@ export const ModulZagangsdaten = ({
 
   function handleSave() {
     if (checkFormValues(credentials)) {
-      submit({ ...credentials, _action: "zagangsdaten" }, { method: "POST" });
+      submit({ ...credentials, _action: "zugangsdaten" }, { method: "POST" });
     } else {
       setIsValidCredentials(false);
     }
@@ -36,7 +36,7 @@ export const ModulZagangsdaten = ({
   return (
     <div className={`sectionContainer`}>
       <Divider title="Zugangsdaten" type="section" />
-      <Form title="Zagangsdaten" method="POST" className={styles.formContainer}>
+      <Form title="Zugangsdaten" method="POST" className={styles.formContainer}>
         <TextField
           name="apiLink"
           label="Albis API Link:"

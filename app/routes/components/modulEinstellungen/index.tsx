@@ -47,7 +47,11 @@ export const ModulEinstellungen = ({
   return (
     <div className={`sectionContainer`}>
       <Divider title="Modul-Einstellungen" type="section" />
-      <Form title="Zagangsdaten" method="POST" className={styles.formContainer}>
+      <Form
+        title="Einstellungen"
+        method="POST"
+        className={styles.formContainer}
+      >
         <TextField
           name="vertragsart"
           label="Vertragsart:"

@@ -3,6 +3,11 @@ import type {
   ModulEinstellungen,
   ModulZugangsdaten,
 } from "@prisma/client";
+import type {
+  GetProduktgruppen,
+  GetVertragsarten,
+  GetZahlungsweisen,
+} from "./methods";
 
 export type ModulAktivData = Omit<ModulAktiv, "id">;
 
@@ -24,4 +29,19 @@ export type PluginConfData = {
   modulAktiv: ModulAktivData;
   modulZugangsdaten: ModulZugangsdatenPlugin;
   modulEinstellungen: ModulEinstellungenData;
+};
+
+export type ActionResponseDefault = {
+  success?: boolean;
+  error?: string;
+};
+
+export type ActionZugangsdatenResponse = {
+  // success: boolean;
+  data: {
+    isCredentialsValid: boolean;
+    zahlungsweisen: GetZahlungsweisen;
+    produktgruppen: GetProduktgruppen;
+    vertragsarten: GetVertragsarten;
+  };
 };

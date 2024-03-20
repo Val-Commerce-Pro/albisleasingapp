@@ -10,19 +10,22 @@ import { updateOrCreateModulZugangsdaten } from "~/models/modulZugangsdaten";
 import { Divider } from "./components/divider";
 import { ModulAktiv } from "./components/modulAktiv";
 import { ModulEinstellungen } from "./components/modulEinstellungen";
-import { ModulZagangsdaten } from "./components/modulZagangsdaten";
+import { ModulZugangsdaten } from "./components/modulZugangsdaten";
 import styles from "./styles/appStyles.module.css";
+
 import type {
-  ModulAktivData,
+  ActionZugangsdatenResponse,
   ModulEinstellungenData,
   ModulZugangsdatenData,
   PluginConfData,
 } from "./types/pluginConfigurator";
 import { formatData } from "./utils/formatData";
+import { getLoaderResponse } from "./utils/getLoaderResponseObj";
 import { getAllMethodData } from "./utils/getMethodsData";
 
-export const action: ActionFunction = async ({ request }) => {
-  console.log("action renders");
+export const action: ActionFunction = async ({
+  request,
+}): Promise<ActionZugangsdatenResponse | undefined> => {
   const { session } = await authenticate.admin(request);
   const formData = await request.formData();
   const { _action, ...values } = Object.fromEntries(formData);
@@ -35,12 +38,13 @@ export const action: ActionFunction = async ({ request }) => {
         isModulAktiv,
       });
       if (!modulAktivData) {
-        return { error: "Error modulAktivData ModulZugangsdaten" };
+        console.log("error: Error modulAktivData ModulZugangsdaten");
+        // return { error: "Error modulAktivData ModulZugangsdaten" };
       }
-      return { success: true, data: modulAktivData };
-    case "zagangsdaten":
+      // return { success: true };
+      break;
+    case "zugangsdaten":
       const credentials = formatData(values) as ModulZugangsdatenData;
-      console.log("credentials casted", credentials);
 
       const credentialsDb = await updateOrCreateModulZugangsdaten(
         session.shop,
@@ -50,20 +54,34 @@ export const action: ActionFunction = async ({ request }) => {
           passwort: credentials.passwort,
         },
       );
-      console.log("credentialsDb", credentialsDb);
 
       if (!credentialsDb) {
-        return { error: "Error updating ModulZugangsdaten" };
+        console.log("error: Error updating/Creating ModulZugangsdaten");
+        // return { error: "Error updating/Creating ModulZugangsdaten" };
       }
 
-      return { success: true, data: credentialsDb };
+      const { zahlungsweisen, produktgruppen, vertragsarten } =
+        await getAllMethodData(credentials);
+
+      const isCredentialsValid =
+        !!zahlungsweisen && !!produktgruppen && !!vertragsarten;
+
+      return {
+        // success: true,
+        data: {
+          isCredentialsValid,
+          zahlungsweisen,
+          produktgruppen,
+          vertragsarten,
+        },
+      };
     case "einstellungen":
       const einstellungenData = formatData(
         values,
         true,
       ) as ModulEinstellungenData;
 
-      console.log("Format data - ", einstellungenData);
+      console.log("Formatted data - ", einstellungenData);
 
       const updatedEinstellungenData = await updateOrCreateModulEinstellungen(
         session.shop,
@@ -71,29 +89,46 @@ export const action: ActionFunction = async ({ request }) => {
       );
       console.log("updatedEinstellungenData", updatedEinstellungenData);
       if (!updatedEinstellungenData) {
-        return { error: "Error updating ModulEinstellungen" };
+        console.log("error: Error updating ModulEinstellungen");
+        // return { error: "Error updating ModulEinstellungen" };
       }
-      return { success: true, data: updatedEinstellungenData };
+      // return { success: true };
+      break;
     default:
-      return "Action not found";
+      break;
+    // return { error: "Action not found" };
   }
 };
 
 export const loader: LoaderFunction = async ({
   request,
-}): Promise<PluginConfData | ModulAktivData | null> => {
+}): Promise<PluginConfData> => {
   console.log("loader renders");
   const { session } = await authenticate.admin(request);
   const pluginConfData = await getPluginConf(session.shop);
-  if (!pluginConfData) return null;
+  if (!pluginConfData)
+    return getLoaderResponse({
+      modulAktiv: {
+        isModulAktiv: false,
+        shop: session.shop,
+      },
+    });
   console.log("pluginConfData", pluginConfData);
 
   const { ModulZugangsdaten, isModulAktiv, shop } = pluginConfData;
+
+  if (!isModulAktiv || !ModulZugangsdaten || !shop)
+    return getLoaderResponse({
+      modulAktiv: {
+        isModulAktiv: false,
+        shop: session.shop,
+      },
+    });
   console.log("ModulZugangsdaten", ModulZugangsdaten);
   const credentials = {
-    apiLink: ModulZugangsdaten?.apiLink ?? "",
-    benutzer: ModulZugangsdaten?.benutzer ?? "",
-    passwort: ModulZugangsdaten?.passwort ?? "",
+    apiLink: ModulZugangsdaten.apiLink,
+    benutzer: ModulZugangsdaten.benutzer,
+    passwort: ModulZugangsdaten.passwort,
   };
   const { zahlungsweisen, produktgruppen, vertragsarten } =
     await getAllMethodData(credentials);
@@ -101,45 +136,52 @@ export const loader: LoaderFunction = async ({
   const isCredentialsValid =
     !!zahlungsweisen && !!produktgruppen && !!vertragsarten;
 
-  const loaderReturn: PluginConfData = {
-    modulAktiv: {
-      isModulAktiv: isModulAktiv ?? false,
-      shop: shop ?? session.shop,
-    },
-    modulZugangsdaten: {
-      isCredentialsValid,
-      ...credentials,
-    },
-    modulEinstellungen: {
-      vertragsart: "",
-      restwertInBeiTAVertrag: null,
-      produktgruppe: "",
-      zahlungsweisen: "",
-      auswahlZahlungsweiseAnzeigen: false,
-      minLeasingsumme: "",
-      servicePauschaleNetto: "",
-      albisServiceGebuhrNetto: "",
-      provisionsangabe: "",
-      objektVersicherung: false,
-      auswahlObjektVersicherungAnzeigen: false,
-      mietsonderzahlung: "",
-      eingabeSonderzahlungErmoglichen: false,
-      pInfoseiteZeigeAlle: false,
-      antragOhneArtikelMoglich: false,
-      kundeKannFinanzierungsbetragAndern: false,
-    },
+  const modulAktiv = {
+    isModulAktiv,
+    shop,
   };
-  console.log("loaderReturn - ", loaderReturn);
-  return loaderReturn;
+  const modulZugangsdaten = {
+    ...credentials,
+  };
+
+  const modulEinstellungen = ModulZugangsdaten?.ModulEinstellungen
+    ? { ...ModulZugangsdaten.ModulEinstellungen }
+    : undefined;
+
+  console.log(
+    "ModulZugangsdaten?.ModulEinstellungen",
+    ModulZugangsdaten?.ModulEinstellungen,
+  );
+  return getLoaderResponse({
+    modulAktiv,
+    modulZugangsdaten,
+    modulEinstellungen,
+    isCredentialsValid,
+  });
 };
 
 export default function Index() {
   const loaderData = useLoaderData<PluginConfData>();
-  const { modulAktiv, modulZugangsdaten, modulEinstellungen } = loaderData;
+  const { modulAktiv, modulEinstellungen, modulZugangsdaten } = loaderData;
 
-  const actionData = useActionData<typeof action>();
+  const actionData = useActionData<ActionZugangsdatenResponse | undefined>();
+
+  const { apiLink, benutzer, isCredentialsValid, passwort } = modulZugangsdaten;
+  const credentials = {
+    apiLink,
+    benutzer,
+    passwort,
+  };
+
   console.log("actionData", actionData);
   console.log("loaderData", loaderData);
+
+  if (actionData) {
+    console.log(
+      "actionData -- data.isCredentialsValid -- ",
+      actionData.data.isCredentialsValid,
+    );
+  }
 
   return (
     <div className={styles.container}>
@@ -150,13 +192,9 @@ export default function Index() {
       <Divider type="main" />
       <ModulAktiv initialValue={modulAktiv.isModulAktiv} />
       {modulAktiv.isModulAktiv && (
-        <ModulZagangsdaten
-          initialValues={{
-            apiLink: modulZugangsdaten.apiLink,
-            benutzer: modulZugangsdaten.benutzer,
-            passwort: modulZugangsdaten.passwort,
-          }}
-          isCredentialsValid={modulZugangsdaten.isCredentialsValid}
+        <ModulZugangsdaten
+          initialValues={credentials}
+          isCredentialsValid={isCredentialsValid}
         />
       )}
       {modulAktiv.isModulAktiv && modulZugangsdaten.isCredentialsValid && (
