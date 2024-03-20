@@ -14,7 +14,7 @@ import { ModulZugangsdaten } from "./components/modulZugangsdaten";
 import styles from "./styles/appStyles.module.css";
 
 import type {
-  ActionZugangsdatenResponse,
+  ActionZugangsdaten,
   ModulEinstellungenData,
   ModulZugangsdatenData,
   PluginConfData,
@@ -25,7 +25,7 @@ import { getAllMethodData } from "./utils/getMethodsData";
 
 export const action: ActionFunction = async ({
   request,
-}): Promise<ActionZugangsdatenResponse | null> => {
+}): Promise<ActionZugangsdaten | null> => {
   const { session } = await authenticate.admin(request);
   const formData = await request.formData();
   const { _action, ...values } = Object.fromEntries(formData);
@@ -37,12 +37,10 @@ export const action: ActionFunction = async ({
         shop: session.shop,
         isModulAktiv,
       });
-      if (!modulAktivData) {
-        console.log("error: Error modulAktivData ModulZugangsdaten");
-        // return { error: "Error modulAktivData ModulZugangsdaten" };
-      }
-      // return { success: true };
-      return null;
+
+      return modulAktivData
+        ? null
+        : { error: "Error modulAktivData Modul Zugangsdaten" };
     case "zugangsdaten":
       const credentials = formatData(values) as ModulZugangsdatenData;
 
@@ -55,33 +53,9 @@ export const action: ActionFunction = async ({
         },
       );
 
-      if (!credentialsDb) {
-        console.log("error: Error updating/Creating ModulZugangsdaten");
-        return null;
-        // return { error: "Error updating/Creating ModulZugangsdaten" };
-      }
-
-      const { zahlungsweisen, produktgruppen, vertragsarten } =
-        await getAllMethodData(credentials);
-
-      const isCredentialsValid =
-        !!zahlungsweisen.result &&
-        !!produktgruppen.result &&
-        !!vertragsarten.result;
-
-      const methodsData = isCredentialsValid
-        ? {
-            zahlungsweisen: zahlungsweisen.result,
-            produktgruppen: produktgruppen.result,
-            vertragsarten: vertragsarten.result,
-          }
-        : undefined;
-
-      return {
-        // success: true,
-        isCredentialsValid,
-        methodsData,
-      };
+      return credentialsDb
+        ? null
+        : { error: "Error updating/Creating ModulZugangsdaten" };
     case "einstellungen":
       const einstellungenData = formatData(
         values,
@@ -94,23 +68,17 @@ export const action: ActionFunction = async ({
         session.shop,
         einstellungenData,
       );
-      console.log("updatedEinstellungenData", updatedEinstellungenData);
-      if (!updatedEinstellungenData) {
-        console.log("error: Error updating ModulEinstellungen");
-        // return { error: "Error updating ModulEinstellungen" };
-      }
-      // return { success: true };
-      return null;
+      return updatedEinstellungenData
+        ? null
+        : { error: "Error updating/Creating ModulEinstellungen" };
     default:
       return null;
-    // return { error: "Action not found" };
   }
 };
 
 export const loader: LoaderFunction = async ({
   request,
 }): Promise<PluginConfData> => {
-  console.log("loader renders");
   const { session } = await authenticate.admin(request);
   const pluginConfData = await getPluginConf(session.shop);
   if (!pluginConfData)
@@ -178,9 +146,8 @@ export const loader: LoaderFunction = async ({
 
 export default function Index() {
   const loaderData = useLoaderData<PluginConfData>();
+  const actions = useActionData<ActionZugangsdaten | null>();
   const { modulAktiv, modulEinstellungen, modulZugangsdaten } = loaderData;
-
-  const actionData = useActionData<ActionZugangsdatenResponse | undefined>();
 
   const { apiLink, benutzer, isCredentialsValid, passwort } = modulZugangsdaten;
   const credentials = {
@@ -189,15 +156,8 @@ export default function Index() {
     passwort,
   };
 
-  console.log("actionData", actionData);
   console.log("loaderData", loaderData);
-
-  if (actionData) {
-    console.log(
-      "actionData -- data.isCredentialsValid -- ",
-      actionData.isCredentialsValid,
-    );
-  }
+  console.log("actions", actions);
 
   return (
     <div className={styles.container}>

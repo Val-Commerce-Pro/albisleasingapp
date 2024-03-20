@@ -36,16 +36,6 @@ export type PluginConfData = {
   };
 };
 
-export type ActionResponseDefault = {
-  success?: boolean;
+export type ActionZugangsdaten = {
   error?: string;
-};
-
-export type ActionZugangsdatenResponse = {
-  isCredentialsValid: boolean;
-  methodsData?: {
-    zahlungsweisen: ResultZahlungsweisen[];
-    produktgruppen: ResultProduktgruppen[];
-    vertragsarten: ResultVertragsarten[];
-  };
 };

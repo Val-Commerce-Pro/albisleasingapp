@@ -15,11 +15,12 @@ export const ModulZugangsdaten = ({
   initialValues,
   isCredentialsValid,
 }: ModulZugangsdatenProps) => {
+  console.log("Modul Zugangsdaten render");
+  console.log("initial values:", initialValues);
+  console.log("isCredentialsValid:", isCredentialsValid);
   const submit = useSubmit();
   const [credentials, setCredentials] =
     useState<ModulZugangsdatenData>(initialValues);
-  const [isValidCredentials, setIsValidCredentials] =
-    useState(isCredentialsValid);
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target;
@@ -29,8 +30,6 @@ export const ModulZugangsdaten = ({
   function handleSave() {
     if (checkFormValues(credentials)) {
       submit({ ...credentials, _action: "zugangsdaten" }, { method: "POST" });
-    } else {
-      setIsValidCredentials(false);
     }
   }
   return (
@@ -70,10 +69,10 @@ export const ModulZugangsdaten = ({
         <div
           className={styles.flag}
           style={{
-            backgroundColor: isValidCredentials ? "#73ce8880" : "#f94d4d80",
+            backgroundColor: isCredentialsValid ? "#73ce8880" : "#f94d4d80",
           }}
         >
-          {`Credentials ${isValidCredentials ? "Success" : "Error"}`}
+          {`Credentials ${isCredentialsValid ? "Success" : "Error"}`}
         </div>
       </div>
     </div>
