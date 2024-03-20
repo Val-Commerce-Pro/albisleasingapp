@@ -1,17 +1,14 @@
 import type { ModulEinstellungenData } from "~/routes/types/pluginConfigurator";
 import db from "../db.server";
+import { getModulZugangsdaten } from "./modulZugangsdaten";
 
 async function updateModulEinstellungen(
-  shop: string,
+  id: number,
   modulEinstellungen: ModulEinstellungenData,
 ) {
   try {
-    const einstellungenData = await getModulEinstellungen(shop);
-    console.log("einstellungenData - ", einstellungenData);
-    if (!einstellungenData) return null;
-
     const einstellungenUpdatedData = await db.modulEinstellungen.update({
-      where: { id: einstellungenData.id },
+      where: { id },
       data: { ...modulEinstellungen },
     });
     return einstellungenUpdatedData;
@@ -40,14 +37,19 @@ export async function updateOrCreateModulEinstellungen(
   modulEinstellungen: ModulEinstellungenData,
 ) {
   try {
-    const modulZugangsdatenData = await updateModulEinstellungen(
-      shop,
+    console.log("modulEinstellungen", modulEinstellungen);
+    const modulZugangsdatenData = await getModulZugangsdaten(shop);
+    if (!modulZugangsdatenData) return null;
+    const { id } = modulZugangsdatenData;
+
+    const updatedZugangsdatenData = await updateModulEinstellungen(
+      id,
       modulEinstellungen,
     );
-    if (!modulZugangsdatenData) return null;
+    if (updatedZugangsdatenData) return updatedZugangsdatenData;
 
-    const newModulEinstellungen = createModulEinstellungen(
-      modulZugangsdatenData.id,
+    const newModulEinstellungen = await createModulEinstellungen(
+      id,
       modulEinstellungen,
     );
     return newModulEinstellungen;
@@ -58,7 +60,7 @@ export async function updateOrCreateModulEinstellungen(
 
 export async function getModulEinstellungen(shop: string) {
   try {
-    const modulAktivData = await db.modulAktiv.findUnique({
+    const pluginConfig = await db.modulAktiv.findUnique({
       where: { shop },
       include: {
         ModulZugangsdaten: {
@@ -68,10 +70,10 @@ export async function getModulEinstellungen(shop: string) {
         },
       },
     });
-    console.log("getModulEinstellungen ", modulAktivData);
-    if (!modulAktivData || modulAktivData?.ModulZugangsdaten) return null;
+    console.log("getModulEinstellungen", pluginConfig);
+    if (!pluginConfig || pluginConfig?.ModulZugangsdaten) return null;
 
-    return { ...modulAktivData.ModulZugangsdaten };
+    return { ...pluginConfig.ModulZugangsdaten };
   } catch (error) {
     console.error("Create Zugangsdaten failed", error);
   }

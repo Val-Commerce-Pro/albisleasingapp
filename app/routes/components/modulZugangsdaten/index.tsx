@@ -15,9 +15,6 @@ export const ModulZugangsdaten = ({
   initialValues,
   isCredentialsValid,
 }: ModulZugangsdatenProps) => {
-  console.log("Modul Zugangsdaten render");
-  console.log("initial values:", initialValues);
-  console.log("isCredentialsValid:", isCredentialsValid);
   const submit = useSubmit();
   const [credentials, setCredentials] =
     useState<ModulZugangsdatenData>(initialValues);
