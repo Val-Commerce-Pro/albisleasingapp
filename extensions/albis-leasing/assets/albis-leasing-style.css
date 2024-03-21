@@ -1,0 +1,292 @@
+/* Page Style */
+
+.wrapper {
+  width: 100%;
+  max-width: 1340px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+.page-title {
+  font-weight: 600;
+}
+
+/* Shared Style */
+
+.box-title {
+  margin: 0;
+  background-color: #00c3ff;
+  color: white;
+  border-bottom: 1px solid #ddd;
+  font-weight: 500;
+  text-transform: uppercase;
+  padding: 1rem;
+}
+.box-title-small {
+  text-transform: none;
+  font-size: 13px;
+}
+.box-content {
+  padding: 1rem 1.5rem;
+}
+
+/* Shopping Items Style */
+.box-container {
+  border: 1px solid #ddd;
+}
+
+.item-details {
+  width: fit-content;
+  padding: 0.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.details-content {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 2rem;
+}
+.item-image-container {
+  position: relative;
+  width: fit-content;
+}
+.item-image {
+  border-radius: 0.75rem;
+}
+.item-quantity {
+  position: absolute;
+  top: -10px;
+  right: -12px;
+  background-color: #666;
+  color: #fff;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 12px;
+  margin: 0;
+}
+.item-info-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+.item-title {
+  margin: 0;
+}
+.item-price {
+  margin: 0;
+}
+.item-remove {
+  margin-top: 2px;
+  margin-left: 2px;
+  width: 16px;
+  height: 20px;
+  align-self: flex-start;
+  text-decoration: none;
+  color: black;
+}
+.total-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-left: 3rem;
+  gap: 5rem;
+}
+.total {
+  margin: 0;
+  font-weight: 600;
+}
+.total-value {
+  margin: 0;
+  font-weight: 600;
+}
+.total-currency {
+  font-size: 1rem;
+  margin: 0;
+  padding: 0;
+  font-weight: 300;
+}
+
+/* Form Style */
+.form-container {
+  margin-top: 20px;
+  border: 1px solid #ddd;
+}
+
+.calcultor-text {
+  margin: 5px 0 25px 0;
+  padding: 0;
+  text-align: justify;
+}
+
+.form-fields-wrapper {
+  width: fit-content;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.form-fields-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.label-input {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+.calc-label {
+  width: max-content;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.calculator-select {
+  border: 1px solid #ccc;
+  width: 220px;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  box-shadow: none;
+}
+.calculator-select:focus {
+  outline: 0.5px solid #ccc;
+}
+.calculator-input {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #ccc;
+  border-right: 0;
+
+  width: 200px;
+
+  padding: 0.7rem 1rem;
+
+  border-radius: 0.5rem 0 0 0.5rem;
+  box-shadow: none;
+}
+.calculator-input:focus {
+  outline: 0.5px solid #ccc;
+}
+
+.finance-field {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+.finance-symbol {
+  border: 1px solid #ccc;
+  border-left: 0;
+  border-radius: 0 0.5rem 0.5rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 20px;
+  height: 31px;
+  background-color: #f5f5f5;
+  color: black;
+  font-size: 14px;
+}
+.calculator-btn {
+  align-self: flex-end;
+  font-weight: bold;
+  background-color: #fd7e14;
+  color: white;
+  padding: 12px 16px;
+  border: none;
+  outline: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+/* Installments Box Style */
+
+.installments-container {
+  margin-top: 20px;
+  border: 1px solid #ddd;
+}
+
+.leasing-txt {
+  margin: 0;
+}
+
+.leasing-info h2,
+.leasing-info p,
+.important-note {
+  text-align: left;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+table,
+th,
+td {
+  border: 1px solid #ddd;
+}
+
+th,
+td {
+  padding: 8px;
+  text-align: center;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+tr:hover {
+  background-color: #e8f4f8;
+}
+
+.contract-btn {
+  cursor: pointer;
+  border: none;
+  outline: none;
+  padding: 16px 24px;
+  background-color: #00c3ff;
+  border-radius: 0.5rem;
+  color: white;
+  font-weight: bold;
+}
+
+.important-note-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.important-note-container p {
+  margin: 0;
+  font-size: 14px;
+}
+.note-number {
+  font-size: 10px;
+  vertical-align: super;
+}
+.important-note {
+  margin: 0;
+  font-size: 0.9em;
+  background-color: #f2f2f2;
+  padding: 10px;
+  border-left: 5px solid #ff0000;
+  font-weight: bold;
+}
