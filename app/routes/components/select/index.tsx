@@ -40,7 +40,7 @@ export const Select = ({
           optionsData.map((item) => (
             <option
               key={`id-${item.id}`}
-              value={item.labelValue}
+              value={item.id}
               selected={item?.selected}
             >
               {item.labelValue}

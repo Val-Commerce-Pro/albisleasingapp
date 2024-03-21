@@ -1,5 +1,6 @@
 import type { ActionFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
+import { getPluginConf } from "~/models/methods.server";
 import type { ModulZugangsdatenData } from "./types/pluginConfigurator";
 
 type Method =
@@ -17,7 +18,8 @@ type GetRate = {
 };
 interface RequestBody {
   method: Method;
-  credentials: ModulZugangsdatenData;
+  credentials?: ModulZugangsdatenData;
+  shop?: string;
   werte?: GetRate;
 }
 
@@ -30,8 +32,8 @@ const getRequestTemplate = (template: RequestBody) => ({
     jsonrpc: "2.0",
     method: template.method,
     params: {
-      login: template.credentials.benutzer,
-      pwd: template.credentials.passwort,
+      login: template.credentials?.benutzer,
+      pwd: template.credentials?.passwort,
       werte: template?.werte,
     },
     id: 1,
@@ -39,21 +41,31 @@ const getRequestTemplate = (template: RequestBody) => ({
 });
 
 export const action: ActionFunction = async ({ request }) => {
-  //check for credentials into the database
-  // if does not
-  // throw new Response("Credentials not found!", {
-  //   status: 404,
-  // });
   const data = await request.json();
-  // console.log("request action data", data);
-  const { method, credentials, werte }: RequestBody = data;
-
-  // console.log("method - values - ", method, werte);
+  const { method, credentials, werte, shop }: RequestBody = data;
 
   try {
+    const pluginConfData = shop && (await getPluginConf(shop));
+    const requestCredentials =
+      pluginConfData && pluginConfData.ModulZugangsdaten
+        ? {
+            apiLink: pluginConfData.ModulZugangsdaten.apiLink,
+            benutzer: pluginConfData.ModulZugangsdaten.benutzer,
+            passwort: pluginConfData.ModulZugangsdaten.passwort,
+          }
+        : credentials;
+
+    if (!requestCredentials) {
+      return new Response("Invalid Credentials", {
+        status: 404,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+        },
+      });
+    }
     const methodsPromise = await fetch(
-      credentials.apiLink,
-      getRequestTemplate({ method, credentials, werte }),
+      requestCredentials.apiLink,
+      getRequestTemplate({ method, credentials: requestCredentials, werte }),
     );
 
     if (!methodsPromise.ok) {
@@ -70,8 +82,11 @@ export const action: ActionFunction = async ({ request }) => {
     });
   } catch (error) {
     console.error("Error fetching data:", error);
-    throw new Response("Internal Server Error", {
+    return new Response("Internal Server Error", {
       status: 500,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+      },
     });
   }
 };
