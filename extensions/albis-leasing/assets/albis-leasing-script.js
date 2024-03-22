@@ -11,14 +11,36 @@ async function fillInterfaceWithMethodsData() {
   const getPluginConfData = async () => {
     try {
       const parameters = new URLSearchParams({ shop });
-      const requestUrl = `https://paylater.cpro-server.de/api/getPluginConfData?${parameters}`;
+      const requestUrl = `https://albisleasingapp.cpro-server.de/api/getPluginConfData?${parameters}`;
 
       const response = await fetch(requestUrl, { method: "GET" });
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
       const data = await response.json();
-      return data;
+      console.log("getPluginConfData", getPluginConfData);
+      const { isModulAktiv, shop, ModulZugangsdaten } = data;
+      if (!isModulAktiv || !ModulZugangsdaten) return data;
+
+      const { ModulEinstellungen } = ModulZugangsdaten;
+      const modulAktiv = {
+        isModulAktiv,
+        shop,
+      };
+      const modulZugangsdaten = {
+        apiLink: ModulZugangsdaten.apiLink,
+        benutzer: ModulZugangsdaten.benutzer,
+        passwort: ModulZugangsdaten.passwort,
+      };
+      const modulEinstellungen = ModulEinstellungen;
+
+      const pluginConfig = {
+        modulAktiv,
+        modulZugangsdaten,
+        modulEinstellungen,
+      };
+      console.log("pluginConfig", pluginConfig);
+      return pluginConfig;
     } catch (error) {
       console.error("Error fetching AppConfig:", error);
     }

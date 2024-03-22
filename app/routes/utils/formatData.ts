@@ -49,7 +49,7 @@ export const getOptionsMethodData = (
   const optionsMethodData = methodData.map((item) => ({
     id: item.id.toString(),
     labelValue: item.bezeichnung,
-    selected: !!bdSelectedOpt && item.bezeichnung.includes(bdSelectedOpt),
+    selected: !!bdSelectedOpt && item.id.toString() === bdSelectedOpt,
   }));
   return optionsMethodData;
 };
