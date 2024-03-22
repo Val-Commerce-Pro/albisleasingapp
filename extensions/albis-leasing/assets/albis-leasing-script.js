@@ -8,6 +8,22 @@ async function fillInterfaceWithMethodsData() {
   const shopDomainTag = document.getElementById("shopDomain");
   const shop = shopDomainTag.textContent;
 
+  const getPluginConfData = async () => {
+    try {
+      const parameters = new URLSearchParams({ shop });
+      const requestUrl = `https://paylater.cpro-server.de/api/getPluginConfData?${parameters}`;
+
+      const response = await fetch(requestUrl, { method: "GET" });
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Error fetching AppConfig:", error);
+    }
+  };
+
   const getMethodsData = async (method, werte) => {
     try {
       //needs to add the credentials
@@ -44,6 +60,8 @@ async function fillInterfaceWithMethodsData() {
   console.log("zahlungsweisen", zahlungsweisen);
   const getRate = await getMethodsData("getRate", mockWerte);
   console.log("getRate", getRate);
+  const pluginConfData = await getPluginConfData();
+  console.log("pluginConfData", pluginConfData);
 
   if (!zahlungsweisen) return console.log("Could not getzahlungsweisen Method");
 

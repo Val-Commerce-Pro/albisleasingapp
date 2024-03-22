@@ -59,6 +59,7 @@ export const ModulEinstellungen = ({
   };
 
   const handleSelectOnChange = (e: ChangeEvent<HTMLSelectElement>): void => {
+    console.log("select on change", e);
     const { name, value } = e.target;
     updateModulEinstellungenDataAndSubmit(name, value);
   };

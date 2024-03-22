@@ -26,7 +26,6 @@ import { getAllMethodData } from "./utils/getMethodsData";
 export const action: ActionFunction = async ({
   request,
 }): Promise<ActionZugangsdaten | null> => {
-  console.log("request", request);
   const { session } = await authenticate.admin(request);
   const formData = await request.formData();
   const { _action, ...values } = Object.fromEntries(formData);
@@ -62,8 +61,6 @@ export const action: ActionFunction = async ({
         values,
         true,
       ) as ModulEinstellungenData;
-
-      console.log("Formatted data - ", einstellungenData);
 
       const updatedEinstellungenData = await updateOrCreateModulEinstellungen(
         session.shop,
@@ -132,10 +129,6 @@ export const loader: LoaderFunction = async ({
       }
     : undefined;
 
-  console.log(
-    "ModulZugangsdaten?.ModulEinstellungen",
-    ModulZugangsdaten?.ModulEinstellungen,
-  );
   return getLoaderResponse({
     modulAktiv,
     modulZugangsdaten,

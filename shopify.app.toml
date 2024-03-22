@@ -2,7 +2,7 @@
 
 client_id = "d26fcc8d70e2ee344e86b88ff3ea8a89"
 name = "albis"
-application_url = "https://clinic-eat-denied-tested.trycloudflare.com"
+application_url = "https://taylor-pick-icon-conventional.trycloudflare.com"
 embedded = true
 
 [build]
@@ -16,9 +16,9 @@ scopes = "write_draft_orders,write_orders,write_products"
 
 [auth]
 redirect_urls = [
-  "https://clinic-eat-denied-tested.trycloudflare.com/auth/callback",
-  "https://clinic-eat-denied-tested.trycloudflare.com/auth/shopify/callback",
-  "https://clinic-eat-denied-tested.trycloudflare.com/api/auth/callback"
+  "https://taylor-pick-icon-conventional.trycloudflare.com/auth/callback",
+  "https://taylor-pick-icon-conventional.trycloudflare.com/auth/shopify/callback",
+  "https://taylor-pick-icon-conventional.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
