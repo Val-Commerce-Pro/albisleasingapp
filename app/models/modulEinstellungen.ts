@@ -71,10 +71,10 @@ export async function getModulEinstellungen(shop: string) {
       },
     });
     console.log("getModulEinstellungen", pluginConfig);
-    if (!pluginConfig || pluginConfig?.ModulZugangsdaten) return null;
+    if (!pluginConfig || !pluginConfig?.ModulZugangsdaten) return null;
 
-    return { ...pluginConfig.ModulZugangsdaten };
+    return pluginConfig.ModulZugangsdaten.ModulEinstellungen;
   } catch (error) {
-    console.error("Create Zugangsdaten failed", error);
+    console.error("Get Modul Einstellungen failed", error);
   }
 }

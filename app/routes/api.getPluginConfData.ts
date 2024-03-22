@@ -1,6 +1,6 @@
 import type { LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { getPluginConf } from "~/models/methods.server";
+import { getModulEinstellungen } from "~/models/modulEinstellungen";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const requestedURL = new URL(request.url);
@@ -8,7 +8,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   const shop = requestedURL.searchParams.get("shop");
 
   try {
-    const pluginConfData = shop && (await getPluginConf(shop));
+    const pluginConfData = shop && (await getModulEinstellungen(shop));
 
     if (!pluginConfData) {
       return new Response("Invalid Credentials", {

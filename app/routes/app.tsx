@@ -1,9 +1,9 @@
 import type { HeadersFunction, LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { Link, Outlet, useLoaderData, useRouteError } from "@remix-run/react";
+import { Outlet, useLoaderData, useRouteError } from "@remix-run/react";
+import "@shopify/polaris/build/esm/styles.css";
 import { AppProvider } from "@shopify/shopify-app-remix/react";
 import { boundary } from "@shopify/shopify-app-remix/server";
-import "@shopify/polaris/build/esm/styles.css";
 
 import { authenticate } from "../shopify.server";
 
@@ -18,12 +18,12 @@ export default function App() {
 
   return (
     <AppProvider isEmbeddedApp apiKey={apiKey}>
-      <ui-nav-menu>
+      {/* <ui-nav-menu>
         <Link to="/app" rel="home">
           Home
         </Link>
         <Link to="/app/additional">Additional page</Link>
-      </ui-nav-menu>
+      </ui-nav-menu> */}
       <Outlet />
     </AppProvider>
   );
