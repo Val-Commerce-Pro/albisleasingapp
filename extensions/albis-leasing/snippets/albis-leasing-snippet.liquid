@@ -1,43 +1,10 @@
-{{ 'albis-leasing-style.css' | asset_url | stylesheet_tag }}
+{% comment %} {{ 'albis-leasing-style.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'albis-leasing-script.js' | asset_url }}" defer="defer"></script>
 <div id="shopDomain" style="visibility: hidden;">{{ shop.domain }}</div>
 
 <div class="wrapper">
   <h1 class="page-title">Albis Leasing</h1>
-  <div class="box-container">
-    <h4 class="box-title">Items from the shopping cart</h4>
-    <div class="box-content">
-      <div class="item-details">
-        {% for item in cart.items %}
-          <div class="details-content">
-            <div class="item-image-container">
-              <img
-                src="{{ item.image | image_url }}"
-                alt="{{ item.image.alt | escape }}"
-                class="item-image"
-                loading="eager"
-                width="100"
-                height="100"
-              >
-              <p class="item-quantity">{{ item.quantity }}</p>
-            </div>
-            <div class="item-info-container">
-              <div>
-                <p class="item-title">{{ item.title }}</p>
-                <p class="item-price">Price: {{ item.final_line_price | money }}</p>
-              </div>
-
-              <a class="item-remove" href="{{ item.url_to_remove }}">{% render 'icon-remove' %}</a>
-            </div>
-          </div>
-        {% endfor %}
-      </div>
-      <div class="total-container">
-        <p class="total">Total</p>
-        <p class="total-value"><span class="total-currency">EUR</span> {{ cart.total_price | money }}</p>
-      </div>
-    </div>
-  </div>
+  {% render 'albis-items-cart' %}
 
   <div class="form-container">
     <h4 class="box-title">Albis Leasing Calculator</h4>
@@ -154,4 +121,4 @@
       </div>
     </div>
   </div>
-</div>
+</div> {% endcomment %}

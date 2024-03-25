@@ -1,5 +1,14 @@
 // alert("HELLO ALBIS LEASING REQUEST")
 
+function Testing() {
+  const test = JSON.parse(localStorage.getItem("cp@albisLeasing"));
+  console.log("localStora getItem", test);
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
+  Testing();
+});
+
 function calculateLeasing(e) {
   // Get values from the form
   const insurance = document.getElementById("propertyInsurance").value;

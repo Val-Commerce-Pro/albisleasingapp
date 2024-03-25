@@ -1,4 +1,6 @@
 async function fillInterfaceWithMethodsData() {
+  const localStorageData = JSON.parse(localStorage.getItem("cp@albisLeasing"));
+
   const insurance = document.getElementById("propertyInsurance");
   const financingAmount = document.getElementById("financingAmount");
   const downPayment = document.getElementById("downPayment");
@@ -44,7 +46,8 @@ async function fillInterfaceWithMethodsData() {
     }
   };
   const pluginConfData = await getPluginConfData();
-  console.log("AAAA pluginConfData", pluginConfData);
+  // console.log("AAAA pluginConfData", pluginConfData);
+  // console.log("AAAA shop", shop);
 
   const mockWerte = {
     kaufpreis: "769.00",
@@ -56,17 +59,21 @@ async function fillInterfaceWithMethodsData() {
   };
 
   const zahlungsweisen = await getMethodsData("getZahlungsweisen");
-  console.log("zahlungsweisen", zahlungsweisen);
+  // console.log("zahlungsweisen", zahlungsweisen);
   const getRate = await getMethodsData("getRate", mockWerte);
-  console.log("getRate", getRate);
+  // console.log("getRate", getRate);
 
   if (!zahlungsweisen) return console.log("Could not getzahlungsweisen Method");
 
   if (paymentMethod) {
-    zahlungsweisen.result.forEach(({ bezeichnung, monate }) => {
+    zahlungsweisen.result.forEach(({ bezeichnung, id }) => {
       const option = document.createElement("option");
       option.text = bezeichnung;
-      option.value = monate;
+      option.value = id;
+      //check if id exists into the localStorage and make it selected
+      //   if(id === retrievedValueId) {
+      //     option.selected = true; // Set the option as selected
+      // }
       paymentMethod.appendChild(option);
     });
   }

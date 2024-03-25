@@ -1,0 +1,55 @@
+<script src="{{ 'albis-calculator.js' | asset_url }}" defer="defer"></script>
+
+<div class="form-container">
+    <h4 class="box-title">Albis Leasing Calculator</h4>
+    <div class="box-content">
+      <form id="leasingCalculator" class="leasing-calculator">
+        <p class="calcultor-text">
+          Quickly and easily calculate the monthly leasing rate to be paid for the planned purchase value: <br>
+          Enter the purchase price (excluding VAT) as the financing amount:
+        </p>
+
+        <div class="form-fields-wrapper">
+          <div class="form-fields-container">
+            <div class="label-input">
+              <label for="propertyInsurance calc-label">Property insurance available:</label>
+              <select id="propertyInsurance" name="property_insurance" class="calculator-select">
+                <option value="Nein">Nein</option>
+                <option value="Ja">Ja</option>
+              </select>
+            </div>
+
+            <div class="label-input">
+              <label for="financingAmount">Financing amount (net):</label>
+              <div class="finance-field">
+                <input
+                  id="financingAmount"
+                  name="financing_amount"
+                  type="number"
+                  value="769"
+                  class="calculator-input"
+                >
+                <span class="finance-symbol">€</span>
+              </div>
+            </div>
+
+            <div class="label-input">
+              <label for="downPayment">Down payment:</label>
+              <div class="finance-field">
+                <input id="downPayment" name="down_payment" type="number" value="0" class="calculator-input">
+                <span class="finance-symbol">€</span>
+              </div>
+            </div>
+
+            <div class="label-input">
+              <label for="paymentMethod">Payment method:</label>
+              <select id="paymentMethod" name="payment_method" class="calculator-select"></select>
+            </div>
+          </div>
+          <button type="button" id="calculatorBtn" class="calculator-btn">
+            Calculate
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
