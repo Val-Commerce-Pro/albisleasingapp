@@ -1,161 +1,17 @@
-{{ 'albis-request-style.css' | asset_url | stylesheet_tag }}
-{% comment %} {{ 'albis-test.js' | asset_url | script_tag }} {% endcomment %}
+{% comment %} {{ 'albis-request-style.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'albis-request-script.js' | asset_url }}" defer="defer"></script> 
 
-<script src="{{ 'albis-request-script.js' | asset_url }}" defer="defer"></script>
-
-<div class="wrapper">
-  <h1 class="page-title">Albis Leasing Request</h1>
-  <div class="box-container">
-    <h4 class="box-title">Leasing Data</h4>
-    <div class="box-content">
-      <div class="general-info">
-        <strong class="general-info-note">
-          IMPORTANT: Please make sure that the delivery times apply at the time of application. Until you sign the
-          leasing contract and provide identification, delivery times may change.
-        </strong>
-
-        <p>
-          You can see your selected data for your non-binding leasing application below. Please fill out the form fields
-          below and send your data using the “Send leasing application” button to subm+it your leasing application. Your
-          application will be processed immediately by ALBIS HiTec Leasing GmbH. We will contact you as soon as we
-          receive feedback from ALBIS HiTec Leasing GmbH
-        </p>
-      </div>
-      <table class="lease-data-table">
-        <tr>
-          <th>Your registered purchase price (excluding VAT)</th>
-          <td class="right-aligned">€769.00</td>
-        </tr>
-        <tr>
-          <th>Your selected monthly term:</th>
-          <td class="right-aligned">36 months</td>
-        </tr>
-        <tr>
-          <th>The monthly leasing rate is:</th>
-          <td class="right-aligned">€27.53 (plus VAT)</td>
-        </tr>
-        <tr>
-          <th>Monthly insurance (is mandatory):</th>
-          <td class="right-aligned">€6.90 (plus VAT)</td>
-        </tr>
-        <tr>
-          <th>Your payment method:</th>
-          <td class="right-aligned">quarterly</td>
-        </tr>
-        <tr>
-          <th>Your total monthly lease payment is:</th>
-          <td class="right-aligned">€34.43 (plus VAT)</td>
-        </tr>
-      </table>
-    </div>
-  </div>
-
-  <div class="box-container">
-    <h4 class="box-title">Information About the company</h4>
-    <div class="company-info-container">
-      <form action="/submit_form" method="post" class="form-container">
-        <div class="box-content form-flex">
-          <div class="flex">
-            <label for="legal-form" class="required">Legal form</label>
-            <select id="legal-form" class="custom-input" name="legal_form" required>
-              <option value="">-- Please select --</option>
-              <!-- Additional options -->
-            </select>
-          </div>
-
-          <div class="flex">
-            <label for="company-name" class="required">Company name</label>
-            <input class="custom-input" type="text" id="company-name" name="company_name" required>
-          </div>
-
-          <div class="flex">
-            <label for="company-street" class="required">Street</label>
-            <input type="text" class="custom-input" id="company-street" name="company_street" required>
-          </div>
-
-          <div class="flex">
-            <label for="postal-code" class="required">Postal code</label>
-            <input type="text" class="custom-input" id="postal-code" name="postal_code" required>
-          </div>
-
-          <div class="flex">
-            <label for="location" class="required">Location</label>
-            <input type="text" class="custom-input" id="location" name="location" required>
-          </div>
-
-          <div class="flex">
-            <label for="phone" class="required">Phone</label>
-            <input type="text" class="custom-input" id="phone" name="phone" required>
-          </div>
-
-          <div class="flex">
-            <label for="email" class="required">E-mail</label>
-            <input type="email" class="custom-input" id="email" name="email" required>
-          </div>
-
-          <div class="flex">
-            <label for="bank-details" class="required">Bank details</label>
-            <input type="text" class="custom-input" id="bank-details" name="bank_details" placeholder="IBAN" required>
-          </div>
-        </div>
-
-        <h4 class="box-title">Information About the Managing director</h4>
-        <div class="box-content form-flex">
-          <div class="flex">
-            <label for="salutation" class="required"><Samp></Samp>Salutation</label>
-            <select id="salutation" class="custom-input" name="salutation" required>
-              <option value="">-- Please select --</option>
-              <!-- Additional options -->
-            </select>
-          </div>
-          <div class="flex">
-            <label for="first-name" class="required">First Name</label>
-            <input type="text" class="custom-input" id="first-name" name="first_name" required>
-          </div>
-          <div class="flex">
-            <label for="last-name" class="required">Last Name</label>
-            <input type="text" class="custom-input" id="last-name" name="last_name" required>
-          </div>
-          <div class="flex">
-            <label for="managing-street" class="required">Street (GF)</label>
-            <input type="text" class="custom-input" id="managing-street" name="managing_street" required>
-          </div>
-          <div class="flex">
-            <label for="managing-postcode" class="required">Postcode (GF)</label>
-            <input type="text" class="custom-input" id="managing-postcode" name="managing_postcode" required>
-          </div>
-          <div class="flex">
-            <label for="managing-location" class="required">Location (GF)</label>
-            <input type="text" class="custom-input" id="managing-location" name="managing_location" required>
-          </div>
-          <div class="flex">
-            <label for="birthday" class="required">Birth date</label>
-            <input type="text" class="custom-input" id="birthday" name="birthday" placeholder="DD.MM.YYYY" required>
-          </div>
-          <div class="flex data-protetion">
-            <label for="data-protetion" class="required">Data protection</label>
-            <div class="checkbox-data-protection">
-              <input
-                type="checkbox"
-                class="custom-input"
-                id="data-protetion"
-                name="data_protetion"
-                placeholder="DD.MM.YYYY"
-                required
-              >
-              <p>
-                I have read the data protection regulations and agree that my data will be passed on to the ALBIS
-                Leasing<br>
-                Group and processed there in accordance with the ALBIS Leasing Group's data protection declaration .
-              </p>
-            </div>
-          </div>
-        </div>
-        <button id="test-backend" type="button">Test Backend</button>
-        <a href="#" class="request-btn">Send leasing application</a>
-      </form>
-    </div>
-  </div>
-  <a href="https://albis-leasing.myshopify.com/pages/albis-leasing" class="back-btn">Back</a>
-  <button type="button" id="testBtn">Test Btn</button>
-</div>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="../assets/vits.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + React + TS</title>
+    <script type="module" crossorigin src="../assets/albis-request-script.js"></script>
+    <link rel="stylesheet" crossorigin href="../assets/albis-request-style.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html> {% endcomment %}

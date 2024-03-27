@@ -2,13 +2,13 @@
 <script src="{{ 'albis-leasing-script.js' | asset_url }}" defer="defer"></script>
 <div id="shopDomain" style="visibility: hidden;">{{ shop.domain }}</div>
 
-<div class="wrapper">
+{% comment %} <div class="wrapper">
   <h1 class="page-title">Albis Leasing</h1>
   {% render 'albis-items-cart' %}
   {% render 'albis-calculator' %}
   {% render 'albis-installments' %}
-</div>
-
+</div> {% endcomment %}
+<div id="root"></div>
 
 {% schema %}
 {
