@@ -1,0 +1,39 @@
+{% comment %} {% assign avg_rating = block.settings.product.metafields.demo.avg_rating.value | round %}
+<span style="color:{{ block.settings.colour }}">
+  {% render 'stars', rating: avg_rating %}
+</span>
+{% if avg_rating >= 4 %}
+  <br>
+  <img src="{{ "thumbs-up.png" | asset_img_url: '15x' }}" height="15" width="15" loading="lazy">
+  {{ 'ratings.home.recommendationText' | t }}
+{% endif %} {% endcomment %}
+{{ 'albis-product.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'albis-product.js' | asset_url }}" defer="defer"></script>
+<div id="ah-product-id" class="albisHiddenInfo">{{ product.variants[0].id }}</div>
+<div id="ah-secure-url" class="albisHiddenInfo">{{ shop.secure_url }}</div>
+
+
+ {% comment %} <script>
+  var product = {{ product | json }};
+  console.log("window.Shopify.routes", window.Shopify.routes);
+  console.log(product);
+</script>  {% endcomment %}
+
+<div class="linksContainer">
+  {% assign productId = product.id %}
+  <a id="addProductAndRedirect" href="https://{{ shop.permanent_domain }}/pages/albis-leasing" class="contract-btn">
+    Lease Item
+   </a>
+</div>
+
+{% schema %}
+{
+  "name": "Product Albis Leasing",
+  "target": "section"
+  // "settings": [
+  //   { "type": "product", "id": "product", "label": "product", "autofill": true },
+  //   { "type": "color", "id": "colour", "label": "Star Colour", "default": "#ff0000" }
+  // ]
+}
+{% endschema %}
+
