@@ -1,5 +1,5 @@
 import type { ActionFunction, LoaderFunction } from "@remix-run/node";
-import { useActionData, useLoaderData } from "@remix-run/react";
+import { useLoaderData } from "@remix-run/react";
 
 import { authenticate } from "../shopify.server";
 
@@ -86,7 +86,6 @@ export const loader: LoaderFunction = async ({
         shop: session.shop,
       },
     });
-  console.log("pluginConfData", pluginConfData);
 
   const { ModulZugangsdaten, isModulAktiv, shop } = pluginConfData;
 
@@ -140,7 +139,6 @@ export const loader: LoaderFunction = async ({
 
 export default function Index() {
   const loaderData = useLoaderData<PluginConfData>();
-  const actions = useActionData<ActionZugangsdaten | null>();
   const { modulAktiv, modulEinstellungen, modulZugangsdaten, methodsData } =
     loaderData;
 
@@ -150,9 +148,6 @@ export default function Index() {
     benutzer,
     passwort,
   };
-
-  console.log("loaderData", loaderData);
-  console.log("actions", actions);
 
   return (
     <div className={styles.container}>

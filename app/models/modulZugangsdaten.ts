@@ -20,11 +20,6 @@ async function updateModulZugangsdaten(
   modulZugangsdaten: ModulZugangsdatenData,
 ) {
   try {
-    console.log(
-      "modulAktivId, modulZugangsdaten",
-      modulAktivId,
-      modulZugangsdaten,
-    );
     const updatedData = await db.modulZugangsdaten.update({
       where: { id: modulAktivId },
       data: { ...modulZugangsdaten },

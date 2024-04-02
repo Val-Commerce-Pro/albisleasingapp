@@ -37,7 +37,6 @@ export async function updateOrCreateModulEinstellungen(
   modulEinstellungen: ModulEinstellungenData,
 ) {
   try {
-    console.log("modulEinstellungen", { ...modulEinstellungen });
     const modulZugangsdatenData = await getModulZugangsdaten(shop);
     if (!modulZugangsdatenData) return null;
     const { id } = modulZugangsdatenData;
@@ -70,7 +69,6 @@ export async function getModulEinstellungen(shop: string) {
         },
       },
     });
-    console.log("getModulEinstellungen", pluginConfig);
     if (!pluginConfig || !pluginConfig?.ModulZugangsdaten) return null;
 
     return pluginConfig.ModulZugangsdaten.ModulEinstellungen;

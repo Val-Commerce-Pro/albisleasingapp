@@ -35,15 +35,19 @@ export async function getPluginConfToFrontStore(shop: string) {
     isModulAktiv,
     ModulZugangsdaten: { ModulEinstellungen },
   } = pluginConfData;
+  const { id, zugangsdatenId, ...einstellungenRest } = ModulEinstellungen;
 
   const dataToFrontStore = {
     modulAktiv: {
       isModulAktiv: isModulAktiv,
     },
+    // modulEinstellungen: {
+    //   ...Object.keys(ModulEinstellungen).filter(
+    //     (key) => key !== "id" || "zugangsdatenId",
+    //   ),
+    // },
     modulEinstellungen: {
-      ...Object.keys(ModulEinstellungen).filter(
-        (key) => key !== "id" || "zugangsdatenId",
-      ),
+      ...einstellungenRest,
     },
   };
 
