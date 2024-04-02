@@ -5,7 +5,7 @@ export const AlbisRequest = () => {
   console.log("AlbisRequest loaderData", loaderData);
 
   return (
-    <div className="w-24 h-24 bg-slate-200">
+    <div className="max-w-7xl m-auto p-1">
       Albis Request page{" "}
       <Link to="/pages/albis-leasing">Go to Albis Leasing</Link>
     </div>
