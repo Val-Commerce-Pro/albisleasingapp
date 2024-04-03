@@ -1,31 +1,37 @@
-import React, { useState } from "react";
+import React from "react";
+import { Label } from "../label";
 
-interface SelectProps {
-  label: string;
-  options: string[];
-}
+type SelectProps = {
+  handleChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  selectedValue?: string;
+  name: string;
+  label?: string;
+  options: Array<{ value: string; label: string }>;
+};
 
-export const Select = ({ label, options }: SelectProps) => {
-  // const [isOpen, setIsOpen] = useState(false);
-
+export const Select = ({
+  handleChange,
+  selectedValue,
+  label,
+  name,
+  options,
+}: SelectProps) => {
   return (
-    <form className="max-w-sm mx-auto">
-      <label
-        htmlFor="countries"
-        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-      >
-        Select an option
-      </label>
+    <div className="flex flex-col gap-2">
+      {label && <Label label={label} />}
       <select
-        id="countries"
-        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        name={name}
+        id={name}
+        onChange={handleChange}
+        value={selectedValue}
+        className="block w-full px-4 py-2 text-base text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
       >
-        <option selected>Choose a country</option>
-        <option value="US">United States</option>
-        <option value="CA">Canada</option>
-        <option value="FR">France</option>
-        <option value="DE">Germany</option>
+        {options.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
       </select>
-    </form>
+    </div>
   );
 };

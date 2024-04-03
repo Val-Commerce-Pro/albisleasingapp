@@ -11,3 +11,5 @@ export const AlbisRequest = () => {
     </div>
   );
 };
+
+export default AlbisRequest;

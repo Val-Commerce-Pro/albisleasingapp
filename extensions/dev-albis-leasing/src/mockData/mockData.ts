@@ -1,3 +1,52 @@
+// export const cartItemIni = {
+//   token: "Z2NwLXVzLWNlbnRyYWwxOjAxSFNHNDFRRzNUUjBDQUUyWEQ2Nks2RUtW",
+//   currency: "EUR",
+//   item_count: 7,
+//   total_price: 876175,
+//   items: [
+//     {
+//       discounted_price: 88595,
+//       final_price: 88595,
+//       handle: "the-videographer-snowboard",
+//       id: 47831615996224,
+//       image:
+//         "https://cdn.shopify.com/s/files/1/0860/1423/0848/files/Main.jpg?v=1707135789",
+//       key: "47831615996224:546a9f13ea72c2016cd50ec70c5b300c",
+//       line_price: 88595,
+//       product_id: 9051247214912,
+//       product_title: "The Videographer Snowboard",
+//       quantity: 1,
+//       title: "The Videographer Snowboard",
+//       url: "/products/the-videographer-snowboard?variant=47831615996224",
+//       variant_id: 47831615996224,
+//     },
+//   ],
+// };
+
+export type CartItem = {
+  discounted_price: number;
+  final_price: number;
+  handle: string;
+  id: number;
+  image: string;
+  key: string;
+  line_price: number;
+  product_id: number;
+  product_title: string;
+  quantity: 1;
+  title: string;
+  url: string;
+  variant_id: number;
+};
+
+export type CartItemsData = {
+  token: string;
+  currency: string;
+  item_count: number;
+  total_price: number;
+  items: CartItem[];
+};
+
 export const mockCartItems = {
   token: "Z2NwLXVzLWNlbnRyYWwxOjAxSFNHNDFRRzNUUjBDQUUyWEQ2Nks2RUtW",
   currency: "EUR",
@@ -86,6 +135,3 @@ export const mockCartItems = {
     },
   ],
 };
-
-export type MockCartData = typeof mockCartItems;
-export type MockCartItems = typeof mockCartItems.items;

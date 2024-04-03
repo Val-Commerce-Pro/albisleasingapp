@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 // import { Link } from "react-router-dom";
 // import { Box } from "../components/box";
 import { PageTitle } from "../components/pagetitle";
@@ -7,14 +7,42 @@ import { PageTitle } from "../components/pagetitle";
 
 import { SectionCalculator } from "../components/sectionCalculator";
 import { SectionCartItems } from "../components/sectionCartItems";
-import { useGetCartData } from "../hooks/useGetCartData";
-import { useGetPluginConfData } from "../hooks/useGetPluginConfData";
+import { ShoppingCart, ShoppingCartItem } from "../types/cartTypes";
+import { PluginConfig } from "../types/pluginConfig";
+import { deleteCartItem, updateCartData } from "../utils/shopifyAjaxApi";
 // import { mockCartItems } from "../mockData/mockData";
 
-export const AlbisLeasing = () => {
+type AlbisLeasingProps = {
+  cartData: ShoppingCart;
+  pluginConfigData: PluginConfig;
+};
+
+export const AlbisLeasing = ({
+  cartData,
+  pluginConfigData,
+}: AlbisLeasingProps) => {
+  const [cartItems, setCartItems] = useState<ShoppingCart>(cartData);
+
+  const handleUpdateItemQuantity = async (
+    item: ShoppingCartItem,
+    type?: "plus",
+  ) => {
+    const productQuantity = {
+      [item.id]: type ? item.quantity + 1 : item.quantity - 1,
+    };
+    const updatedCartData = await updateCartData(productQuantity);
+    setCartItems(updatedCartData);
+  };
+
+  const handleDeleteCartItem = async (item: ShoppingCartItem) => {
+    const productQuantity = {
+      [item.id]: 0,
+    };
+    const updatedCartData = await deleteCartItem(productQuantity);
+    setCartItems(updatedCartData);
+  };
   // const [cartData] = useState<ShoppingCart>(mockCartItems);
-  const cartData = useGetCartData();
-  const pluginConfData = useGetPluginConfData();
+
   // const [cartData, setCartData] = useState<ShoppingCart>();
 
   // const [formData, setFormData] = useState({
@@ -79,18 +107,24 @@ export const AlbisLeasing = () => {
     //   }
     // };
   }, []);
-  console.log("formatted", cartData);
-  return pluginConfData && pluginConfData?.modulAktiv && cartData ? (
-    <div className="max-w-[1280px] m-auto p-4">
-      <PageTitle title="Albis Leasing" />
-      {/* <Link className="text-2xl" to="/pages/albis-leasing-request">
+  return (
+    pluginConfigData &&
+    pluginConfigData?.modulAktiv &&
+    cartData && (
+      <div className="max-w-[1280px] m-auto p-4">
+        <PageTitle title="Albis Leasing" />
+        {/* <Link className="text-2xl" to="/pages/albis-leasing-request">
         Go to Albis Request
       </Link> */}
-      <div className="grid grid-cols-1 md:grid-cols-[1.5fr_0.5fr] gap-4">
-        <SectionCartItems cartData={cartData} />
-        <SectionCalculator leasingValue={cartData.total_price} />
-      </div>
-      {/* <Box title="Artikel aus dem Warenkorb">
+        <div className="grid grid-cols-1 md:grid-cols-[1.5fr_0.5fr] gap-4">
+          <SectionCartItems
+            cartData={cartItems}
+            handleUpdateItemQuantity={handleUpdateItemQuantity}
+            handleDeleteCartItem={handleDeleteCartItem}
+          />
+          <SectionCalculator leasingValue={cartData.total_price} />
+        </div>
+        {/* <Box title="Artikel aus dem Warenkorb">
         <div className="textfieldContainer">
           <h1 className="text-3xl font-bold underline">Hello world!</h1>
           <TextField
@@ -106,8 +140,9 @@ export const AlbisLeasing = () => {
           />
         </div>
       </Box> */}
-    </div>
-  ) : (
-    <h1>Loading...</h1>
+      </div>
+    )
   );
 };
+
+export default AlbisLeasing;

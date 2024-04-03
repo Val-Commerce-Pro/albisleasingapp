@@ -36,6 +36,7 @@ export const useGetPluginConfData = () => {
 
   useEffect(() => {
     const shop = document.getElementById("shopDomain")?.textContent;
+    // const shop = "commerce-albis-leasing.myshopify.com";
     if (!shop) return;
     const getPluginConfData = async () => {
       try {
@@ -47,9 +48,8 @@ export const useGetPluginConfData = () => {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
-        console.log("conf at frontStore", data);
         const formattedData = pluginConfigSchema.parse(data);
-        console.log("conf at frontStore formattedData", formattedData);
+        console.log("pluginConfData", formattedData);
         setPluginConfData(formattedData);
         return data;
       } catch (error) {

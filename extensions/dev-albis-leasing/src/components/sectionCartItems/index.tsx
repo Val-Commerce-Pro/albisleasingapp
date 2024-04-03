@@ -1,42 +1,20 @@
-import { useState } from "react";
 import { FaMinus, FaPlus, FaTrash } from "react-icons/fa";
-import { MockCartData, MockCartItems } from "../../mockData/mockData";
+import { ShoppingCart, ShoppingCartItem } from "../../types/cartTypes";
 import { Box } from "../box";
 
 type SectionCartItemsProps = {
-  cartData?: MockCartData;
+  cartData: ShoppingCart;
+  handleUpdateItemQuantity: (item: ShoppingCartItem, type?: "plus") => void;
+  handleDeleteCartItem: (item: ShoppingCartItem) => void;
 };
 
-export const SectionCartItems = ({ cartData }: SectionCartItemsProps) => {
-  const [cartItems, setCartItems] = useState<MockCartItems>(
-    cartData?.items ?? [],
-  );
-
-  const updateQuantity = (index: number, newQuantity: number) => {
-    if (newQuantity < 1) {
-      return; // Prevent the quantity from going below 1
-    }
-    // Update the quantity for the specified index
-    const newCartItems = [...cartItems];
-    newCartItems[index] = {
-      ...newCartItems[index],
-      quantity: newQuantity,
-    };
-    setCartItems(newCartItems);
-    // TODO: Persist the new quantity to the backend or state management solution
-  };
-
-  const deleteItem = (index: number) => {
-    // Filter out the item to delete
-    const newCartItems = cartItems.filter((_, idx) => idx !== index);
-    setCartItems(newCartItems);
-    // TODO: Remove the item from the cart in the backend or state management solution
-  };
-
-  // const handleUpdateQuantity = () => {};
-
-  return cartData ? (
-    <Box title="Artikel aus dem Warenkorb">
+export const SectionCartItems = ({
+  cartData,
+  handleUpdateItemQuantity,
+  handleDeleteCartItem,
+}: SectionCartItemsProps) => {
+  return (
+    <Box title="Artikel aus dem Warenkorb A">
       <div className="overflow-x-auto shadow-md sm:rounded-lg">
         <table className="min-w-full text-sm divide-y divide-gray-200">
           <thead className="bg-gray-50">
@@ -74,7 +52,7 @@ export const SectionCartItems = ({ cartData }: SectionCartItemsProps) => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {cartItems.map((item, index) => (
+            {cartData.items.map((item, index) => (
               <tr key={index}>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <img
@@ -86,7 +64,7 @@ export const SectionCartItems = ({ cartData }: SectionCartItemsProps) => {
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                   <div className="flex items-center">
                     <button
-                      onClick={() => updateQuantity(index, item.quantity - 1)}
+                      onClick={() => handleUpdateItemQuantity(item)}
                       className={`p-1 mr-2 rounded-full border-0 ${
                         item.quantity <= 1
                           ? "text-gray-300 cursor-not-allowed"
@@ -98,7 +76,7 @@ export const SectionCartItems = ({ cartData }: SectionCartItemsProps) => {
                     </button>
                     <span>{item.quantity}</span>
                     <button
-                      onClick={() => updateQuantity(index, item.quantity + 1)}
+                      onClick={() => handleUpdateItemQuantity(item, "plus")}
                       className="p-1 ml-2 rounded-full border-0 text-gray-500 hover:text-gray-700"
                     >
                       <FaPlus />
@@ -113,7 +91,7 @@ export const SectionCartItems = ({ cartData }: SectionCartItemsProps) => {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   <button
-                    onClick={() => deleteItem(index)}
+                    onClick={() => handleDeleteCartItem(item)}
                     className="p-1 rounded-full border-0 text-red-500 hover:text-red-700"
                   >
                     <FaTrash />
@@ -121,11 +99,22 @@ export const SectionCartItems = ({ cartData }: SectionCartItemsProps) => {
                 </td>
               </tr>
             ))}
+            <tr>
+              <td
+                colSpan={3}
+                className="px-6 py-4 text-right text-sm font-medium text-gray-900"
+              >
+                Total
+              </td>
+              <td className="px-6 py-4 text-sm text-gray-500">
+                €{(cartData.total_price / 100).toFixed(2)}
+              </td>
+              <td className="px-6 py-4"></td>{" "}
+              {/* Empty cell for the Actions column */}
+            </tr>
           </tbody>
         </table>
       </div>
     </Box>
-  ) : (
-    <h1 className="text-3xl">LOADING</h1>
   );
 };

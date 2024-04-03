@@ -13,12 +13,6 @@
 <div id="ah-secure-url" class="albisHiddenInfo">{{ shop.secure_url }}</div>
 
 
- {% comment %} <script>
-  var product = {{ product | json }};
-  console.log("window.Shopify.routes", window.Shopify.routes);
-  console.log(product);
-</script>  {% endcomment %}
-
 <div class="linksContainer">
   {% assign productId = product.id %}
   <a id="addProductAndRedirect" href="https://{{ shop.permanent_domain }}/pages/albis-leasing" class="contract-btn">
