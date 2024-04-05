@@ -36,7 +36,6 @@ export const useGetPluginConfData = () => {
 
   useEffect(() => {
     const shop = document.getElementById("shopDomain")?.textContent;
-    // const shop = "commerce-albis-leasing.myshopify.com";
     if (!shop) return;
     const getPluginConfData = async () => {
       try {

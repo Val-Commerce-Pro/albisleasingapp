@@ -1,53 +1,7 @@
-// export const cartItemIni = {
-//   token: "Z2NwLXVzLWNlbnRyYWwxOjAxSFNHNDFRRzNUUjBDQUUyWEQ2Nks2RUtW",
-//   currency: "EUR",
-//   item_count: 7,
-//   total_price: 876175,
-//   items: [
-//     {
-//       discounted_price: 88595,
-//       final_price: 88595,
-//       handle: "the-videographer-snowboard",
-//       id: 47831615996224,
-//       image:
-//         "https://cdn.shopify.com/s/files/1/0860/1423/0848/files/Main.jpg?v=1707135789",
-//       key: "47831615996224:546a9f13ea72c2016cd50ec70c5b300c",
-//       line_price: 88595,
-//       product_id: 9051247214912,
-//       product_title: "The Videographer Snowboard",
-//       quantity: 1,
-//       title: "The Videographer Snowboard",
-//       url: "/products/the-videographer-snowboard?variant=47831615996224",
-//       variant_id: 47831615996224,
-//     },
-//   ],
-// };
+import { LeasingRate } from "../types/albisMethods";
+import { ShoppingCart } from "../types/cartTypes";
 
-export type CartItem = {
-  discounted_price: number;
-  final_price: number;
-  handle: string;
-  id: number;
-  image: string;
-  key: string;
-  line_price: number;
-  product_id: number;
-  product_title: string;
-  quantity: 1;
-  title: string;
-  url: string;
-  variant_id: number;
-};
-
-export type CartItemsData = {
-  token: string;
-  currency: string;
-  item_count: number;
-  total_price: number;
-  items: CartItem[];
-};
-
-export const mockCartItems = {
+export const mockCartItems: ShoppingCart = {
   token: "Z2NwLXVzLWNlbnRyYWwxOjAxSFNHNDFRRzNUUjBDQUUyWEQ2Nks2RUtW",
   currency: "EUR",
   item_count: 7,
@@ -134,4 +88,55 @@ export const mockCartItems = {
       variant_id: 47831617143104,
     },
   ],
+};
+
+export const mockLeasingRate: LeasingRate = {
+  id: 1,
+  jsonrpc: "2.0",
+  result: {
+    kaufpreis: 2099.9,
+    prodgrp: 2,
+    mietsz: 0,
+    vertragsart: 1,
+    zahlweise: 1,
+    provision: 5,
+    kuendmonat: 30,
+    raten: [
+      {
+        laufzeit: 24,
+        rate: 101.65,
+        versicherung: 0,
+      },
+      {
+        laufzeit: 36,
+        rate: 71.66,
+        versicherung: 0,
+        schlusszahlung: 427.34,
+      },
+      {
+        laufzeit: 42,
+        rate: 63.28,
+        versicherung: 0,
+        schlusszahlung: 749.41,
+      },
+      {
+        laufzeit: 48,
+        rate: 56.89,
+        versicherung: 0,
+        schlusszahlung: 1003.33,
+      },
+      {
+        laufzeit: 54,
+        rate: 52.04,
+        versicherung: 0,
+        schlusszahlung: 1214.99,
+      },
+      {
+        laufzeit: 60,
+        rate: 48.07,
+        versicherung: 0,
+        schlusszahlung: 1392.78,
+      },
+    ],
+  },
 };

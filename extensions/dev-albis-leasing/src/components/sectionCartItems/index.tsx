@@ -14,7 +14,7 @@ export const SectionCartItems = ({
   handleDeleteCartItem,
 }: SectionCartItemsProps) => {
   return (
-    <Box title="Artikel aus dem Warenkorb A">
+    <Box title="Artikel aus dem Warenkorb">
       <div className="overflow-x-auto shadow-md sm:rounded-lg">
         <table className="min-w-full text-sm divide-y divide-gray-200">
           <thead className="bg-gray-50">

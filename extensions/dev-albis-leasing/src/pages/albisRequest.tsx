@@ -1,8 +1,7 @@
-import { Link, useLoaderData } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export const AlbisRequest = () => {
-  const loaderData = useLoaderData();
-  console.log("AlbisRequest loaderData", loaderData);
+  console.log("AlbisRequest render");
 
   return (
     <div className="max-w-7xl m-auto p-1">

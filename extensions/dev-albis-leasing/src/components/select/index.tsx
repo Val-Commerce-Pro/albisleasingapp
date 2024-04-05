@@ -1,34 +1,38 @@
 import React from "react";
-import { Label } from "../label";
 
 type SelectProps = {
   handleChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
-  selectedValue?: string;
   name: string;
+  options: Array<{ id: number | string; bezeichnung: string }>;
   label?: string;
-  options: Array<{ value: string; label: string }>;
+  selectedValue?: string;
+  disabled?: boolean;
+  hidden?: boolean;
 };
 
 export const Select = ({
   handleChange,
-  selectedValue,
-  label,
   name,
   options,
+  label,
+  selectedValue,
+  disabled = false,
+  hidden = false,
 }: SelectProps) => {
   return (
     <div className="flex flex-col gap-2">
-      {label && <Label label={label} />}
+      {label && <label className={`text-sm`}>{label}</label>}
       <select
         name={name}
         id={name}
-        onChange={handleChange}
+        onChange={(e) => handleChange(e)}
         value={selectedValue}
-        className="block w-full px-4 py-2 text-base text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+        disabled={disabled}
+        className={`block w-full px-4 py-2 text-base text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 ${hidden ? "hidden" : "visible"}`}
       >
         {options.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
+          <option key={option.id} value={option.id}>
+            {option.bezeichnung}
           </option>
         ))}
       </select>
