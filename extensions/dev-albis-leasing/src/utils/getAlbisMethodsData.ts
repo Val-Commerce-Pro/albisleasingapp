@@ -2,7 +2,8 @@ import { Werte } from "../types/localStorage";
 
 export const getAlbisMethodsData = async (method: string, werte?: Werte) => {
   try {
-    const shop = document.getElementById("shopDomain")?.textContent;
+    // const shop = document.getElementById("shopDomain")?.textContent;
+    const shop = "commerce-albis-leasing.myshopify.com";
     const requestBody = werte ? { method, shop, werte } : { method, shop };
     console.log("requestBody", requestBody);
     const response = await fetch(

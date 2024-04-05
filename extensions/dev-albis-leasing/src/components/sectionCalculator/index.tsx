@@ -1,6 +1,6 @@
 import { ChangeEvent, useEffect, useState } from "react";
-import { CartItemsData } from "../../mockData/mockData";
 import { GetZahlungsweisen } from "../../types/albisMethods";
+import { ShoppingCart } from "../../types/cartTypes";
 import { PluginConfig } from "../../types/pluginConfig";
 import { getAlbisMethodsData } from "../../utils/getAlbisMethodsData";
 import { Box } from "../box";
@@ -9,7 +9,7 @@ import { TextField } from "../textfield";
 
 type SectionCalculatorProps = {
   calcData: {
-    leasingValue: CartItemsData["total_price"];
+    leasingValue: ShoppingCart["total_price"];
     auswahlZahlungsweiseAnzeigen: PluginConfig["modulEinstellungen"]["auswahlZahlungsweiseAnzeigen"];
     auswahlObjektVersicherungAnzeigen: PluginConfig["modulEinstellungen"]["auswahlObjektVersicherungAnzeigen"];
     kundeKannFinanzierungsbetragAndern: PluginConfig["modulEinstellungen"]["kundeKannFinanzierungsbetragAndern"];
