@@ -35,7 +35,6 @@ export const useGetCartData = () => {
       .then((data) => {
         console.log("original cart data", data);
         const formattedData = shoppingCartSchema.parse(data);
-        console.log("parsed cart data", data);
         setCartData(formattedData);
       })
       .catch((error) => console.error("Error fetching cart data:", error));

@@ -5,7 +5,6 @@ export const getAlbisMethodsData = async (method: string, werte?: Werte) => {
     // const shop = document.getElementById("shopDomain")?.textContent;
     const shop = "commerce-albis-leasing.myshopify.com";
     const requestBody = werte ? { method, shop, werte } : { method, shop };
-    console.log("requestBody", requestBody);
     const response = await fetch(
       `https://albisleasingapp.cpro-server.de/api/getMethodsData`,
       {

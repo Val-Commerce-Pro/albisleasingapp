@@ -49,7 +49,6 @@ export const useGetPluginConfData = () => {
         }
         const data = await response.json();
         const formattedData = pluginConfigSchema.parse(data);
-        console.log("pluginConfData", formattedData);
         setPluginConfData(formattedData);
         return data;
       } catch (error) {

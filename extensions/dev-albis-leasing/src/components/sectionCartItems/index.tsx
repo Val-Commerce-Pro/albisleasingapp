@@ -1,5 +1,6 @@
 import { FaMinus, FaPlus, FaTrash } from "react-icons/fa";
 import { ShoppingCart, ShoppingCartItem } from "../../types/cartTypes";
+import { formatDecimalNumber } from "../../utils/formatValues";
 import { Box } from "../box";
 
 type SectionCartItemsProps = {
@@ -87,7 +88,7 @@ export const SectionCartItems = ({
                   {item.title}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  €{(item.final_price / 100).toFixed(2)}
+                  €{formatDecimalNumber(item.line_price)}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   <button
@@ -107,7 +108,7 @@ export const SectionCartItems = ({
                 Total
               </td>
               <td className="px-6 py-4 text-sm text-gray-500">
-                €{(cartData.total_price / 100).toFixed(2)}
+                €{formatDecimalNumber(cartData.total_price)}
               </td>
               <td className="px-6 py-4"></td>{" "}
               {/* Empty cell for the Actions column */}

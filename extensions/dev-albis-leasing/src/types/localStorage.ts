@@ -10,3 +10,10 @@ export type Werte = {
 export type LocalStorageData = {
   werte: Werte;
 };
+
+export type CalcData = {
+  objektVersicherungVorhanden: string;
+  finanzierungsbetragNetto: string;
+  anzahlung: string;
+  zahlungsweise: string;
+};
