@@ -28,9 +28,11 @@ async function addProductToCart() {
 
 const getPluginConfData = async () => {
   try {
-    const shop = "commerce-albis-leasing.myshopify.com";
+    const shop = document.getElementById("ah-shop-domain").textContent;
     const parameters = new URLSearchParams({ shop });
     const requestUrl = `https://albisleasingapp.cpro-server.de/api/getPluginConfData?${parameters}`;
+
+    console.log('SHOP', shop, requestUrl)
 
     const response = await fetch(requestUrl, { method: "GET" });
     if (!response.ok) {
@@ -94,7 +96,7 @@ async function getLeasingRateTable() {
     let laufzeitCell = newRow.insertCell();
     let rateCell = newRow.insertCell();
     laufzeitCell.innerHTML = `${rate.laufzeit} Monate`;
-    rateCell.innerHTML = `${rate.rate}€`;
+    rateCell.innerHTML = `${rate.rate}${rate.rate.toString().split(".")[1].length === 1 ? "0" : ""}€`;
   }
 
   return table;
