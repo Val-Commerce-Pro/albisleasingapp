@@ -26,11 +26,87 @@ async function addProductToCart() {
   return data;
 }
 
+const getPluginConfData = async () => {
+  try {
+    const shop = "commerce-albis-leasing.myshopify.com";
+    const parameters = new URLSearchParams({ shop });
+    const requestUrl = `https://albisleasingapp.cpro-server.de/api/getPluginConfData?${parameters}`;
+
+    const response = await fetch(requestUrl, { method: "GET" });
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching AppConfig:", error);
+  }
+};
+
+const getAlbisMethodsData = async (method, werte) => {
+  try {
+    const shop = "commerce-albis-leasing.myshopify.com";
+    const requestBody = werte ? { method, shop, werte } : { method, shop };
+    const response = await fetch(
+      `https://albisleasingapp.cpro-server.de/api/getMethodsData`,
+      {
+        method: "POST",
+        body: JSON.stringify(requestBody),
+      },
+    );
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching AppConfig:", error);
+  }
+}
+
+function toCurrency(rate) {
+  cent = rate.toString().slice(-2);
+  euro = rate.toString().slice(0, -2);
+
+  return `${euro}.${cent}`;
+}
+
+async function getLeasingRateTable() {
+  const pluginConfData = await getPluginConfData();
+
+  const productPrice = document.getElementById("ah-product-price").textContent;
+
+  const productValues = {
+    kaufpreis: toCurrency(productPrice),
+    prodgrp: pluginConfData.modulEinstellungen.produktgruppe,
+    mietsz: "0.00",
+    vertragsart: pluginConfData.modulEinstellungen.vertragsart,
+    zahlweise: pluginConfData.modulEinstellungen.zahlungsweisen,
+    provision: Number(pluginConfData.modulEinstellungen.provisionsangabe),
+  };
+
+  const leasingRates = await getAlbisMethodsData("getRate", productValues);
+
+  let table = document.getElementById('preview-table').getElementsByTagName('tbody')[0];
+
+  for(rate of leasingRates.result.raten) {
+    let newRow = table.insertRow();
+    let laufzeitCell = newRow.insertCell();
+    let rateCell = newRow.insertCell();
+    laufzeitCell.innerHTML = `${rate.laufzeit} Monate`;
+    rateCell.innerHTML = `${rate.rate}€`;
+  }
+
+  return table;
+};
+
 document.addEventListener("DOMContentLoaded", async () => {
   // const secureUrl = document.getElementById("ah-secure-url").textContent;
   const addProductAndRedirect = document.getElementById(
     "addProductAndRedirect",
   );
+
+  await getLeasingRateTable();
 
   addProductAndRedirect.addEventListener("click", async (e) => {
     await addProductToCart();
