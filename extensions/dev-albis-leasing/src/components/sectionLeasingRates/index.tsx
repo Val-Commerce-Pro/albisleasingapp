@@ -44,7 +44,7 @@ export const SectionLeasingRates = ({
     };
     localStorage.setItem("cp@albisLeasing", JSON.stringify(dataToLocalStorage));
 
-    navigate(`pages/albis-leasing-request`);
+    navigate(`/pages/albis-leasing-request`);
   };
 
   console.log("leasingValue", leasingValue);

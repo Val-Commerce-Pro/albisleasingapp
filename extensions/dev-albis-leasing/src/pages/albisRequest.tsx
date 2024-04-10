@@ -1,5 +1,6 @@
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { PageTitle } from "../components/pagetitle";
+import { SectionLeasingData } from "../components/sectionLeasingData";
 
 export const AlbisRequest = () => {
   console.log("AlbisRequest render");
@@ -10,9 +11,10 @@ export const AlbisRequest = () => {
   }, []);
 
   return (
-    <div className="max-w-7xl m-auto p-1">
-      Albis Request page{" "}
-      <Link to="/pages/albis-leasing">Go to Albis Leasing</Link>
+
+    <div className="max-w-[1280px] mx-auto p-4">
+    <PageTitle title="Albis Leasing Request" />
+    <SectionLeasingData />
     </div>
   );
 };
