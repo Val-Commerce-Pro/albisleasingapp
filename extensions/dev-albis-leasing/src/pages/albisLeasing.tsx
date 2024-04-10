@@ -5,7 +5,7 @@ import { SectionCartItems } from "../components/sectionCartItems";
 import { SectionLeasingRates } from "../components/sectionLeasingRates";
 import { LeasingRate } from "../types/albisMethods";
 import { ShoppingCart, ShoppingCartItem } from "../types/cartTypes";
-import { CalcData } from "../types/localStorage";
+import { CalcData, LocalStorageI } from "../types/localStorage";
 import { PluginConfig } from "../types/pluginConfig";
 import { formatDecimalNumber } from "../utils/formatValues";
 import { getAlbisMethodsData } from "../utils/getAlbisMethodsData";
@@ -25,15 +25,28 @@ export const AlbisLeasing = ({
   const [leasingRate, setLeasingRate] = useState<LeasingRate | undefined>();
 
   useEffect(() => {
+    const storageDataAsString = localStorage.getItem("cp@albisLeasing");
+    const stateInitialData: LocalStorageI =
+      storageDataAsString &&
+      Object.keys(storageDataAsString).length > 1 &&
+      JSON.parse(storageDataAsString);
+
     const getAlbisData = async () => {
       const werte = {
-        kaufpreis: formatDecimalNumber(total_price),
+        kaufpreis: formatDecimalNumber(
+          stateInitialData
+            ? stateInitialData.calcData.finanzierungsbetragNetto
+            : total_price,
+        ),
         prodgrp: modulEinstellungen.produktgruppe,
         mietsz: "0",
         vertragsart: modulEinstellungen.vertragsart,
-        zahlweise: modulEinstellungen.zahlungsweisen,
+        zahlweise: stateInitialData
+          ? stateInitialData.calcData.zahlungsweise
+          : modulEinstellungen.zahlungsweisen,
         provision: modulEinstellungen.provisionsangabe,
       };
+
       const leasingRateData: LeasingRate = await getAlbisMethodsData(
         "getRate",
         werte,

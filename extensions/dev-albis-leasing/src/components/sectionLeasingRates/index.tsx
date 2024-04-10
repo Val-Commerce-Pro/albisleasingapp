@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { LeasingRate, Rate } from "../../types/albisMethods";
 import { ShoppingCart } from "../../types/cartTypes";
+import { LocalStorageI } from "../../types/localStorage";
 import { formatDecimalNumber } from "../../utils/formatValues";
 import { Box } from "../box";
 
@@ -13,6 +14,18 @@ export const SectionLeasingRates = ({
   leasingRate,
   leasingValue,
 }: SectionLeasingRatesProps) => {
+  const storageDataAsString = localStorage.getItem("cp@albisLeasing");
+  const stateInitialData: LocalStorageI =
+    storageDataAsString &&
+    Object.keys(storageDataAsString).length > 1 &&
+    JSON.parse(storageDataAsString);
+
+  const tableHeaders = [
+    "Vertragslaufzeit",
+    "Monatliche Rate",
+    "Versicherung",
+    "Gesamtleasingrate",
+  ];
   const navigate = useNavigate();
 
   const handleClickRateOpt = (itemRate: Rate) => {
@@ -24,8 +37,8 @@ export const SectionLeasingRates = ({
       : {};
 
     const dataToLocalStorage = {
-      leasing: {
-        ...dataFromLocalStorage.leasing,
+      ...dataFromLocalStorage,
+      leasingRate: {
         ...itemRate,
       },
     };
@@ -34,9 +47,10 @@ export const SectionLeasingRates = ({
     navigate(`pages/albis-leasing-request`);
   };
 
+  console.log("leasingValue", leasingValue);
   return (
     <Box
-      title={`Leasingraten (Finanzierungsbetrag: ${leasingValue && formatDecimalNumber(leasingValue)} €)`}
+      title={`Leasingraten (Finanzierungsbetrag: ${leasingValue && formatDecimalNumber(stateInitialData ? stateInitialData.calcData.finanzierungsbetragNetto : leasingValue)} €)`}
       hasTooltip
       toolTipContent={`Rechnen Sie hier schnell und einfach die zu zahlende monatliche Leasingrate für den geplanten Einkaufswert aus:\nKaufpreis (ohne MwSt.) als Finanzierungsbetrag eintragen:`}
     >
@@ -44,30 +58,15 @@ export const SectionLeasingRates = ({
         <table className="min-w-full text-sm divide-y divide-gray-200">
           <thead className="bg-gray-50 rounded-t-lg">
             <tr className="text-center">
-              <th
-                scope="col"
-                className="px-6 py-3  font-medium text-gray-500 uppercase tracking-wider rounded-tl-lg"
-              >
-                Vertragslaufzeit
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3  font-medium text-gray-500 uppercase tracking-wider"
-              >
-                Monatliche Rate
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3  font-medium text-gray-500 uppercase tracking-wider"
-              >
-                Versicherung
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3  font-medium text-gray-500 uppercase tracking-wider rounded-tr-lg"
-              >
-                Gesamtleasingrate
-              </th>
+              {tableHeaders.map((item, i) => (
+                <th
+                  key={`${i}-${item}`}
+                  scope="col"
+                  className="px-6 py-3  font-medium text-gray-500 uppercase tracking-wider rounded-tl-lg"
+                >
+                  {item}
+                </th>
+              ))}
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200 text-sm rounded-b-lg">

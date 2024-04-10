@@ -1,15 +1,4 @@
-export type Werte = {
-  kaufpreis?: string;
-  prodgrp?: string;
-  mietsz?: string;
-  vertragsart?: string;
-  zahlweise?: string;
-  provision?: string;
-};
-
-export type LocalStorageData = {
-  werte: Werte;
-};
+import { Rate } from "./albisMethods";
 
 export type CalcData = {
   objektVersicherungVorhanden: string;
@@ -17,3 +6,8 @@ export type CalcData = {
   anzahlung: string;
   zahlungsweise: string;
 };
+
+export interface LocalStorageI {
+  calcData: CalcData;
+  leasingRate: Rate;
+}

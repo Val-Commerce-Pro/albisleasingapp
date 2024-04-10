@@ -32,3 +32,12 @@ export type GetZahlungsweisen = {
   jsonrpc: string;
   result: ResultZahlungsweisen[];
 };
+
+export type Werte = {
+  kaufpreis?: string;
+  prodgrp?: string;
+  mietsz?: string;
+  vertragsart?: string;
+  zahlweise?: string;
+  provision?: string;
+};

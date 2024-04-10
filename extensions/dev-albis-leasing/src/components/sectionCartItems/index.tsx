@@ -21,8 +21,9 @@ export const SectionCartItems = ({
         <table className="min-w-full text-sm divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              {tableHeaders.map((item) => (
+              {tableHeaders.map((item, i) => (
                 <th
+                  key={`${i}-${item}`}
                   scope="col"
                   className="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider"
                 >
