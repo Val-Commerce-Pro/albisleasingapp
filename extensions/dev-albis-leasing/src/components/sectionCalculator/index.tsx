@@ -14,7 +14,7 @@ type SectionCalculatorProps = {
   auswahlObjektVersicherungAnzeigen: PluginConfig["modulEinstellungen"]["auswahlObjektVersicherungAnzeigen"];
   kundeKannFinanzierungsbetragAndern: PluginConfig["modulEinstellungen"]["kundeKannFinanzierungsbetragAndern"];
   zahlungsweisenPlugin: PluginConfig["modulEinstellungen"]["zahlungsweisen"];
-  handleSave: (calcData: CalcData) => void;
+  handleGetRate: (calcData: CalcData) => Promise<void>;
 };
 
 export const SectionCalculator = ({
@@ -23,20 +23,28 @@ export const SectionCalculator = ({
   finanzierungsbetragNetto,
   kundeKannFinanzierungsbetragAndern,
   zahlungsweisenPlugin,
-  handleSave,
+  handleGetRate,
 }: SectionCalculatorProps) => {
   const [formData, setFormData] = useState(() => {
     const storageDataAsString = localStorage.getItem("cp@albisLeasing");
-    const stateInitialData: CalcData = storageDataAsString
-      ? { ...JSON.parse(storageDataAsString).calcData }
-      : {
-          objektVersicherungVorhanden: "nein",
-          finanzierungsbetragNetto: finanzierungsbetragNetto.toString(),
-          anzahlung: "0",
-          zahlungsweise: `${zahlungsweisenPlugin}`,
-        };
+    const stateInitialData: CalcData =
+      storageDataAsString && Object.keys(storageDataAsString).length > 1
+        ? { ...JSON.parse(storageDataAsString).calcData }
+        : {
+            objektVersicherungVorhanden: "nein",
+            finanzierungsbetragNetto: finanzierungsbetragNetto.toString(),
+            anzahlung: "0",
+            zahlungsweise: `${zahlungsweisenPlugin}`,
+          };
     return stateInitialData;
   });
+
+  useEffect(() => {
+    localStorage.setItem(
+      "cp@albisLeasing",
+      JSON.stringify({ calcData: formData }),
+    );
+  }, [formData]);
 
   const [zahlungsweisen, setZahlungsweisen] = useState<
     GetZahlungsweisen | undefined
@@ -61,6 +69,33 @@ export const SectionCalculator = ({
     setFormData((prev) => ({ ...prev, [name]: value }));
   }
 
+  function handleSave() {
+    const dataFromLocalStorageAsString =
+      localStorage.getItem("cp@albisLeasing");
+    const dataFromLocalStorage = dataFromLocalStorageAsString
+      ? JSON.parse(dataFromLocalStorageAsString)
+      : {};
+    const formattedCalcData: CalcData = {
+      ...formData,
+      finanzierungsbetragNetto: formData.finanzierungsbetragNetto.replace(
+        /[^\d]/g,
+        "",
+      ),
+      anzahlung: formData.anzahlung.replace(/[^\d]/g, ""),
+    };
+    const dataToLocalStorage = {
+      ...dataFromLocalStorage,
+      calcData: {
+        ...formattedCalcData,
+      },
+    };
+    // console.log("dataToLocalStorage", dataToLocalStorage);
+    // console.log("dataFromLocalStorage", dataFromLocalStorage);
+    localStorage.setItem("cp@albisLeasing", JSON.stringify(dataToLocalStorage));
+
+    handleGetRate(formattedCalcData);
+  }
+
   return (
     <Box
       title="Albis Leasingrechner"
@@ -68,11 +103,7 @@ export const SectionCalculator = ({
       toolTipContent="Rechnen Sie hier schnell und einfach die zu zahlende monatliche Leasingrate für den geplanten Einkaufswert aus:
   Kaufpreis (ohne MwSt.) als Finanzierungsbetrag eintragen:"
     >
-      <div className="w-full h-full flex flex-col gap-4 p-3 overflow-x-auto shadow-md">
-        <p className="text-xs mb-1">
-          {`Quickly and easily calculate the monthly leasing rate to be paid for the planned purchase value:\n
-            Enter the purchase price (excluding VAT) as the financing amount:`}
-        </p>
+      <div className="w-full h-full flex flex-col gap-4 p-3 overflow-x-auto shadow-md rounded-b-lg">
         <Select
           handleChange={handleSelectChange}
           name="objektVersicherungVorhanden"
@@ -89,8 +120,8 @@ export const SectionCalculator = ({
           label="Finanzierungsbetrag (netto):"
           type="number"
           handleOnChange={handleInputChange}
-          handleOnBlur={() => handleSave(formData)}
-          handleKeyDown={() => handleSave(formData)}
+          handleOnBlur={() => handleSave()}
+          handleKeyDown={() => handleSave()}
           textFieldValue={formData.finanzierungsbetragNetto}
           disabled={!kundeKannFinanzierungsbetragAndern}
         />
@@ -99,8 +130,8 @@ export const SectionCalculator = ({
           label="Anzahlung"
           type="number"
           handleOnChange={handleInputChange}
-          handleOnBlur={() => handleSave(formData)}
-          handleKeyDown={() => handleSave(formData)}
+          handleOnBlur={() => handleSave()}
+          handleKeyDown={() => handleSave()}
           textFieldValue={formData.anzahlung}
         />
         {zahlungsweisen && (
@@ -121,7 +152,7 @@ export const SectionCalculator = ({
           <button
             type="button"
             className="text-white font-bold bg-orange-400 rounded-md p-3 w-[250px] hover:bg-orange-300"
-            onClick={() => handleSave(formData)}
+            onClick={() => handleSave()}
           >
             Berechen
           </button>

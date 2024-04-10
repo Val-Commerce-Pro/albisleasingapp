@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { LeasingRate, Rate } from "../../types/albisMethods";
 import { ShoppingCart } from "../../types/cartTypes";
+import { formatDecimalNumber } from "../../utils/formatValues";
 import { Box } from "../box";
 
 type SectionLeasingRatesProps = {
@@ -34,39 +35,42 @@ export const SectionLeasingRates = ({
   };
 
   return (
-    <Box title={`Leasingraten (Finanzierungsbetrag: ${leasingValue} €)`}>
+    <Box
+      title={`Leasingraten (Finanzierungsbetrag: ${leasingValue && formatDecimalNumber(leasingValue)} €)`}
+      hasTooltip
+      toolTipContent={`Rechnen Sie hier schnell und einfach die zu zahlende monatliche Leasingrate für den geplanten Einkaufswert aus:\nKaufpreis (ohne MwSt.) als Finanzierungsbetrag eintragen:`}
+    >
       <div className="overflow-x-auto shadow-md sm:rounded-lg">
-        <pre className="p-3 text-xs">{`Rechnen Sie hier schnell und einfach die zu zahlende monatliche Leasingrate für den geplanten Einkaufswert aus:\nKaufpreis (ohne MwSt.) als Finanzierungsbetrag eintragen:`}</pre>
         <table className="min-w-full text-sm divide-y divide-gray-200">
           <thead className="bg-gray-50 rounded-t-lg">
             <tr className="text-center">
               <th
                 scope="col"
-                className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider rounded-tl-lg"
+                className="px-6 py-3  font-medium text-gray-500 uppercase tracking-wider rounded-tl-lg"
               >
                 Vertragslaufzeit
               </th>
               <th
                 scope="col"
-                className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider"
+                className="px-6 py-3  font-medium text-gray-500 uppercase tracking-wider"
               >
                 Monatliche Rate
               </th>
               <th
                 scope="col"
-                className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider"
+                className="px-6 py-3  font-medium text-gray-500 uppercase tracking-wider"
               >
                 Versicherung
               </th>
               <th
                 scope="col"
-                className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider rounded-tr-lg"
+                className="px-6 py-3  font-medium text-gray-500 uppercase tracking-wider rounded-tr-lg"
               >
                 Gesamtleasingrate
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200 rounded-b-lg">
+          <tbody className="bg-white divide-y divide-gray-200 text-sm rounded-b-lg">
             {leasingRate &&
               leasingRate.map((itemRate, index) => (
                 <tr
@@ -74,17 +78,17 @@ export const SectionLeasingRates = ({
                   onClick={() => handleClickRateOpt(itemRate)}
                   className="cursor-pointer transition-all duration-100 ease-in-out hover:bg-gray-100 text-center"
                 >
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 rounded-bl-lg">
+                  <td className="px-6 py-4 whitespace-nowrap  text-gray-900 rounded-bl-lg">
                     {itemRate.laufzeit} Monate
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    €{itemRate.rate}
+                  <td className="px-6 py-4 whitespace-nowrap text-gray-900">
+                    €{itemRate.rate.toFixed(2)}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    €{itemRate.versicherung}
+                  <td className="px-6 py-4 whitespace-nowrap text-gray-900">
+                    €{itemRate.versicherung.toFixed(2)}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 rounded-br-lg">
-                    €{itemRate.rate + itemRate.versicherung}
+                  <td className="px-6 py-4 whitespace-nowrap text-gray-900 rounded-br-lg">
+                    €{(itemRate.rate + itemRate.versicherung).toFixed(2)}
                   </td>
                 </tr>
               ))}

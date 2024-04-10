@@ -17,9 +17,9 @@ export const Box = ({
 }: BoxProps) => {
   const [isHovered, setIsHovered] = useState(false);
   return (
-    <div className="w-full h-full flex flex-col">
+    <div className="w-full h-full flex flex-col ">
       {title && (
-        <div className="bg-cyan-400 p-4 flex items-center justify-center">
+        <div className="bg-cyan-400 p-4 flex items-center justify-center rounded-t-lg">
           <h2 className="text-white font-semibold text-base text-center w-full">
             {title}
           </h2>

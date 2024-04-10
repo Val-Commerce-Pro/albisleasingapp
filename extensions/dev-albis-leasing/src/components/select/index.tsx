@@ -23,7 +23,7 @@ export const Select = ({
 }: SelectProps) => {
   return (
     <div className="flex flex-col gap-2">
-      {label && <label className={`text-sm`}>{label}</label>}
+      {label && <label className={``}>{label}</label>}
       <select
         name={name}
         id={name}
@@ -31,7 +31,7 @@ export const Select = ({
         value={selectedValue}
         disabled={disabled}
         required={required}
-        className={`block w-full px-4 py-2 text-base text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 ${hidden ? "hidden" : "visible"}`}
+        className={`block w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 ${hidden ? "hidden" : "visible"}`}
       >
         {options.map((option) => (
           <option key={option.id} value={option.id}>

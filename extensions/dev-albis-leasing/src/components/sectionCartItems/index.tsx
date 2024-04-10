@@ -14,42 +14,21 @@ export const SectionCartItems = ({
   handleUpdateItemQuantity,
   handleDeleteCartItem,
 }: SectionCartItemsProps) => {
+  const tableHeaders = ["Image", "Quantity", "TItle", "Price", "Actions"];
   return (
     <Box title="Artikel aus dem Warenkorb">
       <div className="overflow-x-auto shadow-md sm:rounded-lg">
         <table className="min-w-full text-sm divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                Image
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                Quantity
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                Title
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                Price
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                Actions
-              </th>
+              {tableHeaders.map((item) => (
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  {item}
+                </th>
+              ))}
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
@@ -62,7 +41,7 @@ export const SectionCartItems = ({
                     className="h-10 w-10 rounded-full"
                   />
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <td className="px-6 py-4 whitespace-nowrap text-gray-900">
                   <div className="flex items-center">
                     <button
                       onClick={() => handleUpdateItemQuantity(item)}
@@ -84,13 +63,13 @@ export const SectionCartItems = ({
                     </button>
                   </div>
                 </td>
-                <td className="px-6 py-4 text-sm font-medium text-gray-900 break-words">
+                <td className="px-6 py-4 font-medium text-gray-900 break-words">
                   {item.title}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <td className="px-6 py-4 whitespace-nowrap text-gray-500">
                   €{formatDecimalNumber(item.line_price)}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <td className="px-6 py-4 whitespace-nowrap text-gray-500">
                   <button
                     onClick={() => handleDeleteCartItem(item)}
                     className="p-1 rounded-full border-0 text-red-500 hover:text-red-700"
@@ -103,11 +82,11 @@ export const SectionCartItems = ({
             <tr>
               <td
                 colSpan={3}
-                className="px-6 py-4 text-right text-sm font-medium text-gray-900"
+                className="px-6 py-4 text-right font-medium text-gray-900"
               >
                 Total
               </td>
-              <td className="px-6 py-4 text-sm text-gray-500">
+              <td className="px-6 py-4 text-gray-500">
                 €{formatDecimalNumber(cartData.total_price)}
               </td>
               <td className="px-6 py-4"></td>{" "}

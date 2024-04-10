@@ -26,8 +26,8 @@ export const TextField = ({
   handleKeyDown,
 }: TextFieldProps) => {
   return (
-    <div className="flex flex-col gap-2 text-sm">
-      {label && <label className={`text-sm`}>{label}</label>}
+    <div className="flex flex-col gap-2">
+      {label && <label className={``}>{label}</label>}
       <input
         id={name}
         name={name}

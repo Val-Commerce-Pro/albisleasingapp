@@ -64,56 +64,33 @@ export const AlbisLeasing = ({
     setCartItems(updatedCartData);
   };
 
-  function handleSaveCalcData(calcData: CalcData) {
-    const dataFromLocalStorageAsString =
-      localStorage.getItem("cp@albisLeasing");
-    const dataFromLocalStorage = dataFromLocalStorageAsString
-      ? JSON.parse(dataFromLocalStorageAsString)
-      : {};
-    const formattedCalcData = {
-      ...calcData,
-      finanzierungsbetragNetto: calcData.finanzierungsbetragNetto.replace(
-        /[^\d]/g,
-        "",
-      ),
-      anzahlung: calcData.anzahlung.replace(/[^\d]/g, ""),
+  const handleGetRate = async (calcData: CalcData) => {
+    const werte = {
+      kaufpreis: formatDecimalNumber(calcData.finanzierungsbetragNetto),
+      prodgrp: modulEinstellungen.produktgruppe,
+      mietsz: calcData.anzahlung,
+      vertragsart: modulEinstellungen.vertragsart,
+      zahlweise: calcData.zahlungsweise,
+      provision: modulEinstellungen.provisionsangabe,
     };
-    const dataToLocalStorage = {
-      calcData: {
-        ...dataFromLocalStorage.leasing,
-        ...formattedCalcData,
-      },
-    };
-    localStorage.setItem("cp@albisLeasing", JSON.stringify(dataToLocalStorage));
-
-    const getAlbisData = async () => {
-      const werte = {
-        kaufpreis: calcData.finanzierungsbetragNetto,
-        prodgrp: modulEinstellungen.produktgruppe,
-        mietsz: calcData.anzahlung,
-        vertragsart: modulEinstellungen.vertragsart,
-        zahlweise: calcData.zahlungsweise,
-        provision: modulEinstellungen.provisionsangabe,
-      };
-      const leasingRateData: LeasingRate = await getAlbisMethodsData(
-        "getRate",
-        werte,
-      );
-      setLeasingRate(leasingRateData);
-    };
-    getAlbisData();
-  }
+    console.log("werte", werte);
+    const leasingRateData: LeasingRate = await getAlbisMethodsData(
+      "getRate",
+      werte,
+    );
+    setLeasingRate(leasingRateData);
+  };
 
   return (
-    <div className="max-w-[1280px] m-auto p-4">
+    <div className="max-w-[1280px] mx-auto p-4">
       <PageTitle title="Albis Leasing" />
       <SectionCartItems
         cartData={cartItems}
         handleUpdateItemQuantity={handleUpdateItemQuantity}
         handleDeleteCartItem={handleDeleteCartItem}
       />
-      <div className="grid grid-cols-1 md:grid-cols-[1.2fr_1fr] gap-2 mt-5">
-        <div className="order-2 md:order-1">
+      <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_0.6fr] gap-2 mt-5">
+        <div className="order-2 lg:order-1">
           {leasingRate && (
             <SectionLeasingRates
               leasingValue={leasingRate?.result.kaufpreis}
@@ -121,7 +98,7 @@ export const AlbisLeasing = ({
             />
           )}
         </div>
-        <div className="order-1 md:order-2">
+        <div className="order-1 lg:order-2">
           <SectionCalculator
             finanzierungsbetragNetto={total_price}
             auswahlObjektVersicherungAnzeigen={
@@ -134,7 +111,7 @@ export const AlbisLeasing = ({
               modulEinstellungen.kundeKannFinanzierungsbetragAndern
             }
             zahlungsweisenPlugin={modulEinstellungen.zahlungsweisen}
-            handleSave={handleSaveCalcData}
+            handleGetRate={handleGetRate}
           />
         </div>
       </div>
