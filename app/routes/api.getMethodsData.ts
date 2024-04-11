@@ -1,9 +1,9 @@
 import type { ActionFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import {
-  getMethodsData,
+  getAlbisMethodsData,
   type GetMethodsDataRequest,
-} from "./utils/getMethodsData";
+} from "./utils/getAlbisMethodsData";
 
 export const action: ActionFunction = async ({ request }) => {
   const data = await request.json();
@@ -15,8 +15,9 @@ export const action: ActionFunction = async ({ request }) => {
     antragsdaten,
     antragnr,
   }: GetMethodsDataRequest = data;
+  console.log("getMethodsBodyData", data);
   try {
-    const methodsPromise = await getMethodsData({
+    const methodsPromise = await getAlbisMethodsData({
       method,
       credentials,
       werte,

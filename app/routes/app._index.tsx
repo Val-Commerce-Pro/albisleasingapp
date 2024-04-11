@@ -20,8 +20,8 @@ import type {
   PluginConfData,
 } from "./types/pluginConfigurator";
 import { formatData } from "./utils/formatData";
+import { getAllMethodData } from "./utils/getAlbisMethodsData";
 import { getLoaderResponse } from "./utils/getLoaderResponseObj";
-import { getAllMethodData } from "./utils/getMethodsData";
 
 export const action: ActionFunction = async ({
   request,

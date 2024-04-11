@@ -1,14 +1,14 @@
 import type { ActionFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import type { GetAntragDetails, GetStelleAntrag } from "./types/methods";
-import type { GetMethodsDataRequest } from "./utils/getMethodsData";
-import { getMethodsData } from "./utils/getMethodsData";
+import type { GetMethodsDataRequest } from "./utils/getAlbisMethodsData";
+import { getAlbisMethodsData } from "./utils/getAlbisMethodsData";
 
 export const action: ActionFunction = async ({ request }) => {
   const data = await request.json();
   const { method, shop, antragsdaten }: GetMethodsDataRequest = data;
   try {
-    const getStelleAntragPromise = await getMethodsData({
+    const getStelleAntragPromise = await getAlbisMethodsData({
       method,
       shop,
       antragsdaten,
@@ -23,7 +23,7 @@ export const action: ActionFunction = async ({ request }) => {
       await getStelleAntragPromise.json();
     console.log("getStelleAntragData", getStelleAntragData);
 
-    const getAntragDetailsPromise = await getMethodsData({
+    const getAntragDetailsPromise = await getAlbisMethodsData({
       method: "getAntragDetails",
       shop,
       antragnr: getStelleAntragData.result,

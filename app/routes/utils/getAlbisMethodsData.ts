@@ -43,7 +43,7 @@ const getRequestTemplate = (template: GetMethodsDataRequest) => ({
   }),
 });
 
-export const getMethodsData = async ({
+export const getAlbisMethodsData = async ({
   method,
   antragnr,
   antragsdaten,
@@ -63,6 +63,7 @@ export const getMethodsData = async ({
 
   if (!requestCredentials) throw new Error(`Invalid credentials`);
 
+  console.log("requestCredentials", requestCredentials);
   const methodsPromise = await fetch(
     requestCredentials.apiLink,
     getRequestTemplate({
@@ -89,9 +90,9 @@ export const getAllMethodData = async (credentials: ModulZugangsdatenData) => {
     GetProduktgruppen,
     GetVertragsarten,
   ] = await Promise.all([
-    getMethodsData({ method: "getZahlungsweisen", credentials }),
-    getMethodsData({ method: "getProduktgruppen", credentials }),
-    getMethodsData({ method: "getVertragsarten", credentials }),
+    getAlbisMethodsData({ method: "getZahlungsweisen", credentials }),
+    getAlbisMethodsData({ method: "getProduktgruppen", credentials }),
+    getAlbisMethodsData({ method: "getVertragsarten", credentials }),
   ]);
 
   return { zahlungsweisen, produktgruppen, vertragsarten };
