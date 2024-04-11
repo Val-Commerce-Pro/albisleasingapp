@@ -21,20 +21,17 @@ export const SectionInfoCompany = () => {
 
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target;
-    console.log("name, value Input", name, value);
     setCompanyFormData((prev) => ({ ...prev, [name]: value }));
-    console.log('COMA', companyFormData)
   }
 
   function handleSelectChange(event: ChangeEvent<HTMLSelectElement>) {
     const { name, value } = event.target;
-    console.log("name, value Select", name, value);
     setCompanyFormData((prev) => ({ ...prev, [name]: value }));
-    handleSave();
   }
+  
   function handleSave() {
     const localStorageData = localStorage.getItem("cp@albisLeasing");
-    const localStorageJSON: LocalStorageI = JSON.parse(localStorageData ?? "No data"); // TODO: localStorageData && testeb
+    const localStorageJSON: LocalStorageI = JSON.parse(localStorageData ?? "No data");
 
     localStorage.setItem(
       "cp@albisLeasing",

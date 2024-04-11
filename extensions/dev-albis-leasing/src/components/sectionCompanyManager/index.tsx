@@ -6,7 +6,7 @@ import { LocalStorageI } from "../../types/localStorage";
 
 export const SectionCompanyManager = () => {
   const [companyManagerFormData, setCompanyManagerFormData] = useState({
-    anrede: "",
+    anrede: 0,
     vorname: "",
     nachname: "",
     strasseGF: "",
@@ -26,11 +26,10 @@ export const SectionCompanyManager = () => {
     const { name, value } = event.target;
     console.log("name, value Select", name, value);
     setCompanyManagerFormData((prev) => ({ ...prev, [name]: value }));
-    handleSave();
   }
   function handleSave() {
     const localStorageData = localStorage.getItem("cp@albisLeasing");
-    const localStorageJSON: LocalStorageI = JSON.parse(localStorageData ?? "No data"); // TODO: localStorageData && testeb
+    const localStorageJSON: LocalStorageI = JSON.parse(localStorageData ?? "No data");
 
     localStorage.setItem(
       "cp@albisLeasing",
@@ -43,12 +42,13 @@ export const SectionCompanyManager = () => {
       <div className="overflow-x-auto shadow-md sm:rounded-lg p-3 flex flex-col gap-4">
         <Select
           handleChange={handleSelectChange}
+          onBlur={handleSave}
           name="anrede"
           label="Anrede"
           selectedValue={companyManagerFormData.anrede}
           options={[
-            { id: "Herr", bezeichnung: "Herr" },
-            { id: "Frau", bezeichnung: "Frau" },
+            { id: 1, bezeichnung: "Herr" },
+            { id: 2, bezeichnung: "Frau" },
           ]}
           required
         />

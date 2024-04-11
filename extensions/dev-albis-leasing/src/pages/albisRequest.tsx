@@ -24,7 +24,7 @@ export const AlbisRequest = () => {
     <div className="max-w-[1280px] shadow-sm mx-auto p-4">
       <PageTitle title="Albis Leasing Request" />
       <SectionLeasingData />
-      <form>
+      <form action="">
         <div className="mt-5">
           <SectionInfoCompany />
         </div>

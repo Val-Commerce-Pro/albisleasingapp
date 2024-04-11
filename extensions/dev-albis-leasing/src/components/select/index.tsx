@@ -5,7 +5,7 @@ type SelectProps = {
   name: string;
   options: Array<{ id: number | string; bezeichnung?: string, text?: string, crefo?: string }>;
   label?: string;
-  selectedValue?: string;
+  selectedValue?: string | number;
   disabled?: boolean;
   hidden?: boolean;
   required?: boolean;
