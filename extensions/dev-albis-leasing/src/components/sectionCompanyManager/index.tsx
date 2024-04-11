@@ -2,6 +2,7 @@ import { ChangeEvent, useState } from "react";
 import { Box } from "../box";
 import { Select } from "../select";
 import { TextField } from "../textfield";
+import { LocalStorageI } from "../../types/localStorage";
 
 export const SectionCompanyManager = () => {
   const [companyManagerFormData, setCompanyManagerFormData] = useState({
@@ -25,9 +26,16 @@ export const SectionCompanyManager = () => {
     const { name, value } = event.target;
     console.log("name, value Select", name, value);
     setCompanyManagerFormData((prev) => ({ ...prev, [name]: value }));
+    handleSave();
   }
   function handleSave() {
-    console.log("should save on the local storage");
+    const localStorageData = localStorage.getItem("cp@albisLeasing");
+    const localStorageJSON: LocalStorageI = JSON.parse(localStorageData ?? "No data"); // TODO: localStorageData && testeb
+
+    localStorage.setItem(
+      "cp@albisLeasing",
+      JSON.stringify({ ...localStorageJSON, companyManagerFormData }),
+    );
   }
 
   return (
