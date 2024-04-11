@@ -140,3 +140,41 @@ export const mockLeasingRate: LeasingRate = {
     ],
   },
 };
+
+export const mockAntragsdaten = {
+  objekt: "", // same as producktgruppen
+  kaufpreis: "769.00",
+  mietsz: "200.00",
+  laufzeit: "24",
+  rate: "26.23",
+  leasingnehmer: {
+    name: "test",
+    strasse: "test strasse",
+    plz: "20202",
+    ort: "Hamburg",
+    rechtsform: "1",
+    telefon: "15231111111",
+    faxnr: "15232222222",
+    email: "vf@commerce-pro.de",
+    geschaeftsfuehrer: {
+      anrede: 1,
+      vorname: "test name",
+      nachname: "test nach name",
+      strasse: "test strasse",
+      plz: "20202",
+      ort: "Hamburg",
+      gebdat: "1993-01-22",
+      telnr: "15231111111",
+      faxnr: "15232222222",
+    },
+  },
+  provision: "5",
+  ssv: "Ja",
+  prodgrp: "1",
+  vertragsart: "1",
+  zahlweise: "1",
+  iban: "DE02120300000000202051",
+  service_pauschale: 10,
+  vertrag_an_ln: false,
+};
+export type MockAntragsdaten = typeof mockAntragsdaten;

@@ -39,3 +39,48 @@ export interface GetZahlungsweisen {
   jsonrpc: string;
   result: ResultZahlungsweisen[];
 }
+
+export interface StelleAntrag {
+  antragsdaten: Antragsdaten;
+}
+
+export interface Antragsdaten {
+  objekt?: string;
+  kaufpreis: string;
+  mietsz: string;
+  laufzeit: string;
+  rate: string;
+  leasingnehmer: Leasingnehmer;
+  provision: string;
+  ssv: string;
+  prodgrp: string;
+  vertragsart: string;
+  zahlweise: string;
+  iban: string;
+  service_pauschale: number;
+  vertrag_an_ln: boolean;
+}
+
+export interface Leasingnehmer {
+  name: string;
+  strasse: string;
+  plz: string;
+  ort: string;
+  rechtsform: string;
+  telefon: string;
+  faxnr: string;
+  email: string;
+  geschaeftsfuehrer: Geschaeftsfuehrer;
+}
+
+export interface Geschaeftsfuehrer {
+  anrede: number;
+  vorname: string;
+  nachname: string;
+  strasse: string;
+  plz: string;
+  ort: string;
+  gebdat: string; // Date in YYYY-MM-DD format
+  telnr: string;
+  faxnr: string;
+}

@@ -44,15 +44,22 @@ export const SectionLeasingRates = ({
     };
     localStorage.setItem("cp@albisLeasing", JSON.stringify(dataToLocalStorage));
 
-    navigate(`pages/albis-leasing-request`);
+    navigate(`/pages/albis-leasing-request`);
   };
 
-  console.log("leasingValue", leasingValue);
+  const leasingValueData =
+    leasingValue &&
+    formatDecimalNumber(
+      stateInitialData
+        ? stateInitialData.calcData.finanzierungsbetragNetto
+        : leasingValue,
+    );
+
   return (
     <Box
-      title={`Leasingraten (Finanzierungsbetrag: ${leasingValue && formatDecimalNumber(stateInitialData ? stateInitialData.calcData.finanzierungsbetragNetto : leasingValue)} €)`}
+      title={`Leasingraten (Finanzierungsbetrag: ${leasingValueData} €)`}
       hasTooltip
-      toolTipContent={`Rechnen Sie hier schnell und einfach die zu zahlende monatliche Leasingrate für den geplanten Einkaufswert aus:\nKaufpreis (ohne MwSt.) als Finanzierungsbetrag eintragen:`}
+      toolTipContent={`Bitte wählen Sie die gewünschte Vertragslaufzeit aus:`}
     >
       <div className="overflow-x-auto shadow-md sm:rounded-lg">
         <table className="min-w-full text-sm divide-y divide-gray-200">
@@ -74,8 +81,8 @@ export const SectionLeasingRates = ({
               leasingRate.map((itemRate, index) => (
                 <tr
                   key={index}
-                  onClick={() => handleClickRateOpt(itemRate)}
                   className="cursor-pointer transition-all duration-100 ease-in-out hover:bg-gray-100 text-center"
+                  onClick={() => handleClickRateOpt(itemRate)}
                 >
                   <td className="px-6 py-4 whitespace-nowrap  text-gray-900 rounded-bl-lg">
                     {itemRate.laufzeit} Monate

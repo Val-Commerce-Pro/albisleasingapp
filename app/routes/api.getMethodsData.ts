@@ -1,6 +1,7 @@
 import type { ActionFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { getPluginConf } from "~/models/methods.server";
+import type { Antragsdaten } from "./types/methods";
 import type { ModulZugangsdatenData } from "./types/pluginConfigurator";
 
 type Method =
@@ -21,6 +22,7 @@ interface RequestBody {
   credentials?: ModulZugangsdatenData;
   shop?: string;
   werte?: GetRate;
+  antragsdaten?: Antragsdaten;
 }
 
 const getRequestTemplate = (template: RequestBody) => ({
@@ -35,6 +37,7 @@ const getRequestTemplate = (template: RequestBody) => ({
       login: template.credentials?.benutzer,
       pwd: template.credentials?.passwort,
       werte: template?.werte,
+      antragsdaten: template?.antragsdaten,
     },
     id: 1,
   }),
@@ -42,8 +45,8 @@ const getRequestTemplate = (template: RequestBody) => ({
 
 export const action: ActionFunction = async ({ request }) => {
   const data = await request.json();
-  const { method, credentials, werte, shop }: RequestBody = data;
-
+  const { method, credentials, werte, shop, antragsdaten }: RequestBody = data;
+  console.log("antragsdaten", antragsdaten);
   try {
     const pluginConfData = shop && (await getPluginConf(shop));
     const requestCredentials =
@@ -65,7 +68,12 @@ export const action: ActionFunction = async ({ request }) => {
     }
     const methodsPromise = await fetch(
       requestCredentials.apiLink,
-      getRequestTemplate({ method, credentials: requestCredentials, werte }),
+      getRequestTemplate({
+        method,
+        credentials: requestCredentials,
+        werte,
+        antragsdaten,
+      }),
     );
 
     if (!methodsPromise.ok) {

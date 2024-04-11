@@ -3,6 +3,7 @@ import { PageTitle } from "../components/pagetitle";
 import { SectionCalculator } from "../components/sectionCalculator";
 import { SectionCartItems } from "../components/sectionCartItems";
 import { SectionLeasingRates } from "../components/sectionLeasingRates";
+import { mockAntragsdaten } from "../mockData/mockData";
 import { LeasingRate } from "../types/albisMethods";
 import { ShoppingCart, ShoppingCartItem } from "../types/cartTypes";
 import { CalcData, LocalStorageI } from "../types/localStorage";
@@ -94,6 +95,14 @@ export const AlbisLeasing = ({
     setLeasingRate(leasingRateData);
   };
 
+  const handleFakeClick = () => {
+    const stelleAntragResponse = getAlbisMethodsData(
+      "stelleAntrag",
+      mockAntragsdaten,
+    );
+    console.log("stelleAntragResponse", stelleAntragResponse);
+  };
+
   return (
     <div className="max-w-[1280px] mx-auto p-4">
       <PageTitle title="Albis Leasing" />
@@ -128,6 +137,10 @@ export const AlbisLeasing = ({
           />
         </div>
       </div>
+
+      <button className="border-2 mt-6 p-4" onClick={handleFakeClick}>
+        FAKE
+      </button>
     </div>
   );
 };
