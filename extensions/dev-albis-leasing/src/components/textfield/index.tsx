@@ -8,7 +8,7 @@ type TextFieldProps = {
   handleOnBlur: () => void;
   handleKeyDown: () => void;
   required?: boolean;
-  type?: "text" | "password" | "number";
+  type?: "text" | "password" | "number" | "tel" | "email" | "date" | "radio";
   hidden?: boolean;
   disabled?: boolean;
 };
