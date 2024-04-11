@@ -4,7 +4,6 @@ import { Select } from "../select";
 import { TextField } from "../textfield";
 import { Rechtsformen } from "../../types/albisMethods";
 import { getAlbisMethodsData } from "../../utils/getAlbisMethodsData";
-import test from "node:test";
 
 export const SectionInfoCompany = () => {
   const [rechtsformen, setRechtsformen] = useState<Rechtsformen | undefined>();
@@ -23,6 +22,7 @@ export const SectionInfoCompany = () => {
     const { name, value } = event.target;
     console.log("name, value Input", name, value);
     setCompanyFormData((prev) => ({ ...prev, [name]: value }));
+    console.log('COMA', companyFormData)
   }
 
   function handleSelectChange(event: ChangeEvent<HTMLSelectElement>) {
@@ -81,6 +81,7 @@ export const SectionInfoCompany = () => {
           name="plz"
           label="Postleitzahl"
           type="number"
+          pattern="[0-9]{5}"
           handleOnChange={handleInputChange}
           handleOnBlur={handleSave}
           handleKeyDown={handleSave}
@@ -101,10 +102,10 @@ export const SectionInfoCompany = () => {
           name="telefon"
           label="Telefon"
           type="tel"
+          pattern="0[0-9]{10}"
           handleOnChange={handleInputChange}
           handleOnBlur={handleSave}
           handleKeyDown={handleSave}
-          textFieldValue={companyFormData.tel}
           required
         />
         <TextField
@@ -121,6 +122,7 @@ export const SectionInfoCompany = () => {
           name="bank"
           label="Bankverbindung"
           type="text"
+          pattern="[A-Z0-9]{22}"
           handleOnChange={handleInputChange}
           handleOnBlur={handleSave}
           handleKeyDown={handleSave}

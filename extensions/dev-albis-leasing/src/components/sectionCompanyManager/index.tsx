@@ -5,13 +5,14 @@ import { TextField } from "../textfield";
 
 export const SectionCompanyManager = () => {
   const [companyManagerFormData, setCompanyManagerFormData] = useState({
-    rechtsform: "",
-    firmenname: "",
-    strasse: "",
-    plz: "",
-    ort: "",
-    tel: "",
-    email: "",
+    anrede: "",
+    vorname: "",
+    nachname: "",
+    strasseGF: "",
+    plzGF: "",
+    ortGF: "",
+    telGF: "",
+    geburstdatum: "",
   });
 
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
@@ -36,7 +37,7 @@ export const SectionCompanyManager = () => {
           handleChange={handleSelectChange}
           name="anrede"
           label="Anrede"
-          selectedValue={companyManagerFormData.rechtsform}
+          selectedValue={companyManagerFormData.anrede}
           options={[
             { id: "Herr", bezeichnung: "Herr" },
             { id: "Frau", bezeichnung: "Frau" },
@@ -50,7 +51,7 @@ export const SectionCompanyManager = () => {
           handleOnChange={handleInputChange}
           handleOnBlur={handleSave}
           handleKeyDown={handleSave}
-          textFieldValue={companyManagerFormData.firmenname}
+          textFieldValue={companyManagerFormData.vorname}
           required
         />
         <TextField
@@ -60,37 +61,38 @@ export const SectionCompanyManager = () => {
           handleOnChange={handleInputChange}
           handleOnBlur={handleSave}
           handleKeyDown={handleSave}
-          textFieldValue={companyManagerFormData.strasse}
+          textFieldValue={companyManagerFormData.nachname}
           required
         />
         <TextField
-          name="strasse"
+          name="strasseGF"
           label="Strasse (GF)"
           type="text"
           handleOnChange={handleInputChange}
           handleOnBlur={handleSave}
           handleKeyDown={handleSave}
-          textFieldValue={companyManagerFormData.plz}
+          textFieldValue={companyManagerFormData.strasseGF}
           required
         />
         <TextField
-          name="plz"
+          name="plzGF"
           label="Postleitzahl (GF)"
           type="number"
+          pattern="[0-9]{5}"
           handleOnChange={handleInputChange}
           handleOnBlur={handleSave}
           handleKeyDown={handleSave}
-          textFieldValue={companyManagerFormData.ort}
+          textFieldValue={companyManagerFormData.plzGF}
           required
         />
         <TextField
-          name="ort"
+          name="ortGF"
           label="Ort (GF)"
           type="text"
           handleOnChange={handleInputChange}
           handleOnBlur={handleSave}
           handleKeyDown={handleSave}
-          textFieldValue={companyManagerFormData.tel}
+          textFieldValue={companyManagerFormData.ortGF}
           required
         />
         <TextField
@@ -100,7 +102,6 @@ export const SectionCompanyManager = () => {
           handleOnChange={handleInputChange}
           handleOnBlur={handleSave}
           handleKeyDown={handleSave}
-          textFieldValue={companyManagerFormData.email}
           required
         />
       </div>

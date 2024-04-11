@@ -3,7 +3,8 @@ import type { ChangeEvent } from "react";
 type TextFieldProps = {
   label: string;
   name: string;
-  textFieldValue: string;
+  pattern?: string;
+  textFieldValue?: string;
   handleOnChange: (event: ChangeEvent<HTMLInputElement>) => void;
   handleOnBlur: () => void;
   handleKeyDown: () => void;
@@ -15,6 +16,7 @@ type TextFieldProps = {
 
 export const TextField = ({
   label,
+  pattern,
   name,
   type = "text",
   hidden = false,
@@ -32,6 +34,7 @@ export const TextField = ({
         id={name}
         name={name}
         type={type}
+        pattern={pattern}
         className={`w-full p-3 border rounded-md border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-300 ${hidden ? "hidden" : "visible"}`}
         onChange={handleOnChange}
         onBlur={handleOnBlur}
