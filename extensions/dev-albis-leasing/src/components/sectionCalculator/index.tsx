@@ -154,7 +154,7 @@ export const SectionCalculator = ({
             className="text-white font-bold bg-orange-400 rounded-md p-3 w-[250px] hover:bg-orange-300"
             onClick={() => handleSave()}
           >
-            Berechen
+            Berechnen
           </button>
         </div>
       </div>

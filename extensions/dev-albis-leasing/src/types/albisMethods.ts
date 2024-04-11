@@ -22,6 +22,18 @@ export type LeasingRate = {
   result: Result;
 };
 
+export type RechtsformResult = {
+  id: number,
+  text: string,
+  crefo: string
+};
+
+export type Rechtsformen = {
+  id: number;
+  jsonrpc: string;
+  result: RechtsformResult[];
+};
+
 export type ResultZahlungsweisen = {
   id: number;
   bezeichnung: string;

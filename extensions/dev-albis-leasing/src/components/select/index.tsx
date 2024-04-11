@@ -3,9 +3,9 @@ import React from "react";
 type SelectProps = {
   handleChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   name: string;
-  options: Array<{ id: number | string; bezeichnung: string }>;
+  options: Array<{ id: number | string; bezeichnung?: string, text?: string, crefo?: string }>;
   label?: string;
-  selectedValue?: string;
+  selectedValue?: string | number;
   disabled?: boolean;
   hidden?: boolean;
   required?: boolean;
@@ -35,7 +35,7 @@ export const Select = ({
       >
         {options.map((option) => (
           <option key={option.id} value={option.id}>
-            {option.bezeichnung}
+            {option.bezeichnung ? option.bezeichnung : option.text}
           </option>
         ))}
       </select>
