@@ -40,6 +40,12 @@ export interface GetZahlungsweisen {
   result: ResultZahlungsweisen[];
 }
 
+export interface GetStelleAntrag {
+  id: number;
+  jsonrpc: string;
+  result: number;
+}
+
 export interface StelleAntrag {
   antragsdaten: Antragsdaten;
 }
@@ -84,3 +90,68 @@ export interface Geschaeftsfuehrer {
   telnr: string;
   faxnr: string;
 }
+
+export interface GetAntragDetailsResult {
+  antragnr: number;
+  objekt: string;
+  kaufpreis: number;
+  mietsz: number;
+  laufzeit: number;
+  rate: number;
+  mail_an_ln: boolean;
+  ln_name: string;
+  ln_strasse: string;
+  ln_plz: string;
+  ln_ort: string;
+  ln_telefon: string;
+  ln_mobil: string | null;
+  ln_fax: string | null;
+  ln_email: string;
+  gf_name: string;
+  gf_vname: string;
+  gf_nname: string;
+  gf_anrede_text: string;
+  gf_anrede: number;
+  gf_strasse: string;
+  gf_plz: string;
+  gf_ort: string;
+  gf_gebdat: string;
+  eingegangen: string;
+  promotion_id: number | null;
+  status: number;
+  status_txt: string;
+  ln_rechtsform: number;
+  iban: string;
+  bic: string;
+  prodgrp: number;
+  ssv: boolean;
+  schlusszahlung: number;
+  vertragsart: number;
+  zahlweise: number;
+  provproz: number;
+  ta_rw_proz: number | null;
+  referenz: string | null;
+  restwert: number;
+  kuendbar_auf: number;
+  saleleaseback: boolean;
+  vk_id: number;
+  vertrag_an_ln: boolean;
+  bankname: string;
+  entsch_dok: any[];
+  vertr_dok: any[];
+}
+
+export interface GetAntragDetails {
+  id: number;
+  jsonrpc: string;
+  result: GetAntragDetailsResult;
+}
+
+export type Method =
+  | "getZahlungsweisen"
+  | "getProduktgruppen"
+  | "getVertragsarten"
+  | "getRechtsformen"
+  | "stelleAntrag"
+  | "getAntragDetails"
+  | "getVertrag";

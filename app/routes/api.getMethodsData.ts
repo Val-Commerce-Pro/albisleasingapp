@@ -1,88 +1,36 @@
 import type { ActionFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { getPluginConf } from "~/models/methods.server";
-import type { Antragsdaten } from "./types/methods";
-import type { ModulZugangsdatenData } from "./types/pluginConfigurator";
-
-type Method =
-  | "getZahlungsweisen"
-  | "getProduktgruppen"
-  | "getVertragsarten"
-  | "getRechtsformen";
-
-type GetRate = {
-  kaufpreis: string;
-  prodgrp: string;
-  mietsz: string;
-  vertragsart: string;
-  zahlweise: string;
-};
-interface RequestBody {
-  method: Method;
-  credentials?: ModulZugangsdatenData;
-  shop?: string;
-  werte?: GetRate;
-  antragsdaten?: Antragsdaten;
-}
-
-const getRequestTemplate = (template: RequestBody) => ({
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-  },
-  body: JSON.stringify({
-    jsonrpc: "2.0",
-    method: template.method,
-    params: {
-      login: template.credentials?.benutzer,
-      pwd: template.credentials?.passwort,
-      werte: template?.werte,
-      antragsdaten: template?.antragsdaten,
-    },
-    id: 1,
-  }),
-});
+import {
+  getMethodsData,
+  type GetMethodsDataRequest,
+} from "./utils/getMethodsData";
 
 export const action: ActionFunction = async ({ request }) => {
   const data = await request.json();
-  const { method, credentials, werte, shop, antragsdaten }: RequestBody = data;
-  console.log("antragsdaten", antragsdaten);
+  const {
+    method,
+    credentials,
+    werte,
+    shop,
+    antragsdaten,
+    antragnr,
+  }: GetMethodsDataRequest = data;
   try {
-    const pluginConfData = shop && (await getPluginConf(shop));
-    const requestCredentials =
-      pluginConfData && pluginConfData.ModulZugangsdaten
-        ? {
-            apiLink: pluginConfData.ModulZugangsdaten.apiLink,
-            benutzer: pluginConfData.ModulZugangsdaten.benutzer,
-            passwort: pluginConfData.ModulZugangsdaten.passwort,
-          }
-        : credentials;
-
-    if (!requestCredentials) {
-      return new Response("Invalid Credentials", {
-        status: 404,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-        },
-      });
-    }
-    const methodsPromise = await fetch(
-      requestCredentials.apiLink,
-      getRequestTemplate({
-        method,
-        credentials: requestCredentials,
-        werte,
-        antragsdaten,
-      }),
-    );
-
+    const methodsPromise = await getMethodsData({
+      method,
+      credentials,
+      werte,
+      shop,
+      antragsdaten,
+      antragnr,
+    });
     if (!methodsPromise.ok) {
       throw new Error(
         `HTTP error! status: ${methodsPromise.status} for method: ${method}`,
       );
     }
     const methodsData = await methodsPromise.json();
-
+    console.log("methodsData - getMethodsData Route - ", methodsData);
     return json(methodsData, {
       headers: {
         "Access-Control-Allow-Origin": "*",
