@@ -28,11 +28,21 @@ const getRequestTemplate = (template: GetMethodsDataRequest) => {
   const params = {
     login: template.credentials?.benutzer,
     pwd: template.credentials?.passwort,
-    werte: template?.werte,
-    antragsdaten: template?.antragsdaten,
-    antragnr: template?.antragnr,
+    werte: template.werte,
+    antragsdaten: template.antragsdaten,
+    antragnr: template.antragnr,
   };
+  const cleanParams = Object.entries(params).reduce(
+    (acc, [key, value]) => {
+      if (value !== undefined) {
+        acc[key] = value;
+      }
+      return acc;
+    },
+    {} as { [key: string]: unknown },
+  );
   console.log("params", params);
+  console.log("cleanParams", cleanParams);
   return {
     method: "POST",
     headers: {
@@ -41,7 +51,7 @@ const getRequestTemplate = (template: GetMethodsDataRequest) => {
     body: JSON.stringify({
       jsonrpc: "2.0",
       method: template.method,
-      params,
+      params: cleanParams,
       id: 1,
     }),
   };
