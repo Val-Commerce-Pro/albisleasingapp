@@ -109,6 +109,14 @@ export const loader: LoaderFunction = async ({
     !!produktgruppen.result &&
     !!vertragsarten.result;
 
+  console.log("credentials", credentials);
+  console.log(
+    "zahlungsweisen, produktgruppen, vertragsarten",
+    zahlungsweisen,
+    produktgruppen,
+    vertragsarten,
+  );
+  console.log("isCredentialsValid", isCredentialsValid);
   const modulAktiv = {
     isModulAktiv,
     shop,
