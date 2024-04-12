@@ -24,24 +24,28 @@ export interface GetMethodsDataRequest {
   antragnr?: number;
 }
 
-const getRequestTemplate = (template: GetMethodsDataRequest) => ({
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-  },
-  body: JSON.stringify({
-    jsonrpc: "2.0",
-    method: template.method,
-    params: {
-      login: template.credentials?.benutzer,
-      pwd: template.credentials?.passwort,
-      werte: template?.werte,
-      antragsdaten: template?.antragsdaten,
-      antragnr: template?.antragnr,
+const getRequestTemplate = (template: GetMethodsDataRequest) => {
+  const params = {
+    login: template.credentials?.benutzer,
+    pwd: template.credentials?.passwort,
+    werte: template?.werte,
+    antragsdaten: template?.antragsdaten,
+    antragnr: template?.antragnr,
+  };
+  console.log("params", params);
+  return {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
     },
-    id: 1,
-  }),
-});
+    body: JSON.stringify({
+      jsonrpc: "2.0",
+      method: template.method,
+      params,
+      id: 1,
+    }),
+  };
+};
 
 export const getAlbisMethodsData = async ({
   method,
