@@ -25,14 +25,7 @@ export interface GetMethodsDataRequest {
 }
 
 const getRequestTemplate = (template: GetMethodsDataRequest) => {
-  const params = {
-    login: template.credentials?.benutzer,
-    pwd: template.credentials?.passwort,
-    werte: template.werte,
-    antragsdaten: template.antragsdaten,
-    antragnr: template.antragnr,
-  };
-  const cleanParams = Object.entries(params).reduce(
+  const params = Object.entries(template).reduce(
     (acc, [key, value]) => {
       if (value !== undefined) {
         acc[key] = value;
@@ -41,8 +34,8 @@ const getRequestTemplate = (template: GetMethodsDataRequest) => {
     },
     {} as { [key: string]: unknown },
   );
+
   console.log("params", params);
-  console.log("cleanParams", cleanParams);
   return {
     method: "POST",
     headers: {
@@ -51,7 +44,7 @@ const getRequestTemplate = (template: GetMethodsDataRequest) => {
     body: JSON.stringify({
       jsonrpc: "2.0",
       method: template.method,
-      params: cleanParams,
+      params,
       id: 1,
     }),
   };
@@ -88,6 +81,8 @@ export const getAlbisMethodsData = async ({
       antragnr,
     }),
   );
+
+  console.log("methodsPromise", methodsPromise);
 
   if (!methodsPromise.ok) {
     throw new Error(
