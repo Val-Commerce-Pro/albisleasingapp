@@ -7,6 +7,7 @@ import { getAlbisMethodsData } from "./utils/getAlbisMethodsData";
 export const action: ActionFunction = async ({ request }) => {
   const data = await request.json();
   const { method, shop, antragsdaten }: GetMethodsDataRequest = data;
+  console.log("api.createAlbisAppAndDraftOrder", data);
   try {
     const getStelleAntragPromise = await getAlbisMethodsData({
       method,

@@ -6,6 +6,7 @@ import {
 } from "./utils/getAlbisMethodsData";
 
 export const action: ActionFunction = async ({ request }) => {
+  console.log("AAAAAAA getMethodsData", request)
   const data = await request.json();
   const {
     method,

@@ -55,7 +55,7 @@ export const getAlbisMethodsData = async ({
   shop,
   werte,
 }: GetMethodsDataRequest) => {
-  const pluginConfData = shop && (await getPluginConf(shop));
+  const pluginConfData = !credentials && shop && (await getPluginConf(shop));
   const requestCredentials =
     pluginConfData && pluginConfData.ModulZugangsdaten
       ? {
