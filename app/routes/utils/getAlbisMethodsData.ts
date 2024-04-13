@@ -27,7 +27,7 @@ export interface GetMethodsDataRequest {
 export const getRequestTemplate = (template: GetMethodsDataRequest) => {
   const params = Object.entries(template).reduce(
     (acc, [key, value]) => {
-      if (value !== undefined && key !== "method") {
+      if (value !== undefined && key !== "method" && key !== "credentials") {
         acc[key] = value;
       }
       return acc;
