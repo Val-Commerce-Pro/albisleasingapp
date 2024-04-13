@@ -24,8 +24,8 @@ export interface GetMethodsDataRequest {
   antragnr?: number;
 }
 
-export const getRequestTemplate = (template: GetMethodsDataRequest) => {
-  const params = Object.entries(template).reduce(
+const getRequestTemplate = (template: GetMethodsDataRequest) => {
+  const extraParams = Object.entries(template).reduce(
     (acc, [key, value]) => {
       if (value !== undefined && key !== "method" && key !== "credentials") {
         acc[key] = value;
@@ -34,8 +34,7 @@ export const getRequestTemplate = (template: GetMethodsDataRequest) => {
     },
     {} as { [key: string]: unknown },
   );
-
-  console.log("params", params);
+  console.log("extraParams - ", extraParams);
   return {
     method: "POST",
     headers: {
@@ -44,7 +43,11 @@ export const getRequestTemplate = (template: GetMethodsDataRequest) => {
     body: JSON.stringify({
       jsonrpc: "2.0",
       method: template.method,
-      params,
+      params: {
+        login: template.credentials?.benutzer,
+        pwd: template.credentials?.passwort,
+        ...extraParams,
+      },
       id: 1,
     }),
   };
