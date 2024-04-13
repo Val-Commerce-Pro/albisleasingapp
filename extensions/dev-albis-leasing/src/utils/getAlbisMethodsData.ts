@@ -5,23 +5,28 @@ export const getAlbisMethodsData = async (
   method: string,
   werte?: Werte,
   antragsdaten?: MockAntragsdaten,
+  antragnr?: number,
 ) => {
   try {
-    if (werte && antragsdaten) return;
     // const shop = document.getElementById("shopDomain")?.textContent;
     const shop = "commerce-albis-leasing.myshopify.com";
-    // const requestBody = werte
-    //   ? { method, shop, werte }
-    //   : antragsdaten
-    //     ? { method, shop, antragsdaten }
-    //     : { method, shop };
+    const body = JSON.stringify({
+      method,
+      shop,
+      werte,
+      antragsdaten,
+      antragnr,
+    });
+
+    console.log("reuest body", body);
     const response = await fetch(
       `https://albisleasingapp.cpro-server.de/api/getMethodsData`,
       {
         method: "POST",
-        body: JSON.stringify({ method, shop, werte, antragsdaten }),
+        body,
       },
     );
+    console.log("response form methodsData", response);
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }

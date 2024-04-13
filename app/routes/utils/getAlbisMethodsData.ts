@@ -34,7 +34,6 @@ const getRequestTemplate = (template: GetMethodsDataRequest) => {
     },
     {} as { [key: string]: unknown },
   );
-  console.log("requestBody - ", { ...extraParams });
   const requestBody = {
     jsonrpc: "2.0",
     method: template.method,
@@ -45,7 +44,7 @@ const getRequestTemplate = (template: GetMethodsDataRequest) => {
     },
     id: 1,
   };
-  console.log("requestBody - ", requestBody);
+  console.log("requestBody stringify - ", JSON.stringify({ ...requestBody }));
 
   return {
     method: "POST",
@@ -87,11 +86,11 @@ export const getAlbisMethodsData = async ({
     }),
   );
 
-  if (!methodsPromise.ok) {
-    throw new Error(
-      `HTTP error! status: ${methodsPromise.status} for method: ${method}`,
-    );
-  }
+  // if (!methodsPromise.ok) {
+  //   throw new Error(
+  //     `HTTP error! status: ${methodsPromise.status} for method: ${method}`,
+  //   );
+  // }
   const methodsData = await methodsPromise.json();
   return methodsData;
 };

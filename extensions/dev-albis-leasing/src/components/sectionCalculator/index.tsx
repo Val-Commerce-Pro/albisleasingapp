@@ -140,10 +140,6 @@ export const SectionCalculator = ({
             name="zahlungsweise"
             label="Zahlungsweise:"
             selectedValue={zahlungsweisenPlugin}
-            // options={[
-            //   { value: "quartalsweise", label: "quartalsweise" },
-            //   { value: "monatlich", label: "monatlich" },
-            // ]}
             options={zahlungsweisen.result}
             disabled={!auswahlZahlungsweiseAnzeigen}
           />

@@ -7,7 +7,7 @@ import { getAlbisMethodsData } from "./utils/getAlbisMethodsData";
 export const action: ActionFunction = async ({ request }) => {
   const data = await request.json();
   const { method, shop, antragsdaten }: GetMethodsDataRequest = data;
-  console.log("api.createAlbisAppAndDraftOrder", data);
+  // console.log("api.createAlbisAppAndDraftOrder", data);
   try {
     const getStelleAntragPromise = await getAlbisMethodsData({
       method,
@@ -22,7 +22,7 @@ export const action: ActionFunction = async ({ request }) => {
     }
     const getStelleAntragData: GetStelleAntrag =
       await getStelleAntragPromise.json();
-    console.log("getStelleAntragData", getStelleAntragData);
+    // console.log("getStelleAntragData", getStelleAntragData);
 
     const getAntragDetailsPromise = await getAlbisMethodsData({
       method: "getAntragDetails",
@@ -37,18 +37,18 @@ export const action: ActionFunction = async ({ request }) => {
     }
     const getAntragDetailsData: GetAntragDetails =
       await getStelleAntragPromise.json();
-    console.log("getAntragDetailsData", getAntragDetailsData);
+    // console.log("getAntragDetailsData", getAntragDetailsData);
 
-    const useful = {
-      antragnr: getAntragDetailsData.result.antragnr,
-      kaufpreis: getAntragDetailsData.result.kaufpreis,
-      ln_name: getAntragDetailsData.result.ln_name,
-      ln_telefon: getAntragDetailsData.result.ln_telefon,
-      ln_mobil: getAntragDetailsData.result.ln_mobil,
-      ln_email: getAntragDetailsData.result.ln_email,
-    };
+    // const useful = {
+    //   antragnr: getAntragDetailsData.result.antragnr,
+    //   kaufpreis: getAntragDetailsData.result.kaufpreis,
+    //   ln_name: getAntragDetailsData.result.ln_name,
+    //   ln_telefon: getAntragDetailsData.result.ln_telefon,
+    //   ln_mobil: getAntragDetailsData.result.ln_mobil,
+    //   ln_email: getAntragDetailsData.result.ln_email,
+    // };
 
-    console.log("useful", useful);
+    // console.log("useful", useful);
     return json(getAntragDetailsData, {
       headers: {
         "Access-Control-Allow-Origin": "*",

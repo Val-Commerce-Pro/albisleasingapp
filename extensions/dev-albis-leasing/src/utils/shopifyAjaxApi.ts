@@ -23,6 +23,5 @@ export const deleteCartItem = async (updates: UpdateCartDataProps) => {
     body: JSON.stringify({ updates }),
   });
   const updateCartData = await updateCartPromise.json();
-  console.log("deleted Cart Item", updateCartData);
   return updateCartData;
 };

@@ -9,9 +9,9 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const sourceDir = path.join(__dirname, "./dist/assets/");
 const destinationDir = path.join(__dirname, "../albis-leasing/assets/");
 
-console.log("__dirname", __dirname);
-console.log("sourceDir", sourceDir);
-console.log("destinationDir", destinationDir);
+// console.log("__dirname", __dirname);
+// console.log("sourceDir", sourceDir);
+// console.log("destinationDir", destinationDir);
 
 async function copyFilesWithCustomNames(source, destination) {
   try {

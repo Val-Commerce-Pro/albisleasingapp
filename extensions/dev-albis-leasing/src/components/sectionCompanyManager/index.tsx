@@ -18,18 +18,18 @@ export const SectionCompanyManager = () => {
 
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target;
-    console.log("name, value Input", name, value);
     setCompanyManagerFormData((prev) => ({ ...prev, [name]: value }));
   }
 
   function handleSelectChange(event: ChangeEvent<HTMLSelectElement>) {
     const { name, value } = event.target;
-    console.log("name, value Select", name, value);
     setCompanyManagerFormData((prev) => ({ ...prev, [name]: value }));
   }
   function handleSave() {
     const localStorageData = localStorage.getItem("cp@albisLeasing");
-    const localStorageJSON: LocalStorageI = JSON.parse(localStorageData ?? "No data");
+    const localStorageJSON: LocalStorageI = JSON.parse(
+      localStorageData ?? "No data",
+    );
 
     localStorage.setItem(
       "cp@albisLeasing",

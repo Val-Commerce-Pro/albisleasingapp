@@ -25,6 +25,7 @@ export const action: ActionFunction = async ({ request }) => {
       antragsdaten,
       antragnr,
     });
+    console.log("methodsPromise", methodsPromise);
     if (!methodsPromise.ok) {
       throw new Error(
         `HTTP error! status: ${methodsPromise.status} for method: ${method}`,

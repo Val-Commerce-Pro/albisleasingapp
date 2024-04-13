@@ -3,7 +3,7 @@ import { PageTitle } from "../components/pagetitle";
 import { SectionCalculator } from "../components/sectionCalculator";
 import { SectionCartItems } from "../components/sectionCartItems";
 import { SectionLeasingRates } from "../components/sectionLeasingRates";
-import { mockAntragsdaten } from "../mockData/mockData";
+import { MockAntragsdaten, mockAntragsdaten } from "../mockData/mockData";
 import { LeasingRate } from "../types/albisMethods";
 import { ShoppingCart, ShoppingCartItem } from "../types/cartTypes";
 import { CalcData, LocalStorageI } from "../types/localStorage";
@@ -87,7 +87,6 @@ export const AlbisLeasing = ({
       zahlweise: calcData.zahlungsweise,
       provision: modulEinstellungen.provisionsangabe,
     };
-    console.log("werte", werte);
     const leasingRateData: LeasingRate = await getAlbisMethodsData(
       "getRate",
       werte,
@@ -95,9 +94,10 @@ export const AlbisLeasing = ({
     setLeasingRate(leasingRateData);
   };
 
-  const handleFakeClick = () => {
-    const stelleAntragResponse = getAlbisMethodsData(
+  const handleFakeClick = async (mockAntragsdaten: MockAntragsdaten) => {
+    const stelleAntragResponse = await getAlbisMethodsData(
       "stelleAntrag",
+      undefined,
       mockAntragsdaten,
     );
     console.log("stelleAntragResponse", stelleAntragResponse);
@@ -138,7 +138,10 @@ export const AlbisLeasing = ({
         </div>
       </div>
 
-      <button className="border-2 mt-6 p-4" onClick={handleFakeClick}>
+      <button
+        className="border-2 mt-6 p-4"
+        onClick={() => handleFakeClick(mockAntragsdaten)}
+      >
         FAKE
       </button>
     </div>

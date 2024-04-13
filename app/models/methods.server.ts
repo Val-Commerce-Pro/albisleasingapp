@@ -41,17 +41,12 @@ export async function getPluginConfToFrontStore(shop: string) {
     modulAktiv: {
       isModulAktiv: isModulAktiv,
     },
-    // modulEinstellungen: {
-    //   ...Object.keys(ModulEinstellungen).filter(
-    //     (key) => key !== "id" || "zugangsdatenId",
-    //   ),
-    // },
     modulEinstellungen: {
       ...einstellungenRest,
     },
   };
 
-  console.log("dataToFrontStore", dataToFrontStore);
+  // console.log("dataToFrontStore", dataToFrontStore);
 
   return { ...dataToFrontStore };
 }

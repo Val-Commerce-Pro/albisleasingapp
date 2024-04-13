@@ -32,7 +32,7 @@ const getPluginConfData = async () => {
     const parameters = new URLSearchParams({ shop });
     const requestUrl = `https://albisleasingapp.cpro-server.de/api/getPluginConfData?${parameters}`;
 
-    console.log('SHOP', shop, requestUrl)
+    console.log("SHOP", shop, requestUrl);
 
     const response = await fetch(requestUrl, { method: "GET" });
     if (!response.ok) {
@@ -48,12 +48,12 @@ const getPluginConfData = async () => {
 const getAlbisMethodsData = async (method, werte) => {
   try {
     const shop = "commerce-albis-leasing.myshopify.com";
-    const requestBody = werte ? { method, shop, werte } : { method, shop };
+    // const requestBody = werte ? { method, shop, werte } : { method, shop };
     const response = await fetch(
       `https://albisleasingapp.cpro-server.de/api/getMethodsData`,
       {
         method: "POST",
-        body: JSON.stringify(requestBody),
+        body: JSON.stringify({ method, shop, werte }),
       },
     );
     if (!response.ok) {
@@ -64,11 +64,11 @@ const getAlbisMethodsData = async (method, werte) => {
   } catch (error) {
     console.error("Error fetching AppConfig:", error);
   }
-}
+};
 
 function toCurrency(rate) {
-  cent = rate.toString().slice(-2);
-  euro = rate.toString().slice(0, -2);
+  let cent = rate.toString().slice(-2);
+  let euro = rate.toString().slice(0, -2);
 
   return `${euro}.${cent}`;
 }
@@ -86,12 +86,14 @@ async function getLeasingRateTable() {
     zahlweise: pluginConfData.modulEinstellungen.zahlungsweisen,
     provision: Number(pluginConfData.modulEinstellungen.provisionsangabe),
   };
-
+  console.log("productValues", productValues);
   const leasingRates = await getAlbisMethodsData("getRate", productValues);
 
-  let table = document.getElementById('preview-table').getElementsByTagName('tbody')[0];
+  let table = document
+    .getElementById("preview-table")
+    .getElementsByTagName("tbody")[0];
 
-  for(rate of leasingRates.result.raten) {
+  for (let rate of leasingRates.result.raten) {
     let newRow = table.insertRow();
     let laufzeitCell = newRow.insertCell();
     let rateCell = newRow.insertCell();
@@ -100,7 +102,7 @@ async function getLeasingRateTable() {
   }
 
   return table;
-};
+}
 
 document.addEventListener("DOMContentLoaded", async () => {
   // const secureUrl = document.getElementById("ah-secure-url").textContent;
