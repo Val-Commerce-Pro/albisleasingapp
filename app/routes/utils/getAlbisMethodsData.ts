@@ -1,57 +1,56 @@
 // import { getPluginConf } from "~/models/methods.server";
 import type {
-  Antragsdaten,
+  // Antragsdaten,
   GetProduktgruppen,
   GetVertragsarten,
   GetZahlungsweisen,
-  Method,
 } from "../types/methods";
 // import type { ModulZugangsdatenData } from "../types/pluginConfigurator";
 
 import type { ModulZugangsdatenData } from "../types/pluginConfigurator";
 import { baseServerUrl } from "./urls";
 
-type GetRate = {
-  kaufpreis: string;
-  prodgrp: string;
-  mietsz: string;
-  vertragsart: string;
-  zahlweise: string;
-};
-export interface GetMethodsDataRequest {
-  method: Method;
-  credentials?: ModulZugangsdatenData;
-  shop?: string;
-  werte?: GetRate;
-  antragsdaten?: Antragsdaten;
-  antragnr?: number;
-}
+// type GetRate = {
+//   kaufpreis: string;
+//   prodgrp: string;
+//   mietsz: string;
+//   vertragsart: string;
+//   zahlweise: string;
+// };
+// export interface GetMethodsDataRequest {
+//   method: Method;
+//   credentials?: ModulZugangsdatenData;
+//   shop?: string;
+//   werte?: GetRate;
+//   antragsdaten?: Antragsdaten;
+//   antragnr?: number;
+// }
 
-export const getRequestTemplate = (template: GetMethodsDataRequest) => {
-  const params = Object.entries(template).reduce(
-    (acc, [key, value]) => {
-      if (value !== undefined) {
-        acc[key] = value;
-      }
-      return acc;
-    },
-    {} as { [key: string]: unknown },
-  );
+// export const getRequestTemplate = (template: GetMethodsDataRequest) => {
+//   const params = Object.entries(template).reduce(
+//     (acc, [key, value]) => {
+//       if (value !== undefined) {
+//         acc[key] = value;
+//       }
+//       return acc;
+//     },
+//     {} as { [key: string]: unknown },
+//   );
 
-  console.log("params", params);
-  return {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      jsonrpc: "2.0",
-      method: template.method,
-      params,
-      id: 1,
-    }),
-  };
-};
+//   console.log("params", params);
+//   return {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify({
+//       jsonrpc: "2.0",
+//       method: template.method,
+//       params,
+//       id: 1,
+//     }),
+//   };
+// };
 
 // export const getAlbisMethodsData = async ({
 //   method,
