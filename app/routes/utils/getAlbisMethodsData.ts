@@ -34,22 +34,25 @@ const getRequestTemplate = (template: GetMethodsDataRequest) => {
     },
     {} as { [key: string]: unknown },
   );
-  console.log("extraParams - ", extraParams);
+  console.log("requestBody - ", { ...extraParams });
+  const requestBody = {
+    jsonrpc: "2.0",
+    method: template.method,
+    params: {
+      login: template.credentials?.benutzer,
+      pwd: template.credentials?.passwort,
+      ...extraParams,
+    },
+    id: 1,
+  };
+  console.log("requestBody - ", requestBody);
+
   return {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      jsonrpc: "2.0",
-      method: template.method,
-      params: {
-        login: template.credentials?.benutzer,
-        pwd: template.credentials?.passwort,
-        ...extraParams,
-      },
-      id: 1,
-    }),
+    body: JSON.stringify({ ...requestBody }),
   };
 };
 
@@ -106,42 +109,3 @@ export const getAllMethodData = async (credentials: ModulZugangsdatenData) => {
 
   return { zahlungsweisen, produktgruppen, vertragsarten };
 };
-
-// const getMethodsData = async (
-//   method: string,
-//   credentials: ModulZugangsdatenData,
-// ) => {
-//   try {
-//     const requestBody = { method, credentials };
-//     const response = await fetch(`${baseServerUrl}/api/getMethodsData`, {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify(requestBody),
-//     });
-
-//     if (!response.ok) {
-//       throw new Error(`HTTP error! Status: ${response.status}`);
-//     }
-//     const data = await response.json();
-//     return data;
-//   } catch (error) {
-//     console.error("Error fetching method data:", error);
-//     return null;
-//   }
-// };
-
-// export const getAllMethodData = async (credentials: ModulZugangsdatenData) => {
-//   const [zahlungsweisen, produktgruppen, vertragsarten]: [
-//     GetZahlungsweisen,
-//     GetProduktgruppen,
-//     GetVertragsarten,
-//   ] = await Promise.all([
-//     getMethodsData("getZahlungsweisen", credentials),
-//     getMethodsData("getProduktgruppen", credentials),
-//     getMethodsData("getVertragsarten", credentials),
-//   ]);
-
-//   return { zahlungsweisen, produktgruppen, vertragsarten };
-// };
