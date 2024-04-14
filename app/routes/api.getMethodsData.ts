@@ -17,7 +17,7 @@ export const action: ActionFunction = async ({ request }) => {
   }: GetMethodsDataRequest = data;
   console.log("getMethodsBodyData RENDED", data);
   try {
-    const methodsPromise = await getAlbisMethodsData({
+    const methodsData = await getAlbisMethodsData({
       method,
       credentials,
       werte,
@@ -25,13 +25,13 @@ export const action: ActionFunction = async ({ request }) => {
       antragsdaten,
       antragnr,
     });
-    console.log("methodsPromise", methodsPromise);
-    if (!methodsPromise.ok) {
-      throw new Error(
-        `HTTP error! status: ${methodsPromise.status} for method: ${method}`,
-      );
-    }
-    const methodsData = await methodsPromise.json();
+    console.log("methodsData", methodsData);
+    // if (!methodsPromise.ok) {
+    //   throw new Error(
+    //     `HTTP error! status: ${methodsPromise.status} for method: ${method}`,
+    //   );
+    // }
+    // const methodsData = await methodsPromise.json();
     console.log("methodsData - getMethodsData Route - ", methodsData);
 
     return json(methodsData, {

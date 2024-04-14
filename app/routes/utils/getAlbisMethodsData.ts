@@ -86,11 +86,12 @@ export const getAlbisMethodsData = async ({
     }),
   );
 
-  // if (!methodsPromise.ok) {
-  //   throw new Error(
-  //     `HTTP error! status: ${methodsPromise.status} for method: ${method}`,
-  //   );
-  // }
+  console.log("methodsPromise Albis Fetch - ");
+  if (!methodsPromise.ok) {
+    throw new Error(
+      `HTTP error! status: ${methodsPromise.status} for method: ${method}`,
+    );
+  }
   const methodsData = await methodsPromise.json();
   return methodsData;
 };
