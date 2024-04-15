@@ -26,7 +26,22 @@ export const SectionInfoCompany = () => {
 
   function handleSelectChange(event: ChangeEvent<HTMLSelectElement>) {
     const { name, value } = event.target;
-    setCompanyFormData((prev) => ({ ...prev, [name]: value }));
+    setCompanyFormData((prev) => {
+      const newState =  {...prev, [name]: value };
+
+      handleSelectSave(newState);
+      return newState;
+    });
+  }
+
+  function handleSelectSave(companyInfoData=companyFormData) {
+    const localStorageData = localStorage.getItem("cp@albisLeasing");
+    const localStorageJSON: LocalStorageI = JSON.parse(localStorageData ?? "No data");
+
+    localStorage.setItem(
+      "cp@albisLeasing",
+      JSON.stringify({ ...localStorageJSON, companyInfoData }),
+    );
   }
 
   function handleSave() {
@@ -35,7 +50,7 @@ export const SectionInfoCompany = () => {
 
     localStorage.setItem(
       "cp@albisLeasing",
-      JSON.stringify({ ...localStorageJSON, companyFormData }),
+      JSON.stringify({ ...localStorageJSON, companyInfoData: companyFormData }),
     );
   }
 
