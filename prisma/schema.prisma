@@ -68,9 +68,10 @@ model AntragDetails {
   antragnr    Int    @unique
   kaufpreis   Float
   eingegangen String
-  ln_email    String
   ln_name     String
   ln_telefon  String
+  ln_mobil    String
+  ln_email    String
   gf_name     String
   gf_vname    String
 }

@@ -46,7 +46,6 @@ export const ModulEinstellungen = ({
       ...modulEinstellungenData,
       [name]: value,
     };
-    console.log("updatedModulEinstellungenData", updatedModulEinstellungenData);
     setModulEinstellungenData(updatedModulEinstellungenData);
     submit(
       { ...updatedModulEinstellungenData, _action: "einstellungen" },
@@ -64,7 +63,6 @@ export const ModulEinstellungen = ({
     updateModulEinstellungenDataAndSubmit(name, value);
     if (name === "produktgruppe") {
       const label = e.target.options[e.target.selectedIndex].text;
-      console.log("name, label produktgrupee", name, label);
       updateModulEinstellungenDataAndSubmit(`produktgruppeLabel`, label);
     }
   };
