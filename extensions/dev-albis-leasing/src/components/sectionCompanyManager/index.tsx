@@ -1,8 +1,8 @@
 import { ChangeEvent, useState } from "react";
+import { LocalStorageI } from "../../types/localStorage";
 import { Box } from "../box";
 import { Select } from "../select";
 import { TextField } from "../textfield";
-import { LocalStorageI } from "../../types/localStorage";
 
 export const SectionCompanyManager = () => {
   const [companyManagerFormData, setCompanyManagerFormData] = useState({
@@ -42,7 +42,6 @@ export const SectionCompanyManager = () => {
       <div className="overflow-x-auto shadow-md sm:rounded-lg p-3 flex flex-col gap-4">
         <Select
           handleChange={handleSelectChange}
-          onBlur={handleSave}
           name="anrede"
           label="Anrede"
           selectedValue={companyManagerFormData.anrede}

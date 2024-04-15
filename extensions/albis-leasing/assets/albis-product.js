@@ -86,19 +86,19 @@ async function getLeasingRateTable() {
     zahlweise: pluginConfData.modulEinstellungen.zahlungsweisen,
     provision: Number(pluginConfData.modulEinstellungen.provisionsangabe),
   };
-  console.log("productValues", productValues);
   const leasingRates = await getAlbisMethodsData("getRate", productValues);
 
+  // console.log("leasingRates", leasingRates);
   let table = document
     .getElementById("preview-table")
     .getElementsByTagName("tbody")[0];
 
-  for (let rate of leasingRates.result.raten) {
+  for (const rate of leasingRates.result.raten) {
     let newRow = table.insertRow();
     let laufzeitCell = newRow.insertCell();
     let rateCell = newRow.insertCell();
     laufzeitCell.innerHTML = `${rate.laufzeit} Monate`;
-    rateCell.innerHTML = `${rate.rate}${rate.rate.toString().split(".")[1].length === 1 ? "0" : ""}€`;
+    rateCell.innerHTML = `${rate.rate.toFixed(2)}€`;
   }
 
   return table;

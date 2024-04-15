@@ -1,10 +1,10 @@
 import { ChangeEvent, useEffect, useState } from "react";
+import { Rechtsformen } from "../../types/albisMethods";
+import { LocalStorageI } from "../../types/localStorage";
+import { getAlbisMethodsData } from "../../utils/getAlbisMethodsData";
 import { Box } from "../box";
 import { Select } from "../select";
 import { TextField } from "../textfield";
-import { Rechtsformen } from "../../types/albisMethods";
-import { getAlbisMethodsData } from "../../utils/getAlbisMethodsData";
-import { LocalStorageI } from "../../types/localStorage";
 
 export const SectionInfoCompany = () => {
   const [rechtsformen, setRechtsformen] = useState<Rechtsformen | undefined>();
@@ -16,7 +16,7 @@ export const SectionInfoCompany = () => {
     ort: "",
     tel: "",
     email: "",
-    bank: ""
+    bank: "",
   });
 
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
@@ -28,10 +28,10 @@ export const SectionInfoCompany = () => {
     const { name, value } = event.target;
     setCompanyFormData((prev) => ({ ...prev, [name]: value }));
   }
-  
+
   function handleSave() {
     const localStorageData = localStorage.getItem("cp@albisLeasing");
-    const localStorageJSON: LocalStorageI = JSON.parse(localStorageData ?? "No data");
+    const localStorageJSON: LocalStorageI = JSON.parse(localStorageData ?? "");
 
     localStorage.setItem(
       "cp@albisLeasing",
@@ -40,28 +40,28 @@ export const SectionInfoCompany = () => {
   }
 
   const fetchRechtsformen = async () => {
-    const rechtsformData: Rechtsformen = await getAlbisMethodsData(
-      "getRechtsformen",
-    );
+    const rechtsformData: Rechtsformen =
+      await getAlbisMethodsData("getRechtsformen");
     setRechtsformen(rechtsformData);
-  }
+  };
 
   useEffect(() => {
-    fetchRechtsformen()
+    fetchRechtsformen();
   }, []);
 
   return (
     <Box title="Angaben über die Firma">
       <div className="overflow-x-auto shadow-md sm:rounded-lg p-3 flex flex-col gap-4">
-      {rechtsformen &&(
-        <Select
-          handleChange={handleSelectChange}
-          name="rechtsform"
-          label="Rechtsform"
-          selectedValue={companyFormData.rechtsform}
-          options={rechtsformen.result}
-          required
-        />)}
+        {rechtsformen && (
+          <Select
+            handleChange={handleSelectChange}
+            name="rechtsform"
+            label="Rechtsform"
+            selectedValue={companyFormData.rechtsform}
+            options={rechtsformen.result}
+            required
+          />
+        )}
         <TextField
           name="firmenname"
           label="Firmenname"

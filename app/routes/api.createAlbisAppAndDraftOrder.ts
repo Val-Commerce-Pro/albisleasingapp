@@ -1,43 +1,35 @@
 import type { ActionFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import type { GetAntragDetails, GetStelleAntrag } from "./types/methods";
+import type { GetStelleAntrag } from "./types/methods";
 import type { GetMethodsDataRequest } from "./utils/getAlbisMethodsData";
 import { getAlbisMethodsData } from "./utils/getAlbisMethodsData";
 
 export const action: ActionFunction = async ({ request }) => {
   const data = await request.json();
-  const { method, shop, antragsdaten }: GetMethodsDataRequest = data;
+  const { shop, antragsdaten }: GetMethodsDataRequest = data;
   // console.log("api.createAlbisAppAndDraftOrder", data);
   try {
-    const getStelleAntragPromise = await getAlbisMethodsData({
-      method,
+    const getStelleAntragData: GetStelleAntrag = await getAlbisMethodsData({
+      method: "stelleAntrag",
       shop,
       antragsdaten,
     });
 
-    if (!getStelleAntragPromise.ok) {
-      throw new Error(
-        `HTTP error! status: ${getStelleAntragPromise.status} for method: ${method}`,
-      );
+    if (!getStelleAntragData.result) {
+      return new Response("Invalid Credentials", {
+        status: 404,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+        },
+      });
     }
-    const getStelleAntragData: GetStelleAntrag =
-      await getStelleAntragPromise.json();
-    // console.log("getStelleAntragData", getStelleAntragData);
 
-    const getAntragDetailsPromise = await getAlbisMethodsData({
+    const getAntragDetailsData = await getAlbisMethodsData({
       method: "getAntragDetails",
       shop,
       antragnr: getStelleAntragData.result,
     });
-
-    if (!getAntragDetailsPromise.ok) {
-      throw new Error(
-        `HTTP error! status: ${getAntragDetailsPromise.status} for method: ${method}`,
-      );
-    }
-    const getAntragDetailsData: GetAntragDetails =
-      await getStelleAntragPromise.json();
-    // console.log("getAntragDetailsData", getAntragDetailsData);
+    console.log("getAntragDetailsData", getAntragDetailsData);
 
     // const useful = {
     //   antragnr: getAntragDetailsData.result.antragnr,

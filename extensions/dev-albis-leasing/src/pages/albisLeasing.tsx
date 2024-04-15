@@ -8,6 +8,7 @@ import { LeasingRate } from "../types/albisMethods";
 import { ShoppingCart, ShoppingCartItem } from "../types/cartTypes";
 import { CalcData, LocalStorageI } from "../types/localStorage";
 import { PluginConfig } from "../types/pluginConfig";
+import { createAlbisAppAndDraftOrder } from "../utils/createAlbisAppAndDraftOrder";
 import { formatDecimalNumber } from "../utils/formatValues";
 import { getAlbisMethodsData } from "../utils/getAlbisMethodsData";
 import { deleteCartItem, updateCartData } from "../utils/shopifyAjaxApi";
@@ -95,11 +96,8 @@ export const AlbisLeasing = ({
   };
 
   const handleFakeClick = async (mockAntragsdaten: MockAntragsdaten) => {
-    const stelleAntragResponse = await getAlbisMethodsData(
-      "stelleAntrag",
-      undefined,
-      mockAntragsdaten,
-    );
+    const stelleAntragResponse =
+      await createAlbisAppAndDraftOrder(mockAntragsdaten);
     console.log("stelleAntragResponse", stelleAntragResponse);
   };
 
