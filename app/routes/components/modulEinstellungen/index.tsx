@@ -61,6 +61,10 @@ export const ModulEinstellungen = ({
   const handleSelectOnChange = (e: ChangeEvent<HTMLSelectElement>): void => {
     const { name, value } = e.target;
     updateModulEinstellungenDataAndSubmit(name, value);
+    if (name === "produktgruppe") {
+      const label = e.target.options[e.target.selectedIndex].text;
+      updateModulEinstellungenDataAndSubmit(`${name}Label`, label);
+    }
   };
 
   return methodsData ? (

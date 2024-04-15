@@ -44,7 +44,6 @@ const getRequestTemplate = (template: GetMethodsDataRequest) => {
     },
     id: 1,
   };
-  console.log("requestBody stringify - ", JSON.stringify({ ...requestBody }));
 
   return {
     method: "POST",
@@ -86,7 +85,6 @@ export const getAlbisMethodsData = async ({
     }),
   );
 
-  console.log("methodsPromise Albis Fetch - ");
   if (!methodsPromise.ok) {
     throw new Error(
       `HTTP error! status: ${methodsPromise.status} for method: ${method}`,

@@ -45,6 +45,7 @@ model ModulEinstellungen {
   vertragsart                        String
   restwertInBeiTAVertrag             Boolean?
   produktgruppe                      String
+  produktgruppeLabel                 String
   zahlungsweisen                     String
   auswahlZahlungsweiseAnzeigen       Boolean
   minLeasingsumme                    String
@@ -60,4 +61,16 @@ model ModulEinstellungen {
   kundeKannFinanzierungsbetragAndern Boolean
   zugangsdatenId                     Int               @unique
   zugangsdaten                       ModulZugangsdaten @relation(fields: [zugangsdatenId], references: [id])
+}
+
+model AntragDetails {
+  id          Int    @id @default(autoincrement())
+  antragnr    Int    @unique
+  kaufpreis   Float
+  eingegangen String
+  ln_email    String
+  ln_name     String
+  ln_telefon  String
+  gf_name     String
+  gf_vname    String
 }

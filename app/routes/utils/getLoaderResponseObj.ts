@@ -45,6 +45,7 @@ export const getLoaderResponse = ({
       restwertInBeiTAVertrag:
         modulEinstellungen?.restwertInBeiTAVertrag ?? null,
       produktgruppe: modulEinstellungen?.produktgruppe ?? "",
+      produktgruppeLabel: modulEinstellungen?.produktgruppeLabel ?? "",
       zahlungsweisen: modulEinstellungen?.zahlungsweisen ?? "",
       auswahlZahlungsweiseAnzeigen:
         modulEinstellungen?.auswahlZahlungsweiseAnzeigen ?? false,
