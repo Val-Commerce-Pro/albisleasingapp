@@ -1,6 +1,6 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import { Rechtsformen } from "../../types/albisMethods";
-import { LocalStorageI } from "../../types/localStorage";
+import { CompanyInfoData, LocalStorageI } from "../../types/localStorage";
 import { getAlbisMethodsData } from "../../utils/getAlbisMethodsData";
 import { Box } from "../box";
 import { Select } from "../select";
@@ -8,7 +8,7 @@ import { TextField } from "../textfield";
 
 export const SectionInfoCompany = () => {
   const [rechtsformen, setRechtsformen] = useState<Rechtsformen | undefined>();
-  const [companyFormData, setCompanyFormData] = useState({
+  const initialState: CompanyInfoData = {  
     rechtsform: "1",
     firmenname: "",
     strasse: "",
@@ -17,6 +17,15 @@ export const SectionInfoCompany = () => {
     telefon: "",
     email: "",
     bank: "",
+  } 
+  
+  const [companyFormData, setCompanyFormData] = useState(() => {
+    const storageDataAsString = localStorage.getItem("cp@albisLeasing");
+    const stateInitialData: CompanyInfoData =
+      storageDataAsString && Object.keys(storageDataAsString).length > 1
+        ? { ...JSON.parse(storageDataAsString).calcData }
+        : initialState
+    return stateInitialData;
   });
 
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
@@ -36,7 +45,7 @@ export const SectionInfoCompany = () => {
 
   function handleSelectSave(companyInfoData=companyFormData) {
     const localStorageData = localStorage.getItem("cp@albisLeasing");
-    const localStorageJSON: LocalStorageI = JSON.parse(localStorageData ?? "No data");
+    const localStorageJSON: LocalStorageI = JSON.parse(localStorageData ?? initialState.toString());
 
     localStorage.setItem(
       "cp@albisLeasing",

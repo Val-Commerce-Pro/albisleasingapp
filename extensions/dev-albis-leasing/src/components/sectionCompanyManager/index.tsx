@@ -1,21 +1,28 @@
 import { ChangeEvent, useState } from "react";
-import { LocalStorageI } from "../../types/localStorage";
+import { CompanyManagerInfoData, LocalStorageI } from "../../types/localStorage";
 import { Box } from "../box";
 import { Select } from "../select";
 import { TextField } from "../textfield";
 import { isDate21orMoreYearsOld } from "../../utils/formValidation";
 
 export const SectionCompanyManager = () => {
-  const [companyManagerFormData, setCompanyManagerFormData] = useState({
-    anrede: "1",
-    vorname: "",
-    nachname: "",
-    strasseGF: "",
-    plzGF: "",
-    ortGF: "",
-    telGF: "",
-    geburtsdatum: "",
-  });
+    const initialState: CompanyManagerInfoData =  {
+        anrede: "1",
+        vorname: "",
+        nachname: "",
+        strasseGF: "",
+        plzGF: "",
+        ortGF: "",
+        telGF: "",
+        geburtsdatum: "",  
+    }
+  const [companyManagerFormData, setCompanyManagerFormData] = useState( () => {
+    const storageDataAsString = localStorage.getItem("cp@albisLeasing");
+    const stateInitialData: CompanyManagerInfoData =
+      storageDataAsString && Object.keys(storageDataAsString).length > 1
+        ? { ...JSON.parse(storageDataAsString).calcData } : initialState
+        return stateInitialData;
+    });
 
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target;
@@ -34,7 +41,7 @@ export const SectionCompanyManager = () => {
   
     function handleSelectSave(companyManagerInfoData=companyManagerFormData) {
       const localStorageData = localStorage.getItem("cp@albisLeasing");
-      const localStorageJSON: LocalStorageI = JSON.parse(localStorageData ?? "No data");
+      const localStorageJSON: LocalStorageI = JSON.parse(localStorageData ?? initialState.toString());
   
       localStorage.setItem(
         "cp@albisLeasing",
