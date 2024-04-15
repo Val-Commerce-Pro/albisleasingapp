@@ -7,7 +7,13 @@ import { ChangeEvent } from "react";
 import { StelleAntrag } from "../types/albisMethods";
 import { PluginConfig } from "../types/pluginConfig";
 
-export const AlbisRequest = (pluginConfData: PluginConfig) => {
+type AlbisRequestProps = {
+  pluginConfData: PluginConfig;
+};
+
+export const AlbisRequest = ({
+  pluginConfData,
+}: AlbisRequestProps) => {
 
   const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault(); 
