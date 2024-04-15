@@ -90,6 +90,6 @@ export type StelleAntrag = {
   vertragsart: string;
   zahlweise: string;
   iban: string;
-  service_pauschale: string;
+  service_pauschale: number;
   vertrag_an_ln: boolean;
 }

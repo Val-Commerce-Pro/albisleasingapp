@@ -5,9 +5,6 @@ export type CalcData = {
   finanzierungsbetragNetto: string;
   anzahlung: string;
   zahlungsweise: string;
-  provision?: string;
-  prodgrp?: string;
-  vertragsart?: string;
 };
 
 export type CompanyManagerInfoData = {

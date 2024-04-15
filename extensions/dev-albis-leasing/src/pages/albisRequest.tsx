@@ -6,6 +6,9 @@ import { LocalStorageI } from "../types/localStorage";
 import { ChangeEvent } from "react";
 import { StelleAntrag } from "../types/albisMethods";
 import { PluginConfig } from "../types/pluginConfig";
+import { createAlbisAppAndDraftOrder } from "../utils/createAlbisAppAndDraftOrder";
+import { mockAntragsdaten } from "../mockData/mockData";
+import { formatDecimalNumber } from "../utils/formatValues";
 
 type AlbisRequestProps = {
   pluginConfData: PluginConfig;
@@ -24,8 +27,8 @@ export const AlbisRequest = ({
     // Gather form data using FormData API
     const formData: StelleAntrag = {
       objekt: "", // same as produktgruppen
-      kaufpreis: localStorageJSON.calcData.finanzierungsbetragNetto,
-      mietsz: pluginConfData.modulEinstellungen.mietsonderzahlung,
+      kaufpreis: formatDecimalNumber(localStorageJSON.calcData.finanzierungsbetragNetto),
+      mietsz: localStorageJSON.calcData.anzahlung,
       laufzeit: localStorageJSON.leasingRate.laufzeit.toString(),
       rate: localStorageJSON.leasingRate.rate.toString(),
       leasingnehmer: {
@@ -53,11 +56,14 @@ export const AlbisRequest = ({
       vertragsart: pluginConfData.modulEinstellungen.vertragsart,
       zahlweise: localStorageJSON.calcData.zahlungsweise,
       iban: localStorageJSON.companyInfoData.bank,
-      service_pauschale: pluginConfData.modulEinstellungen.servicePauschaleNetto,
+      service_pauschale: Number(pluginConfData.modulEinstellungen.servicePauschaleNetto),
       vertrag_an_ln: true
     }
 
-    //getAlbisMethodsData("stelleAntrag", formData)
+    console.log('formData', formData)
+    console.log('MOCK', mockAntragsdaten)
+
+    createAlbisAppAndDraftOrder(formData);
   };
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
@@ -94,5 +100,7 @@ export const AlbisRequest = ({
     </div>
   );
 };
+
+//TODO: check if cart> 500 or productPrice > 500, only then display table in PDP
 
 export default AlbisRequest;

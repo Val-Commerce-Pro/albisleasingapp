@@ -3,10 +3,11 @@ import { LocalStorageI } from "../../types/localStorage";
 import { Box } from "../box";
 import { Select } from "../select";
 import { TextField } from "../textfield";
+import { isDate21orMoreYearsOld } from "../../utils/formValidation";
 
 export const SectionCompanyManager = () => {
   const [companyManagerFormData, setCompanyManagerFormData] = useState({
-    anrede: 0,
+    anrede: "1",
     vorname: "",
     nachname: "",
     strasseGF: "",
@@ -132,6 +133,7 @@ export const SectionCompanyManager = () => {
           name="geburtsdatum"
           label="Geburtsdatum"
           type="date"
+          max={isDate21orMoreYearsOld()}
           handleOnChange={handleInputChange}
           handleOnBlur={handleSave}
           handleKeyDown={handleSave}

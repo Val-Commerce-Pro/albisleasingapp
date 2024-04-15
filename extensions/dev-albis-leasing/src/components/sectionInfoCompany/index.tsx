@@ -9,7 +9,7 @@ import { TextField } from "../textfield";
 export const SectionInfoCompany = () => {
   const [rechtsformen, setRechtsformen] = useState<Rechtsformen | undefined>();
   const [companyFormData, setCompanyFormData] = useState({
-    rechtsform: "",
+    rechtsform: "1",
     firmenname: "",
     strasse: "",
     plz: "",
