@@ -5,6 +5,7 @@
 <div hidden id="ah-product-price" class="albisHiddenInfo">{{ product.price }}</div>
 <div hidden id="ah-shop-domain" class="albisHiddenInfo">{{ shop.domain }}</div>
 
+{% if product.price >= 50000 %}
 <div class="d-flex gap">
   <div class="separator">- oder -</div>
   <a id="addProductAndRedirect" class="button full-width" href="https://{{ shop.permanent_domain }}/pages/albis-leasing">👉 Jetzt Leasen</a>
@@ -19,6 +20,7 @@
     </table>
   </div>
 </div>
+{% endif %}
 
 {% schema %}
 {
@@ -26,4 +28,3 @@
   "target": "section"
 }
 {% endschema %}
-
