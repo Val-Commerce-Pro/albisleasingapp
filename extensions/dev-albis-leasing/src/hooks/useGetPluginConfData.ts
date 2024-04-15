@@ -11,6 +11,7 @@ const modulEinstellungenSchema = z.object({
   vertragsart: z.string(),
   restwertInBeiTAVertrag: z.boolean(),
   produktgruppe: z.string(),
+  produktgruppeLabel: z.string(),
   zahlungsweisen: z.string(),
   auswahlZahlungsweiseAnzeigen: z.boolean(),
   minLeasingsumme: z.string(),

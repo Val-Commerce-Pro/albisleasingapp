@@ -6,6 +6,7 @@ export type PluginConfig = {
     vertragsart: string;
     restwertInBeiTAVertrag: boolean;
     produktgruppe: string;
+    produktgruppeLabel: string;
     zahlungsweisen: string;
     auswahlZahlungsweiseAnzeigen: boolean;
     minLeasingsumme: string;
