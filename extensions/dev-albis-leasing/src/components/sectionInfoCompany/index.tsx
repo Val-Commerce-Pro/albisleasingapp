@@ -14,7 +14,7 @@ export const SectionInfoCompany = () => {
     strasse: "",
     plz: "",
     ort: "",
-    tel: "",
+    telefon: "",
     email: "",
     bank: "",
   });
@@ -122,7 +122,6 @@ export const SectionInfoCompany = () => {
           name="telefon"
           label="Telefon"
           type="tel"
-          pattern="0[0-9]{10}"
           handleOnChange={handleInputChange}
           handleOnBlur={handleSave}
           handleKeyDown={handleSave}

@@ -13,7 +13,7 @@ export const SectionCompanyManager = () => {
     plzGF: "",
     ortGF: "",
     telGF: "",
-    geburstdatum: "",
+    geburtsdatum: "",
   });
 
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
@@ -106,6 +106,16 @@ export const SectionCompanyManager = () => {
           handleOnBlur={handleSave}
           handleKeyDown={handleSave}
           textFieldValue={companyManagerFormData.plzGF}
+          required
+        />
+        <TextField
+          name="telGF"
+          label="Telefon (GF)"
+          type="tel"
+          handleOnChange={handleInputChange}
+          handleOnBlur={handleSave}
+          handleKeyDown={handleSave}
+          textFieldValue={companyManagerFormData.telGF}
           required
         />
         <TextField
