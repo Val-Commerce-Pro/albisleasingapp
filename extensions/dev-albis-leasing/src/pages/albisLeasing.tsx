@@ -25,6 +25,7 @@ export const AlbisLeasing = ({
   const { modulEinstellungen } = pluginConfData;
   const { total_price } = cartData;
   const [leasingRate, setLeasingRate] = useState<LeasingRate | undefined>();
+  console.log("leasingRate", leasingRate);
 
   useEffect(() => {
     const storageDataAsString = localStorage.getItem("cp@albisLeasing");
@@ -137,7 +138,7 @@ export const AlbisLeasing = ({
       </div>
 
       <button
-        className="border-2 mt-6 p-4"
+        className="border-2 mt-6 p-6"
         onClick={() => handleFakeClick(mockAntragsdaten)}
       >
         FAKE
