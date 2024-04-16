@@ -68,6 +68,7 @@ export const SectionCompanyManager = () => {
           handleChange={handleSelectChange}
           name="anrede"
           label="Anrede"
+          defaultText="Anrede auswählen"
           selectedValue={companyManagerFormData.anrede}
           options={[
             { id: 1, bezeichnung: "Herr" },
