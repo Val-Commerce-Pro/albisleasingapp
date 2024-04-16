@@ -2,12 +2,11 @@ import { PageTitle } from "../components/pagetitle";
 import { SectionLeasingData } from "../components/sectionLeasingData";
 import { SectionInfoCompany } from "../components/sectionInfoCompany";
 import { SectionCompanyManager } from "../components/sectionCompanyManager";
-import { LocalStorageI } from "../types/localStorage";
+import { initialStorageState, LocalStorageI } from "../types/localStorage";
 import { ChangeEvent } from "react";
 import { StelleAntrag } from "../types/albisMethods";
 import { PluginConfig } from "../types/pluginConfig";
 import { createAlbisAppAndDraftOrder } from "../utils/createAlbisAppAndDraftOrder";
-import { mockAntragsdaten } from "../mockData/mockData";
 import { formatDecimalNumber } from "../utils/formatValues";
 
 type AlbisRequestProps = {
@@ -22,7 +21,7 @@ export const AlbisRequest = ({
     event.preventDefault(); 
 
     const localStorageData = localStorage.getItem("cp@albisLeasing");
-    const localStorageJSON: LocalStorageI = JSON.parse(localStorageData ?? "No data");
+    const localStorageJSON: LocalStorageI = JSON.parse(localStorageData ?? initialStorageState.toString());
 
     // Gather form data using FormData API
     const formData: StelleAntrag = {
@@ -60,17 +59,13 @@ export const AlbisRequest = ({
       vertrag_an_ln: true
     }
 
-    console.log('formData', formData)
-    console.log('MOCK', mockAntragsdaten)
-
     createAlbisAppAndDraftOrder(formData);
   };
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
     const { checked } = event.target;
-    console.log('DATENSCHUTZ', checked)
     const localStorageData = localStorage.getItem("cp@albisLeasing");
-    const localStorageJSON: LocalStorageI = JSON.parse(localStorageData ?? "No data");
+    const localStorageJSON: LocalStorageI = JSON.parse(localStorageData ?? initialStorageState.toString());
 
     localStorage.setItem(
       "cp@albisLeasing",
@@ -80,27 +75,25 @@ export const AlbisRequest = ({
 
   return (
 
-    <div className="max-w-[1280px] shadow-sm mx-auto p-4">
+    <div className="max-w-[1280px] shadow-sm mx-auto p-[16px]">
       <PageTitle title="Albis Leasing Request" />
       <SectionLeasingData />
       <form onSubmit={handleFormSubmit}>
-        <div className="mt-5">
+        <div className="mt-[20px]">
           <SectionInfoCompany />
         </div>
-        <div className="mt-5">
+        <div className="mt-[20px]">
           <SectionCompanyManager />
         </div>
 
-        <div className="p-3 flex">
-          <input onChange={(e) => handleChange(e)} type="checkbox" id="datenschutz" name="datenschutz" required className="mr-4"/>
+        <div className="p-[12px] flex">
+          <input onChange={(e) => handleChange(e)} type="checkbox" id="datenschutz" name="datenschutz" required className="mr-[16px]"/>
           <label htmlFor="datenschutz">Die Datenschutzbestimmungen habe ich zur Kenntnis genommen und bin einverstanden, dass meine Daten an die ALBIS Leasing Gruppe weitergegeben und gemäß der Datenschutzerklärung der ALBIS Leasing Gruppe dort verarbeitet werden.</label>
         </div>
-        <input type="submit" className="text-white font-bold bg-orange-400 rounded-md p-3 w-[250px] hover:bg-orange-300"/>
+        <input type="submit" className="text-white font-bold bg-orange-400 rounded-md p-[12px] w-[250px] hover:bg-orange-300"/>
       </form>
     </div>
   );
 };
-
-//TODO: check if cart> 500 or productPrice > 500, only then display table in PDP
 
 export default AlbisRequest;

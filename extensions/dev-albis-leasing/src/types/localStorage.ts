@@ -36,3 +36,39 @@ export interface LocalStorageI {
   datenschutz: boolean;
   companyManagerInfoData: CompanyManagerInfoData;
 }
+
+export const initialStorageState: LocalStorageI = {
+  calcData: {
+    objektVersicherungVorhanden: "",
+    finanzierungsbetragNetto: "",
+    anzahlung: "",
+    zahlungsweise: ""
+  },
+  leasingRate: {
+    laufzeit: 0,
+    rate: 0,
+    versicherung: 0,
+    schlusszahlung: undefined
+  },
+  companyInfoData: {
+    bank: "",
+    email: "",
+    firmenname: "",
+    ort: "",
+    plz: "",
+    rechtsform: "",
+    strasse: "",
+    telefon: ""
+  },
+  datenschutz: false,
+  companyManagerInfoData: {
+    anrede: "",
+    geburtsdatum: "",
+    nachname: "",
+    ortGF: "",
+    plzGF: "",
+    strasseGF: "",
+    telGF: "",
+    vorname: ""
+  }
+}
