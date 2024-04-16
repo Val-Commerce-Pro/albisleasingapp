@@ -79,7 +79,7 @@ export async function createDraftOrder(shop: string, input: DraftOrderInput) {
               quantity: 1,
             },
             {
-              variantId: `gid://shopify/ProductVariant/${input.lineItems[0].variantId}`,
+              variantId: `${input.lineItems[0].variantId}`,
               quantity: input.lineItems[0].quantity,
             },
           ],
