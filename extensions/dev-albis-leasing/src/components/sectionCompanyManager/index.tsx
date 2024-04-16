@@ -52,7 +52,7 @@ export const SectionCompanyManager = () => {
   function handleSave() {
     const localStorageData = localStorage.getItem("cp@albisLeasing");
     const localStorageJSON: LocalStorageI = JSON.parse(
-      localStorageData ?? "No data",
+      localStorageData ?? initialState.toString(),
     );
 
     localStorage.setItem(
@@ -63,7 +63,7 @@ export const SectionCompanyManager = () => {
 
   return (
     <Box title="Angaben zum Geschäftsführer">
-      <div className="overflow-x-auto shadow-md sm:rounded-lg p-3 flex flex-col gap-4">
+      <div className="overflow-x-auto shadow-md sm:rounded-lg p-[12px] flex flex-col gap-[16px]">
         <Select
           handleChange={handleSelectChange}
           name="anrede"

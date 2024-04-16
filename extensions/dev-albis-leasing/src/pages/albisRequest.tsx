@@ -8,6 +8,7 @@ import { StelleAntrag } from "../types/albisMethods";
 import { PluginConfig } from "../types/pluginConfig";
 import { createAlbisAppAndDraftOrder } from "../utils/createAlbisAppAndDraftOrder";
 import { formatDecimalNumber } from "../utils/formatValues";
+import {Snackbar} from "../components/snackbar";
 
 type AlbisRequestProps = {
   pluginConfData: PluginConfig;
@@ -92,6 +93,7 @@ export const AlbisRequest = ({
         </div>
         <input type="submit" className="text-white font-bold bg-orange-400 rounded-md p-[12px] w-[250px] hover:bg-orange-300"/>
       </form>
+      <Snackbar type="error" text="irgendwas"/>
     </div>
   );
 };

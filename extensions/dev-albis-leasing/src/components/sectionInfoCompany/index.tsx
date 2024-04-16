@@ -18,7 +18,7 @@ export const SectionInfoCompany = () => {
     email: "",
     bank: "",
   } 
-  
+
   const [companyFormData, setCompanyFormData] = useState(() => {
     const storageDataAsString = localStorage.getItem("cp@albisLeasing");
     const stateInitialData: CompanyInfoData =
@@ -55,7 +55,7 @@ export const SectionInfoCompany = () => {
 
   function handleSave() {
     const localStorageData = localStorage.getItem("cp@albisLeasing");
-    const localStorageJSON: LocalStorageI = JSON.parse(localStorageData ?? "");
+    const localStorageJSON: LocalStorageI = JSON.parse(localStorageData ?? initialState.toString());
 
     localStorage.setItem(
       "cp@albisLeasing",
@@ -75,7 +75,7 @@ export const SectionInfoCompany = () => {
 
   return (
     <Box title="Angaben über die Firma">
-      <div className="overflow-x-auto shadow-md sm:rounded-lg p-3 flex flex-col gap-4">
+      <div className="overflow-x-auto shadow-md sm:rounded-lg p-[12px] flex flex-col gap-[16px]">
         {rechtsformen && (
           <Select
             handleChange={handleSelectChange}

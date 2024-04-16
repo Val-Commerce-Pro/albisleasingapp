@@ -10,7 +10,7 @@ export const ToolTip = ({ isHovered = false, children }: ToolTipProps) => {
     <div
       id="tooltip-left"
       role="tooltip"
-      className={`absolute z-10 inline-block p-3 text-sm text-white bg-gray-900 rounded-lg shadow-sm ${isHovered ? "opacity-100 visible" : "opacity-0 invisible"} tooltip dark:bg-gray-700`}
+      className={`absolute z-10 inline-block p-[12px] text-sm text-white bg-gray-900 rounded-lg shadow-sm ${isHovered ? "opacity-100 visible" : "opacity-0 invisible"} tooltip dark:bg-gray-700`}
     >
       {children}
       <div className="tooltip-arrow" data-popper-arrow></div>

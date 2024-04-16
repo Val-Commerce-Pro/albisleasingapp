@@ -103,14 +103,14 @@ export const AlbisLeasing = ({
   };
 
   return (
-    <div className="max-w-[1280px] mx-auto p-4">
+    <div className="max-w-[1280px] mx-auto p-[16px]">
       <PageTitle title="Albis Leasing" />
       <SectionCartItems
         cartData={cartItems}
         handleUpdateItemQuantity={handleUpdateItemQuantity}
         handleDeleteCartItem={handleDeleteCartItem}
       />
-      <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_0.6fr] gap-2 mt-5">
+      <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_0.6fr] gap-[8px] mt-[20px]">
         <div className="order-2 lg:order-1">
           {leasingRate && (
             <SectionLeasingRates
@@ -138,7 +138,7 @@ export const AlbisLeasing = ({
       </div>
 
       <button
-        className="border-2 mt-6 p-6"
+        className="border-2 mt-[24px] p-[16px]"
         onClick={() => handleFakeClick(mockAntragsdaten)}
       >
         FAKE

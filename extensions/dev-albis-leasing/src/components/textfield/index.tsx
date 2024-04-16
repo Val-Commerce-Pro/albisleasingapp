@@ -30,7 +30,7 @@ export const TextField = ({
   handleKeyDown,
 }: TextFieldProps) => {
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-[8px]">
       {label && <label className={``}>{label}</label>}
       <input
         id={name}
@@ -38,7 +38,7 @@ export const TextField = ({
         type={type}
         max={max}
         pattern={pattern}
-        className={`w-full p-3 border rounded-md border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-300 ${hidden ? "hidden" : "visible"}`}
+        className={`h-[48px] w-full p-[12px] border rounded-md border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-300 ${hidden ? "hidden" : "visible"}`}
         onChange={handleOnChange}
         onBlur={handleOnBlur}
         onKeyDown={(e) => e.key === "Enter" && handleKeyDown()}

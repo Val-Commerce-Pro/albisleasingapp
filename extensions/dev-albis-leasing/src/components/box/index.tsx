@@ -19,7 +19,7 @@ export const Box = ({
   return (
     <div className="w-full h-full flex flex-col ">
       {title && (
-        <div className="bg-cyan-400 p-4 flex items-center justify-center rounded-t-lg">
+        <div className="bg-cyan-400 p-[16px] flex items-center justify-center rounded-t-lg">
           <h2 className="text-white font-semibold text-base text-center w-full">
             {title}
           </h2>

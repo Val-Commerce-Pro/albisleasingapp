@@ -28,7 +28,7 @@ export const SectionLeasingData = () => {
         title={'Leasingdaten'}
       >
         <div className="overflow-x-auto shadow-md sm:rounded-lg">
-          <div className="text-sm p-3 flex flex-col gap-1 border-t border-gray-200">
+          <div className="text-sm p-[12px] flex flex-col gap-[4px] border-t border-gray-200">
           <strong>
             WICHTIG: Bitte achten Sie darauf, dass die Lieferzeiten zum Zeitpunkt der Antragstellung gelten. Bis Sie den Leasingvertrag unterschreiben und sich ausweisen, können sich die Lieferzeiten ändern.
           </strong>
@@ -40,27 +40,27 @@ export const SectionLeasingData = () => {
           <table className="min-w-full text-sm divide-y divide-gray-200">
             <tbody className="bg-white divide-y divide-gray-200 text-sm rounded-b-lg">
               <tr>
-                <td className="px-6 py-4 whitespace-nowrap  text-gray-900 rounded-bl-lg">Ihr eingetragener Kaufpreis (ohne MwSt):</td>
+                <td className="px-[24px] py-[16px] whitespace-nowrap  text-gray-900 rounded-bl-lg">Ihr eingetragener Kaufpreis (ohne MwSt):</td>
                 <td><strong>€{formatDecimalNumber(localStorageJSON.calcData.finanzierungsbetragNetto)}</strong></td>
               </tr>
               <tr>
-                <td className="px-6 py-4 whitespace-nowrap  text-gray-900 rounded-bl-lg">Ihre ausgewählte monatliche Laufzeit:</td>
+                <td className="px-[24px] py-[16px] whitespace-nowrap  text-gray-900 rounded-bl-lg">Ihre ausgewählte monatliche Laufzeit:</td>
                 <td><strong>{localStorageJSON.leasingRate.laufzeit} Monate</strong></td>
               </tr>
               <tr>
-                <td className="px-6 py-4 whitespace-nowrap  text-gray-900 rounded-bl-lg">Die monatliche Leasingrate beträgt:</td>
+                <td className="px-[24px] py-[16px] whitespace-nowrap  text-gray-900 rounded-bl-lg">Die monatliche Leasingrate beträgt:</td>
                 <td><strong>€{localStorageJSON.leasingRate.rate.toFixed(2)}</strong></td>
               </tr>
               <tr>
-                <td className="px-6 py-4 whitespace-nowrap  text-gray-900 rounded-bl-lg">Monatliche Versicherung:</td>
+                <td className="px-[24px] py-[16px] whitespace-nowrap  text-gray-900 rounded-bl-lg">Monatliche Versicherung:</td>
                 <td><strong>€{localStorageJSON.leasingRate.versicherung.toFixed(2)}</strong></td>
               </tr>
               <tr>
-                <td className="px-6 py-4 whitespace-nowrap  text-gray-900 rounded-bl-lg">Ihre Zahlungsweise:</td>
+                <td className="px-[24px] py-[16px] whitespace-nowrap  text-gray-900 rounded-bl-lg">Ihre Zahlungsweise:</td>
                 <td><strong>{localStorageJSON.calcData.zahlungsweise === "1" ? zahlungsweisen?.result[0].bezeichnung : zahlungsweisen?.result[1].bezeichnung}</strong></td>
               </tr>
               <tr>
-                <td className="px-6 py-4 whitespace-nowrap  text-gray-900 rounded-bl-lg">Ihre monatliche Gesamtleasingzahlung beträgt:</td>
+                <td className="px-[24px] py-[16px] whitespace-nowrap  text-gray-900 rounded-bl-lg">Ihre monatliche Gesamtleasingzahlung beträgt:</td>
                 <td><strong>€{(localStorageJSON.leasingRate.rate + localStorageJSON.leasingRate.versicherung).toFixed(2)}</strong></td>
               </tr>
             </tbody>
