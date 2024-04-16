@@ -1,7 +1,13 @@
-import { StelleAntrag } from "../types/albisMethods";
+import { MockAntragsdaten } from "../mockData/mockData";
+
+export interface LineItem {
+  variantId: string;
+  quantity: number;
+}
 
 export const createAlbisAppAndDraftOrder = async (
-  antragsdaten: StelleAntrag,
+  antragsdaten: MockAntragsdaten,
+  lineItem: LineItem[],
 ) => {
   try {
     // const shop = document.getElementById("shopDomain")?.textContent;
@@ -9,6 +15,7 @@ export const createAlbisAppAndDraftOrder = async (
     const body = JSON.stringify({
       shop,
       antragsdaten,
+      lineItem,
     });
     const response = await fetch(
       `https://albisleasingapp.cpro-server.de/api/createAlbisAppAndDraftOrder`,

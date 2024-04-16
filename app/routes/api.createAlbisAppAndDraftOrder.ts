@@ -2,14 +2,15 @@ import type { ActionFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { createAntragDetails } from "~/models/antragDetails";
 import type { AntragDetailsData } from "~/models/types";
+import type { DraftOrderInput } from "./shopify/graphql/createDraftOrder";
 import { createDraftOrder } from "./shopify/graphql/createDraftOrder";
+import type { CreateAlbisAppAndOrder } from "./types/createAlbisAppAndOrder";
 import type { GetAntragDetails, GetStelleAntrag } from "./types/methods";
-import type { GetMethodsDataRequest } from "./utils/getAlbisMethodsData";
 import { getAlbisMethodsData } from "./utils/getAlbisMethodsData";
 
 export const action: ActionFunction = async ({ request }) => {
   const data = await request.json();
-  const { shop, antragsdaten }: GetMethodsDataRequest = data;
+  const { shop, antragsdaten, lineItems }: CreateAlbisAppAndOrder = data;
   try {
     const getStelleAntragData: GetStelleAntrag = await getAlbisMethodsData({
       method: "stelleAntrag",
@@ -33,25 +34,39 @@ export const action: ActionFunction = async ({ request }) => {
     });
     console.log("getAntragDetailsData", getAntragDetailsData);
 
+    const { result } = getAntragDetailsData;
+
     const antragnrDetails: AntragDetailsData = {
-      antragnr: getAntragDetailsData.result.antragnr,
-      kaufpreis: getAntragDetailsData.result.kaufpreis,
-      eingegangen: getAntragDetailsData.result.eingegangen,
-      ln_name: getAntragDetailsData.result.ln_name,
-      ln_telefon: getAntragDetailsData.result.ln_telefon,
-      ln_mobil: getAntragDetailsData.result.ln_mobil,
-      ln_email: getAntragDetailsData.result.ln_email,
-      gf_name: getAntragDetailsData.result.gf_name,
-      gf_vname: getAntragDetailsData.result.gf_vname,
+      antragnr: result.antragnr,
+      kaufpreis: result.kaufpreis,
+      eingegangen: result.eingegangen,
+      ln_name: result.ln_name,
+      ln_telefon: result.ln_telefon,
+      ln_mobil: result.ln_mobil,
+      ln_email: result.ln_email,
+      gf_name: result.gf_name,
+      gf_vname: result.gf_vname,
     };
     await createAntragDetails(antragnrDetails);
 
-    // const input = {
-    //   customerId: "",
-    //   note: getAntragDetailsData.result.status_txt,
-    // };
+    const input: DraftOrderInput = {
+      note: `Albis Request Status: ${result.status_txt}`,
+      email: result.ln_email,
+      phone: result.ln_telefon,
+      tags: "Albis Leasing",
+      taxExempt: true,
+      visibleToCustomer: true,
+      billingAddress: {
+        address1: result.ln_strasse,
+        city: result.ln_ort,
+        zip: result.ln_plz,
+        countryCode: "DE",
+      },
+      customAttributes: [{ key: "name", value: result.gf_nname }],
+      lineItems,
+    };
 
-    const testDrafOrder = createDraftOrder(shop ?? "");
+    const testDrafOrder = await createDraftOrder(shop, input);
     console.log("testDrafOrder", testDrafOrder);
 
     return json(getAntragDetailsData, {

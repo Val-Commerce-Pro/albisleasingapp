@@ -3,12 +3,10 @@ import { PageTitle } from "../components/pagetitle";
 import { SectionCalculator } from "../components/sectionCalculator";
 import { SectionCartItems } from "../components/sectionCartItems";
 import { SectionLeasingRates } from "../components/sectionLeasingRates";
-import { MockAntragsdaten, mockAntragsdaten } from "../mockData/mockData";
 import { LeasingRate } from "../types/albisMethods";
 import { ShoppingCart, ShoppingCartItem } from "../types/cartTypes";
 import { CalcData, LocalStorageI } from "../types/localStorage";
 import { PluginConfig } from "../types/pluginConfig";
-import { createAlbisAppAndDraftOrder } from "../utils/createAlbisAppAndDraftOrder";
 import { formatDecimalNumber } from "../utils/formatValues";
 import { getAlbisMethodsData } from "../utils/getAlbisMethodsData";
 import { deleteCartItem, updateCartData } from "../utils/shopifyAjaxApi";
@@ -25,7 +23,6 @@ export const AlbisLeasing = ({
   const { modulEinstellungen } = pluginConfData;
   const { total_price } = cartData;
   const [leasingRate, setLeasingRate] = useState<LeasingRate | undefined>();
-  console.log("leasingRate", leasingRate);
 
   useEffect(() => {
     const storageDataAsString = localStorage.getItem("cp@albisLeasing");
@@ -96,12 +93,6 @@ export const AlbisLeasing = ({
     setLeasingRate(leasingRateData);
   };
 
-  const handleFakeClick = async (mockAntragsdaten: MockAntragsdaten) => {
-    const stelleAntragResponse =
-      await createAlbisAppAndDraftOrder(mockAntragsdaten);
-    console.log("stelleAntragResponse", stelleAntragResponse);
-  };
-
   return (
     <div className="max-w-[1280px] mx-auto p-[16px]">
       <PageTitle title="Albis Leasing" />
@@ -136,13 +127,6 @@ export const AlbisLeasing = ({
           />
         </div>
       </div>
-
-      <button
-        className="border-2 mt-[24px] p-[16px]"
-        onClick={() => handleFakeClick(mockAntragsdaten)}
-      >
-        FAKE
-      </button>
     </div>
   );
 };

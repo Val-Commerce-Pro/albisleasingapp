@@ -1,33 +1,41 @@
-import { PageTitle } from "../components/pagetitle";
-import { SectionLeasingData } from "../components/sectionLeasingData";
-import { SectionInfoCompany } from "../components/sectionInfoCompany";
-import { SectionCompanyManager } from "../components/sectionCompanyManager";
-import { initialStorageState, LocalStorageI } from "../types/localStorage";
 import { ChangeEvent } from "react";
+import { PageTitle } from "../components/pagetitle";
+import { SectionCompanyManager } from "../components/sectionCompanyManager";
+import { SectionInfoCompany } from "../components/sectionInfoCompany";
+import { SectionLeasingData } from "../components/sectionLeasingData";
 import { StelleAntrag } from "../types/albisMethods";
+import { ShoppingCart } from "../types/cartTypes";
+import { initialStorageState, LocalStorageI } from "../types/localStorage";
 import { PluginConfig } from "../types/pluginConfig";
-import { createAlbisAppAndDraftOrder } from "../utils/createAlbisAppAndDraftOrder";
+import {
+  createAlbisAppAndDraftOrder,
+  LineItem,
+} from "../utils/createAlbisAppAndDraftOrder";
 import { formatDecimalNumber } from "../utils/formatValues";
-import {Snackbar} from "../components/snackbar";
 
 type AlbisRequestProps = {
+  cartData: ShoppingCart;
   pluginConfData: PluginConfig;
 };
 
 export const AlbisRequest = ({
   pluginConfData,
+  cartData,
 }: AlbisRequestProps) => {
-
   const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault(); 
+    event.preventDefault();
 
     const localStorageData = localStorage.getItem("cp@albisLeasing");
-    const localStorageJSON: LocalStorageI = JSON.parse(localStorageData ?? initialStorageState.toString());
+    const localStorageJSON: LocalStorageI = JSON.parse(
+      localStorageData ?? initialStorageState.toString(),
+    );
 
     // Gather form data using FormData API
     const formData: StelleAntrag = {
       objekt: pluginConfData.modulEinstellungen.produktgruppeLabel,
-      kaufpreis: formatDecimalNumber(localStorageJSON.calcData.finanzierungsbetragNetto),
+      kaufpreis: formatDecimalNumber(
+        localStorageJSON.calcData.finanzierungsbetragNetto,
+      ),
       mietsz: localStorageJSON.calcData.anzahlung,
       laufzeit: localStorageJSON.leasingRate.laufzeit.toString(),
       rate: localStorageJSON.leasingRate.rate.toString(),
@@ -47,8 +55,8 @@ export const AlbisRequest = ({
           plz: localStorageJSON.companyManagerInfoData.plzGF,
           ort: localStorageJSON.companyManagerInfoData.ortGF,
           gebdat: localStorageJSON.companyManagerInfoData.geburtsdatum,
-          telnr: localStorageJSON.companyManagerInfoData.telGF
-        }
+          telnr: localStorageJSON.companyManagerInfoData.telGF,
+        },
       },
       provision: pluginConfData.modulEinstellungen.provisionsangabe,
       ssv: localStorageJSON.calcData.objektVersicherungVorhanden,
@@ -56,26 +64,34 @@ export const AlbisRequest = ({
       vertragsart: pluginConfData.modulEinstellungen.vertragsart,
       zahlweise: localStorageJSON.calcData.zahlungsweise,
       iban: localStorageJSON.companyInfoData.bank,
-      service_pauschale: Number(pluginConfData.modulEinstellungen.servicePauschaleNetto),
-      vertrag_an_ln: true
-    }
+      service_pauschale: Number(
+        pluginConfData.modulEinstellungen.servicePauschaleNetto,
+      ),
+      vertrag_an_ln: true,
+    };
 
-    createAlbisAppAndDraftOrder(formData);
+    const lineItem: LineItem[] = cartData.items.map((item) => ({
+      variantId: `gid://shopify/ProductVariant/${item.id}`,
+      quantity: item.quantity,
+    }));
+
+    createAlbisAppAndDraftOrder(formData, lineItem);
   };
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
     const { checked } = event.target;
     const localStorageData = localStorage.getItem("cp@albisLeasing");
-    const localStorageJSON: LocalStorageI = JSON.parse(localStorageData ?? initialStorageState.toString());
+    const localStorageJSON: LocalStorageI = JSON.parse(
+      localStorageData ?? initialStorageState.toString(),
+    );
 
     localStorage.setItem(
       "cp@albisLeasing",
-      JSON.stringify({ ...localStorageJSON, "datenschutz": checked}),
+      JSON.stringify({ ...localStorageJSON, datenschutz: checked }),
     );
   }
 
   return (
-
     <div className="max-w-[1280px] shadow-sm mx-auto p-[16px]">
       <PageTitle title="Albis Leasing Request" />
       <SectionLeasingData />
@@ -88,12 +104,27 @@ export const AlbisRequest = ({
         </div>
 
         <div className="p-[12px] flex">
-          <input onChange={(e) => handleChange(e)} type="checkbox" id="datenschutz" name="datenschutz" required className="mr-[16px]"/>
-          <label htmlFor="datenschutz">Die Datenschutzbestimmungen habe ich zur Kenntnis genommen und bin einverstanden, dass meine Daten an die ALBIS Leasing Gruppe weitergegeben und gemäß der Datenschutzerklärung der ALBIS Leasing Gruppe dort verarbeitet werden.</label>
+          <input
+            onChange={(e) => handleChange(e)}
+            type="checkbox"
+            id="datenschutz"
+            name="datenschutz"
+            required
+            className="mr-[16px]"
+          />
+          <label htmlFor="datenschutz">
+            Die Datenschutzbestimmungen habe ich zur Kenntnis genommen und bin
+            einverstanden, dass meine Daten an die ALBIS Leasing Gruppe
+            weitergegeben und gemäß der Datenschutzerklärung der ALBIS Leasing
+            Gruppe dort verarbeitet werden.
+          </label>
         </div>
-        <input type="submit" className="text-white font-bold bg-orange-400 rounded-md p-[12px] w-[250px] hover:bg-orange-300"/>
+        <input
+          type="submit"
+          className="text-white font-bold bg-orange-400 rounded-md p-[12px] w-[250px] hover:bg-orange-300"
+        />
       </form>
-      <Snackbar type="error" text="irgendwas"/>
+      {/* <Snackbar type="error" text="irgendwas" /> */}
     </div>
   );
 };
