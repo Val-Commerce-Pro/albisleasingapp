@@ -39,12 +39,11 @@ export const ModulEinstellungen = ({
   }
 
   const updateModulEinstellungenDataAndSubmit = (
-    name: string,
-    value: boolean | string,
+    updates: Partial<ModulEinstellungenData>,
   ) => {
     const updatedModulEinstellungenData: ModulEinstellungenData = {
       ...modulEinstellungenData,
-      [name]: value,
+      ...updates,
     };
     console.log("updatedModulEinstellungenData", updatedModulEinstellungenData);
     setModulEinstellungenData(updatedModulEinstellungenData);
@@ -56,18 +55,26 @@ export const ModulEinstellungen = ({
 
   const handleSwitchOnChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const { name, checked } = e.target;
-    updateModulEinstellungenDataAndSubmit(name, checked);
+    updateModulEinstellungenDataAndSubmit({
+      [name as keyof ModulEinstellungenData]: checked,
+    });
   };
 
   const handleSelectOnChange = (e: ChangeEvent<HTMLSelectElement>): void => {
     const { name, value } = e.target;
     console.log(" name, value", name, value);
-    updateModulEinstellungenDataAndSubmit(name, value);
     if (name === "produktgruppe") {
       const label = e.target.options[e.target.selectedIndex].text;
       console.log(" label", label);
-      updateModulEinstellungenDataAndSubmit(`produktgruppeLabel`, label);
+      updateModulEinstellungenDataAndSubmit({
+        [name as keyof ModulEinstellungenData]: value,
+        produktgruppeLabel: value,
+      });
+      return;
     }
+    updateModulEinstellungenDataAndSubmit({
+      [name as keyof ModulEinstellungenData]: value,
+    });
   };
 
   return methodsData ? (
