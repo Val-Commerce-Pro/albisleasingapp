@@ -25,7 +25,7 @@ export const AlbisRequest = ({
 
     // Gather form data using FormData API
     const formData: StelleAntrag = {
-      objekt: "", // same as produktgruppen
+      objekt: pluginConfData.modulEinstellungen.produktgruppeLabel,
       kaufpreis: formatDecimalNumber(localStorageJSON.calcData.finanzierungsbetragNetto),
       mietsz: localStorageJSON.calcData.anzahlung,
       laufzeit: localStorageJSON.leasingRate.laufzeit.toString(),
