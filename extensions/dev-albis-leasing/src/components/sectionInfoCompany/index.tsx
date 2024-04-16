@@ -81,6 +81,7 @@ export const SectionInfoCompany = () => {
             handleChange={handleSelectChange}
             name="rechtsform"
             label="Rechtsform"
+            defaultText="Rechtsform auswählen"
             selectedValue={companyFormData.rechtsform}
             options={rechtsformen.result}
             required

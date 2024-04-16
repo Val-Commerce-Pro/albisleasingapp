@@ -34,6 +34,13 @@ export type Rechtsformen = {
   result: RechtsformResult[];
 };
 
+export interface GetStelleAntrag {
+  id: number;
+  jsonrpc: string;
+  result: number;
+  error?: string;
+}
+
 export type ResultZahlungsweisen = {
   id: number;
   bezeichnung: string;
