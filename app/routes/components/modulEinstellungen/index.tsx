@@ -45,7 +45,6 @@ export const ModulEinstellungen = ({
       ...modulEinstellungenData,
       ...updates,
     };
-    console.log("updatedModulEinstellungenData", updatedModulEinstellungenData);
     setModulEinstellungenData(updatedModulEinstellungenData);
     submit(
       { ...updatedModulEinstellungenData, _action: "einstellungen" },
@@ -62,13 +61,11 @@ export const ModulEinstellungen = ({
 
   const handleSelectOnChange = (e: ChangeEvent<HTMLSelectElement>): void => {
     const { name, value } = e.target;
-    console.log(" name, value", name, value);
     if (name === "produktgruppe") {
       const label = e.target.options[e.target.selectedIndex].text;
-      console.log(" label", label);
       updateModulEinstellungenDataAndSubmit({
         [name as keyof ModulEinstellungenData]: value,
-        produktgruppeLabel: value,
+        produktgruppeLabel: label,
       });
       return;
     }

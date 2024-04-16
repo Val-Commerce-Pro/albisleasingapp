@@ -64,13 +64,13 @@ model ModulEinstellungen {
 }
 
 model AntragDetails {
-  id          Int    @id @default(autoincrement())
-  antragnr    Int    @unique
+  id          Int     @id @default(autoincrement())
+  antragnr    Int     @unique
   kaufpreis   Float
   eingegangen String
   ln_name     String
-  ln_telefon  String
-  ln_mobil    String
+  ln_telefon  String?
+  ln_mobil    String?
   ln_email    String
   gf_name     String
   gf_vname    String

@@ -4,6 +4,7 @@ import { createAntragDetails } from "~/models/antragDetails";
 import type { GetAntragDetails, GetStelleAntrag } from "./types/methods";
 import type { GetMethodsDataRequest } from "./utils/getAlbisMethodsData";
 import { getAlbisMethodsData } from "./utils/getAlbisMethodsData";
+import { AntragDetailsData } from "~/models/types";
 
 export const action: ActionFunction = async ({ request }) => {
   const data = await request.json();
@@ -31,7 +32,7 @@ export const action: ActionFunction = async ({ request }) => {
     });
     console.log("getAntragDetailsData", getAntragDetailsData);
 
-    const antragnrDetails = {
+    const antragnrDetails: AntragDetailsData = {
       antragnr: getAntragDetailsData.result.antragnr,
       kaufpreis: getAntragDetailsData.result.kaufpreis,
       eingegangen: getAntragDetailsData.result.eingegangen,

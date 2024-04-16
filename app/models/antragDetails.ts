@@ -13,11 +13,3 @@ export async function createAntragDetails(antragData: AntragDetailsData) {
     return null;
   }
 }
-
-// export async function getAntragDetails(antragnr: number) {
-//   const pluginConfData = await db.antragDetails.findUnique({
-//     where: { antragnr },
-//   });
-
-//   return { ...pluginConfData };
-// }
