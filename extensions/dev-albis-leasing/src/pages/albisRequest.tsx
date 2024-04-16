@@ -80,14 +80,14 @@ export const AlbisRequest = ({
       vertrag_an_ln: true,
     };
 
-    const lineItem: LineItem[] = cartData.items.map((item) => ({
+    const lineItems: LineItem[] = cartData.items.map((item) => ({
       variantId: `gid://shopify/ProductVariant/${item.id}`,
       quantity: item.quantity,
     }));
     try {
       const response: GetStelleAntrag = await createAlbisAppAndDraftOrder(
         formData,
-        lineItem,
+        lineItems,
       );
       console.log("response", response);
       if (!response.result) {

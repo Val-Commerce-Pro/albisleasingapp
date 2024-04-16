@@ -7,7 +7,7 @@ export interface LineItem {
 
 export const createAlbisAppAndDraftOrder = async (
   antragsdaten: MockAntragsdaten,
-  lineItem: LineItem[],
+  lineItems: LineItem[],
 ) => {
   try {
     // const shop = document.getElementById("shopDomain")?.textContent;
@@ -15,7 +15,7 @@ export const createAlbisAppAndDraftOrder = async (
     const body = JSON.stringify({
       shop,
       antragsdaten,
-      lineItem,
+      lineItems,
     });
     const response = await fetch(
       `https://albisleasingapp.cpro-server.de/api/createAlbisAppAndDraftOrder`,

@@ -33,7 +33,7 @@ export interface DraftOrderInput {
   shippingLine?: ShippingLine;
   shippingAddress?: Address;
   billingAddress: Address;
-  customAttributes?: CustomAttribute[];
+  customAttributes: CustomAttribute[];
   lineItems: LineItem[];
 }
 
@@ -51,7 +51,40 @@ export async function createDraftOrder(shop: string, input: DraftOrderInput) {
       }
     }`,
     {
-      variables: { input: { ...input } },
+      variables: {
+        input: {
+          // customerId: "gid://shopify/Customer/544365967",
+          note: input.note,
+          email: input.email,
+          taxExempt: true,
+          tags: "Albis Leasing",
+          customAttributes: [
+            { key: "name", value: input.customAttributes[0].value },
+          ],
+          shippingAddress: {
+            address1: input.shippingAddress?.address1,
+            city: input.shippingAddress?.city,
+            zip: input.shippingAddress?.zip,
+            countryCode: "DE",
+          },
+          billingAddress: {
+            address1: "456 Main St",
+            city: "Toronto",
+            zip: "Z9Z 9Z9",
+            countryCode: "DE",
+          },
+          lineItems: [
+            {
+              variantId: "gid://shopify/ProductVariant/47831615996224",
+              quantity: 1,
+            },
+            {
+              variantId: `gid://shopify/ProductVariant/${input.lineItems[0].variantId}`,
+              quantity: input.lineItems[0].quantity,
+            },
+          ],
+        },
+      },
     },
   );
 }
