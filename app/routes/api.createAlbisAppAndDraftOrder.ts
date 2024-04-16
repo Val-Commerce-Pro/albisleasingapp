@@ -1,10 +1,11 @@
 import type { ActionFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { createAntragDetails } from "~/models/antragDetails";
+import type { AntragDetailsData } from "~/models/types";
+import { createDraftOrder } from "./shopify/graphql/createDraftOrder";
 import type { GetAntragDetails, GetStelleAntrag } from "./types/methods";
 import type { GetMethodsDataRequest } from "./utils/getAlbisMethodsData";
 import { getAlbisMethodsData } from "./utils/getAlbisMethodsData";
-import { AntragDetailsData } from "~/models/types";
 
 export const action: ActionFunction = async ({ request }) => {
   const data = await request.json();
@@ -44,6 +45,14 @@ export const action: ActionFunction = async ({ request }) => {
       gf_vname: getAntragDetailsData.result.gf_vname,
     };
     await createAntragDetails(antragnrDetails);
+
+    // const input = {
+    //   customerId: "",
+    //   note: getAntragDetailsData.result.status_txt,
+    // };
+
+    const testDrafOrder = createDraftOrder(shop ?? "");
+    console.log("testDrafOrder", testDrafOrder);
 
     return json(getAntragDetailsData, {
       headers: {
