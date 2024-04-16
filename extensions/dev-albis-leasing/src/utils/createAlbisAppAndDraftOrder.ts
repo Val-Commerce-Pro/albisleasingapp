@@ -1,7 +1,7 @@
-import { MockAntragsdaten } from "../mockData/mockData";
+import { StelleAntrag } from "../types/albisMethods";
 
 export const createAlbisAppAndDraftOrder = async (
-  antragsdaten: MockAntragsdaten,
+  antragsdaten: StelleAntrag,
 ) => {
   try {
     // const shop = document.getElementById("shopDomain")?.textContent;

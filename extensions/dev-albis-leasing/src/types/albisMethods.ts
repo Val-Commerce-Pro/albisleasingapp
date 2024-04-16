@@ -53,3 +53,43 @@ export type Werte = {
   zahlweise?: string;
   provision?: string;
 };
+
+
+export type Geschaeftsfuehrer = {
+  anrede: string;
+  vorname: string;
+  nachname: string;
+  strasse: string;
+  plz: string;
+  ort: string;
+  gebdat: string;
+  telnr: string;
+}
+
+export type Leasingnehmer = {
+  name: string;
+  strasse: string;
+  plz: string;
+  ort: string;
+  rechtsform: string;
+  telefon: string;
+  email: string;
+  geschaeftsfuehrer: Geschaeftsfuehrer;
+}
+
+export type StelleAntrag = {
+  objekt: string;
+  kaufpreis: string;
+  mietsz: string;
+  laufzeit: string;
+  rate: string;
+  leasingnehmer: Leasingnehmer;
+  provision: string;
+  ssv: string;
+  prodgrp: string;
+  vertragsart: string;
+  zahlweise: string;
+  iban: string;
+  service_pauschale: number;
+  vertrag_an_ln: boolean;
+}

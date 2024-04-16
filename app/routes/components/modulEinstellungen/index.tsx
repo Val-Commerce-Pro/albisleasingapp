@@ -177,7 +177,7 @@ export const ModulEinstellungen = ({
         />
         <TextField
           name="mietsonderzahlung"
-          label="Mietsoderzahlung:"
+          label="Mietsonderzahlung:"
           type="text"
           handleOnChange={handleChange}
           handleOnBlur={handleSave}

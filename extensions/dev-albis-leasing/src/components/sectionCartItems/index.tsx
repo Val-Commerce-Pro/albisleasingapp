@@ -25,7 +25,7 @@ export const SectionCartItems = ({
                 <th
                   key={`${i}-${item}`}
                   scope="col"
-                  className="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider"
+                  className="px-[24px] py-[12px] text-left font-medium text-gray-500 uppercase tracking-wider"
                 >
                   {item}
                 </th>
@@ -35,18 +35,18 @@ export const SectionCartItems = ({
           <tbody className="bg-white divide-y divide-gray-200">
             {cartData.items.map((item, index) => (
               <tr key={index}>
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="px-[24px] py-[16px] whitespace-nowrap">
                   <img
                     src={item.image}
                     alt={item.title}
-                    className="h-10 w-10 rounded-full"
+                    className="h-[40px] w-[40px] rounded-full"
                   />
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-gray-900">
+                <td className="px-[24px] py-[16px] whitespace-nowrap text-gray-900">
                   <div className="flex items-center">
                     <button
                       onClick={() => handleUpdateItemQuantity(item)}
-                      className={`p-1 mr-2 rounded-full border-0 ${
+                      className={`p-[4px] mr-[8px] rounded-full border-0 ${
                         item.quantity <= 1
                           ? "text-gray-300 cursor-not-allowed"
                           : "text-gray-500 hover:text-gray-700"
@@ -58,22 +58,22 @@ export const SectionCartItems = ({
                     <span>{item.quantity}</span>
                     <button
                       onClick={() => handleUpdateItemQuantity(item, "plus")}
-                      className="p-1 ml-2 rounded-full border-0 text-gray-500 hover:text-gray-700"
+                      className="p-[4px] ml-[8px] rounded-full border-0 text-gray-500 hover:text-gray-700"
                     >
                       <FaPlus />
                     </button>
                   </div>
                 </td>
-                <td className="px-6 py-4 font-medium text-gray-900 break-words">
+                <td className="px-[24px] py-[16px] font-medium text-gray-900 break-words">
                   {item.title}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-gray-500">
+                <td className="px-[24px] py-[16px] whitespace-nowrap text-gray-500">
                   €{formatDecimalNumber(item.line_price)}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-gray-500">
+                <td className="px-[24px] py-[16px] whitespace-nowrap text-gray-500">
                   <button
                     onClick={() => handleDeleteCartItem(item)}
-                    className="p-1 rounded-full border-0 text-red-500 hover:text-red-700"
+                    className="p-[4px] rounded-full border-0 text-red-500 hover:text-red-700"
                   >
                     <FaTrash />
                   </button>
@@ -83,14 +83,14 @@ export const SectionCartItems = ({
             <tr>
               <td
                 colSpan={3}
-                className="px-6 py-4 text-right font-medium text-gray-900"
+                className="px-[24px] py-[16px] text-right font-medium text-gray-900"
               >
                 Total
               </td>
-              <td className="px-6 py-4 text-gray-500">
+              <td className="px-[24px] py-[16px] text-gray-500">
                 €{formatDecimalNumber(cartData.total_price)}
               </td>
-              <td className="px-6 py-4"></td>{" "}
+              <td className="px-[24px] py-[16px]"></td>{" "}
               {/* Empty cell for the Actions column */}
             </tr>
           </tbody>

@@ -103,7 +103,7 @@ export const SectionCalculator = ({
       toolTipContent="Rechnen Sie hier schnell und einfach die zu zahlende monatliche Leasingrate für den geplanten Einkaufswert aus:
   Kaufpreis (ohne MwSt.) als Finanzierungsbetrag eintragen:"
     >
-      <div className="w-full h-full flex flex-col gap-4 p-3 overflow-x-auto shadow-md rounded-b-lg">
+      <div className="w-full h-full flex flex-col gap-[16px] p-[12px] overflow-x-auto shadow-md rounded-b-lg">
         <Select
           handleChange={handleSelectChange}
           name="objektVersicherungVorhanden"
@@ -144,10 +144,10 @@ export const SectionCalculator = ({
             disabled={!auswahlZahlungsweiseAnzeigen}
           />
         )}
-        <div className="flex items-center justify-center w-full mt-4">
+        <div className="flex items-center justify-center w-full mt-[16px]">
           <button
             type="button"
-            className="text-white font-bold bg-orange-400 rounded-md p-3 w-[250px] hover:bg-orange-300"
+            className="text-white font-bold bg-orange-400 rounded-md p-[12px] w-[250px] hover:bg-orange-300"
             onClick={() => handleSave()}
           >
             Berechnen

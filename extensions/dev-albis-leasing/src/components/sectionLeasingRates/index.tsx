@@ -69,7 +69,7 @@ export const SectionLeasingRates = ({
                 <th
                   key={`${i}-${item}`}
                   scope="col"
-                  className="px-6 py-3  font-medium text-gray-500 uppercase tracking-wider rounded-tl-lg"
+                  className="px-[24px] py-[12px] font-medium text-gray-500 uppercase tracking-wider rounded-tl-lg"
                 >
                   {item}
                 </th>
@@ -84,23 +84,23 @@ export const SectionLeasingRates = ({
                   className="cursor-pointer transition-all duration-100 ease-in-out hover:bg-gray-100 text-center"
                   onClick={() => handleClickRateOpt(itemRate)}
                 >
-                  <td className="px-6 py-4 whitespace-nowrap  text-gray-900 rounded-bl-lg">
+                  <td className="px-[24px] py-[16px] whitespace-nowrap  text-gray-900 rounded-bl-lg">
                     {itemRate.laufzeit} Monate
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-gray-900">
+                  <td className="px-[24px] py-[16px] whitespace-nowrap text-gray-900">
                     €{itemRate.rate.toFixed(2)}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-gray-900">
+                  <td className="px-[24px] py-[16px] whitespace-nowrap text-gray-900">
                     €{itemRate.versicherung.toFixed(2)}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-gray-900 rounded-br-lg">
+                  <td className="px-[24px] py-[16px] whitespace-nowrap text-gray-900 rounded-br-lg">
                     €{(itemRate.rate + itemRate.versicherung).toFixed(2)}
                   </td>
                 </tr>
               ))}
           </tbody>
         </table>
-        <div className="text-sm p-3 flex flex-col gap-1 border-t border-gray-200">
+        <div className="text-sm p-[12px] flex flex-col gap-[4px] border-t border-gray-200">
           <strong>
             WICHTIG: Bitte achten Sie darauf, dass die Lieferzeiten zum
             Zeitpunkt der Antragstellung gelten. Bis Sie den Leasingvertrag

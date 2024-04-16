@@ -1,6 +1,6 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import { Rechtsformen } from "../../types/albisMethods";
-import { LocalStorageI } from "../../types/localStorage";
+import { CompanyInfoData, LocalStorageI } from "../../types/localStorage";
 import { getAlbisMethodsData } from "../../utils/getAlbisMethodsData";
 import { Box } from "../box";
 import { Select } from "../select";
@@ -8,15 +8,24 @@ import { TextField } from "../textfield";
 
 export const SectionInfoCompany = () => {
   const [rechtsformen, setRechtsformen] = useState<Rechtsformen | undefined>();
-  const [companyFormData, setCompanyFormData] = useState({
-    rechtsform: "",
+  const initialState: CompanyInfoData = {  
+    rechtsform: "1",
     firmenname: "",
     strasse: "",
     plz: "",
     ort: "",
-    tel: "",
+    telefon: "",
     email: "",
     bank: "",
+  } 
+
+  const [companyFormData, setCompanyFormData] = useState(() => {
+    const storageDataAsString = localStorage.getItem("cp@albisLeasing");
+    const stateInitialData: CompanyInfoData =
+      storageDataAsString && Object.keys(storageDataAsString).length > 1
+        ? { ...JSON.parse(storageDataAsString).companyInfoData }
+        : initialState
+    return stateInitialData;
   });
 
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
@@ -26,16 +35,31 @@ export const SectionInfoCompany = () => {
 
   function handleSelectChange(event: ChangeEvent<HTMLSelectElement>) {
     const { name, value } = event.target;
-    setCompanyFormData((prev) => ({ ...prev, [name]: value }));
+    setCompanyFormData((prev) => {
+      const newState =  {...prev, [name]: value };
+
+      handleSelectSave(newState);
+      return newState;
+    });
+  }
+
+  function handleSelectSave(companyInfoData=companyFormData) {
+    const localStorageData = localStorage.getItem("cp@albisLeasing");
+    const localStorageJSON: LocalStorageI = JSON.parse(localStorageData ?? initialState.toString());
+
+    localStorage.setItem(
+      "cp@albisLeasing",
+      JSON.stringify({ ...localStorageJSON, companyInfoData }),
+    );
   }
 
   function handleSave() {
     const localStorageData = localStorage.getItem("cp@albisLeasing");
-    const localStorageJSON: LocalStorageI = JSON.parse(localStorageData ?? "");
+    const localStorageJSON: LocalStorageI = JSON.parse(localStorageData ?? initialState.toString());
 
     localStorage.setItem(
       "cp@albisLeasing",
-      JSON.stringify({ ...localStorageJSON, companyFormData }),
+      JSON.stringify({ ...localStorageJSON, companyInfoData: companyFormData }),
     );
   }
 
@@ -51,7 +75,7 @@ export const SectionInfoCompany = () => {
 
   return (
     <Box title="Angaben über die Firma">
-      <div className="overflow-x-auto shadow-md sm:rounded-lg p-3 flex flex-col gap-4">
+      <div className="overflow-x-auto shadow-md sm:rounded-lg p-[12px] flex flex-col gap-[16px]">
         {rechtsformen && (
           <Select
             handleChange={handleSelectChange}
@@ -107,7 +131,6 @@ export const SectionInfoCompany = () => {
           name="telefon"
           label="Telefon"
           type="tel"
-          pattern="0[0-9]{10}"
           handleOnChange={handleInputChange}
           handleOnBlur={handleSave}
           handleKeyDown={handleSave}

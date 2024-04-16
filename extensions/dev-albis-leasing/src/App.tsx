@@ -29,7 +29,7 @@ function App() {
             />
             <Route
               path="/pages/albis-leasing-request"
-              element={<AlbisRequest />}
+              element={<AlbisRequest pluginConfData={pluginConfData}/>}
             />
           </>
         ) : (
