@@ -5,22 +5,34 @@ import type { AntragDetailsData } from "~/models/types";
 import type { DraftOrderInput } from "./shopify/graphql/createDraftOrder";
 import { createDraftOrder } from "./shopify/graphql/createDraftOrder";
 import type { CreateAlbisAppAndOrder } from "./types/createAlbisAppAndOrder";
-import type { GetAntragDetails, GetStelleAntrag } from "./types/methods";
+import type {
+  GetAntragDetails,
+  GetStelleAntrag,
+  JsonRpcErrorResponse,
+} from "./types/methods";
 import { getAlbisMethodsData } from "./utils/getAlbisMethodsData";
 
 export const action: ActionFunction = async ({ request }) => {
   const data = await request.json();
   const { shop, antragsdaten, lineItems }: CreateAlbisAppAndOrder = data;
+  console.log("data CreateAlbisAPp", data);
   try {
-    const getStelleAntragData: GetStelleAntrag = await getAlbisMethodsData({
-      method: "stelleAntrag",
-      shop,
-      antragsdaten,
-    });
+    const getStelleAntragData: GetStelleAntrag | JsonRpcErrorResponse =
+      await getAlbisMethodsData({
+        method: "stelleAntrag",
+        shop,
+        antragsdaten,
+      });
 
-    if (!getStelleAntragData.result) {
-      return new Response("Invalid Credentials", {
-        status: 404,
+    console.log("getStelleAntragData", getStelleAntragData);
+    function isJsonRpcErrorResponse(
+      object: any,
+    ): object is JsonRpcErrorResponse {
+      return "error" in object;
+    }
+    if (isJsonRpcErrorResponse(getStelleAntragData)) {
+      console.error("RPC Error:", getStelleAntragData);
+      return json(getStelleAntragData, {
         headers: {
           "Access-Control-Allow-Origin": "*",
         },
@@ -32,7 +44,6 @@ export const action: ActionFunction = async ({ request }) => {
       shop,
       antragnr: getStelleAntragData.result,
     });
-    console.log("getAntragDetailsData", getAntragDetailsData);
 
     const { result } = getAntragDetailsData;
 
@@ -55,8 +66,14 @@ export const action: ActionFunction = async ({ request }) => {
       phone: result.ln_telefon,
       tags: "Albis Leasing",
       taxExempt: true,
-      visibleToCustomer: true,
+      // visibleToCustomer: true,
       billingAddress: {
+        address1: result.ln_strasse,
+        city: result.ln_ort,
+        zip: result.ln_plz,
+        countryCode: "DE",
+      },
+      shippingAddress: {
         address1: result.ln_strasse,
         city: result.ln_ort,
         zip: result.ln_plz,

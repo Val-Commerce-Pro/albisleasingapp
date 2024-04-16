@@ -1,3 +1,15 @@
+interface RpcError {
+  code: number;
+  message: string;
+  data: unknown;
+}
+
+export interface JsonRpcErrorResponse {
+  id: number;
+  jsonrpc: string;
+  error: RpcError;
+}
+
 export interface ResultVertragsarten {
   id: number;
   bezeichnung: string;

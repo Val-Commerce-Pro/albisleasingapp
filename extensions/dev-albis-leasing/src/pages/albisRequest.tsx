@@ -1,21 +1,19 @@
-
-import { ShoppingCart } from "../types/cartTypes";
-import { PageTitle } from "../components/pagetitle";
-import { SectionLeasingData } from "../components/sectionLeasingData";
-import { SectionInfoCompany } from "../components/sectionInfoCompany";
-import { SectionCompanyManager } from "../components/sectionCompanyManager";
-import { initialStorageState, LocalStorageI } from "../types/localStorage";
 import { ChangeEvent, useState } from "react";
-import { StelleAntrag, GetStelleAntrag } from "../types/albisMethods";
+import { Modal, closeModal, openModal } from "../components/modal";
+import { PageTitle } from "../components/pagetitle";
+import { SectionCompanyManager } from "../components/sectionCompanyManager";
+import { SectionInfoCompany } from "../components/sectionInfoCompany";
+import { SectionLeasingData } from "../components/sectionLeasingData";
+import { Snackbar, openSnackbar } from "../components/snackbar";
+import { GetStelleAntrag, StelleAntrag } from "../types/albisMethods";
+import { ShoppingCart } from "../types/cartTypes";
+import { LocalStorageI, initialStorageState } from "../types/localStorage";
 import { PluginConfig } from "../types/pluginConfig";
 import {
-  createAlbisAppAndDraftOrder,
   LineItem,
+  createAlbisAppAndDraftOrder,
 } from "../utils/createAlbisAppAndDraftOrder";
 import { formatDecimalNumber } from "../utils/formatValues";
-import {openSnackbar, Snackbar} from "../components/snackbar";
-import { closeModal, Modal, openModal } from "../components/modal";
-
 
 type AlbisRequestProps = {
   cartData: ShoppingCart;
@@ -27,11 +25,15 @@ export const AlbisRequest = ({
   cartData,
 }: AlbisRequestProps) => {
   const [responseSuccess, setResponseSuccess] = useState(true);
-  const [senden, setSenden] = useState("Senden");
-  const [responseText, setResponseText] = useState("Deine Leasing Anfrage an Albis wurde erfolgreich versendet! Weitere Informationen erhalten Sie per Mail");
+  const [senden] = useState("Senden");
+  const [responseText, setResponseText] = useState(
+    "Deine Leasing Anfrage an Albis wurde erfolgreich versendet! Weitere Informationen erhalten Sie per Mail",
+  );
 
-  const handleFormSubmit = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    event.preventDefault(); 
+  const handleFormSubmit = async (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
+    event.preventDefault();
 
     const localStorageData = localStorage.getItem("cp@albisLeasing");
     const localStorageJSON: LocalStorageI = JSON.parse(
@@ -83,20 +85,27 @@ export const AlbisRequest = ({
       quantity: item.quantity,
     }));
     try {
-      const response: GetStelleAntrag = await createAlbisAppAndDraftOrder(formData, lineItem);
+      const response: GetStelleAntrag = await createAlbisAppAndDraftOrder(
+        formData,
+        lineItem,
+      );
+      console.log("response", response);
       if (!response.result) {
         throw new Error(`HTTP error! Status: ${response}`);
-      } else {
-        setResponseSuccess(true);
-        setResponseText("Deine Leasing Anfrage an Albis wurde erfolgreich versendet! Weitere Informationen erhalten Sie per Mail")
-        openSnackbar();
-        closeModal();
-        //localStorage.clear();
-        //TODO: reset form values
       }
-    } catch (error: any) {
+
+      setResponseSuccess(true);
+      setResponseText(
+        "Deine Leasing Anfrage an Albis wurde erfolgreich versendet! Weitere Informationen erhalten Sie per Mail",
+      );
+      openSnackbar();
+      closeModal();
+      //localStorage.clear();
+      //TODO: reset form values
+    } catch (error) {
+      console.log("error", error);
       setResponseSuccess(false);
-      setResponseText(error.toString());
+      // setResponseText(error as string);
       openSnackbar();
     }
   };
@@ -142,10 +151,18 @@ export const AlbisRequest = ({
             Gruppe dort verarbeitet werden.
           </label>
         </div>
-        <input value={senden} onClick={openModal} type="button" data-modal-target="static-modal" id="modal-button" data-modal-toggle="static-modal" className="text-white font-bold bg-orange-400 rounded-md p-[12px] w-[250px] hover:bg-orange-300"/>
+        <input
+          value={senden}
+          onClick={openModal}
+          type="button"
+          data-modal-target="static-modal"
+          id="modal-button"
+          data-modal-toggle="static-modal"
+          className="text-white font-bold bg-orange-400 rounded-md p-[12px] w-[250px] hover:bg-orange-300"
+        />
       </form>
-      <Snackbar success={responseSuccess} text={responseText}/>
-      <Modal onSubmit={handleFormSubmit}/>
+      <Snackbar success={responseSuccess} text={responseText} />
+      <Modal onSubmit={handleFormSubmit} />
     </div>
   );
 };
