@@ -20,7 +20,7 @@ export const SectionCompanyManager = () => {
     const storageDataAsString = localStorage.getItem("cp@albisLeasing");
     const stateInitialData: CompanyManagerInfoData =
       storageDataAsString && Object.keys(storageDataAsString).length > 1
-        ? { ...JSON.parse(storageDataAsString).CompanyManagerInfoData } : initialState
+        ? { ...JSON.parse(storageDataAsString).companyManagerInfoData } : initialState
         return stateInitialData;
     });
 
