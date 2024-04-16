@@ -41,7 +41,7 @@ export async function createDraftOrder(shop: string, input: DraftOrderInput) {
   const graphQlClient = await getGraphqlClient(shop);
 
   console.log("inside createDraftOrder - input: ", input);
-  console.log("graphQlClient apiVersion", graphQlClient.apiVersion);
+  console.log("graphQlClient session.shop", graphQlClient.session.shop);
   await graphQlClient.request(
     `mutation draftOrderCreate($input: DraftOrderInput!) {
       draftOrderCreate(input: $input) {

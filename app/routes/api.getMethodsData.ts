@@ -25,14 +25,6 @@ export const action: ActionFunction = async ({ request }) => {
       antragsdaten,
       antragnr,
     });
-    console.log("methodsData", methodsData);
-    // if (!methodsPromise.ok) {
-    //   throw new Error(
-    //     `HTTP error! status: ${methodsPromise.status} for method: ${method}`,
-    //   );
-    // }
-    // const methodsData = await methodsPromise.json();
-    console.log("methodsData - getMethodsData Route - ", methodsData);
 
     return json(methodsData, {
       headers: {
