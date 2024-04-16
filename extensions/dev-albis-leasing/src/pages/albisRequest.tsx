@@ -1,17 +1,21 @@
-import { ChangeEvent } from "react";
-import { PageTitle } from "../components/pagetitle";
-import { SectionCompanyManager } from "../components/sectionCompanyManager";
-import { SectionInfoCompany } from "../components/sectionInfoCompany";
-import { SectionLeasingData } from "../components/sectionLeasingData";
-import { StelleAntrag } from "../types/albisMethods";
+
 import { ShoppingCart } from "../types/cartTypes";
+import { PageTitle } from "../components/pagetitle";
+import { SectionLeasingData } from "../components/sectionLeasingData";
+import { SectionInfoCompany } from "../components/sectionInfoCompany";
+import { SectionCompanyManager } from "../components/sectionCompanyManager";
 import { initialStorageState, LocalStorageI } from "../types/localStorage";
+import { ChangeEvent, useState } from "react";
+import { StelleAntrag, GetStelleAntrag } from "../types/albisMethods";
 import { PluginConfig } from "../types/pluginConfig";
 import {
   createAlbisAppAndDraftOrder,
   LineItem,
 } from "../utils/createAlbisAppAndDraftOrder";
 import { formatDecimalNumber } from "../utils/formatValues";
+import {openSnackbar, Snackbar} from "../components/snackbar";
+import { closeModal, Modal, openModal } from "../components/modal";
+
 
 type AlbisRequestProps = {
   cartData: ShoppingCart;
@@ -22,8 +26,12 @@ export const AlbisRequest = ({
   pluginConfData,
   cartData,
 }: AlbisRequestProps) => {
-  const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const [responseSuccess, setResponseSuccess] = useState(true);
+  const [senden, setSenden] = useState("Senden");
+  const [responseText, setResponseText] = useState("Deine Leasing Anfrage an Albis wurde erfolgreich versendet! Weitere Informationen erhalten Sie per Mail");
+
+  const handleFormSubmit = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    event.preventDefault(); 
 
     const localStorageData = localStorage.getItem("cp@albisLeasing");
     const localStorageJSON: LocalStorageI = JSON.parse(
@@ -74,8 +82,23 @@ export const AlbisRequest = ({
       variantId: `gid://shopify/ProductVariant/${item.id}`,
       quantity: item.quantity,
     }));
-
-    createAlbisAppAndDraftOrder(formData, lineItem);
+    try {
+      const response: GetStelleAntrag = await createAlbisAppAndDraftOrder(formData, lineItem);
+      if (!response.result) {
+        throw new Error(`HTTP error! Status: ${response}`);
+      } else {
+        setResponseSuccess(true);
+        setResponseText("Deine Leasing Anfrage an Albis wurde erfolgreich versendet! Weitere Informationen erhalten Sie per Mail")
+        openSnackbar();
+        closeModal();
+        //localStorage.clear();
+        //TODO: reset form values
+      }
+    } catch (error: any) {
+      setResponseSuccess(false);
+      setResponseText(error.toString());
+      openSnackbar();
+    }
   };
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
@@ -95,7 +118,7 @@ export const AlbisRequest = ({
     <div className="max-w-[1280px] shadow-sm mx-auto p-[16px]">
       <PageTitle title="Albis Leasing Request" />
       <SectionLeasingData />
-      <form onSubmit={handleFormSubmit}>
+      <form>
         <div className="mt-[20px]">
           <SectionInfoCompany />
         </div>
@@ -119,12 +142,10 @@ export const AlbisRequest = ({
             Gruppe dort verarbeitet werden.
           </label>
         </div>
-        <input
-          type="submit"
-          className="text-white font-bold bg-orange-400 rounded-md p-[12px] w-[250px] hover:bg-orange-300"
-        />
+        <input value={senden} onClick={openModal} type="button" data-modal-target="static-modal" id="modal-button" data-modal-toggle="static-modal" className="text-white font-bold bg-orange-400 rounded-md p-[12px] w-[250px] hover:bg-orange-300"/>
       </form>
-      {/* <Snackbar type="error" text="irgendwas" /> */}
+      <Snackbar success={responseSuccess} text={responseText}/>
+      <Modal onSubmit={handleFormSubmit}/>
     </div>
   );
 };
