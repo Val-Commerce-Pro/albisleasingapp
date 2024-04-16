@@ -6,7 +6,6 @@ export async function createAntragDetails(antragData: AntragDetailsData) {
     const antragDetailsData = await db.antragDetails.create({
       data: { ...antragData },
     });
-    console.log("DB - createAntragDetails", antragDetailsData);
     return antragDetailsData;
   } catch (error) {
     console.error("create AntragDetails failed", error);
