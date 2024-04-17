@@ -16,23 +16,25 @@ export const isFormFilled = () => {
     if (!form) return
   
     const submitButton = document.getElementById('modal-button');//form.querySelector('input[type="submit"]');
-    const requiredFields = form.querySelectorAll<HTMLInputElement>('input[required]');
+    const requiredInputFields = form.querySelectorAll<HTMLInputElement>('input[required]');
+    const requiredSelectFields = form.querySelectorAll<HTMLSelectElement>('select[required]');
 
     if (!submitButton) return
   
-      form.addEventListener("input", function() {
-        const allFilled = Array.from(requiredFields).every((field) =>  {
+      form.addEventListener("change", function() {
+        const allInputsFilled = Array.from(requiredInputFields).every((field) =>  {
           if (field.type === "checkbox") {
             return field.checked !== false;
           }else {
             return field.value.trim() !== "";
           } 
         });
-  
-        if (!allFilled) {
-          submitButton.setAttribute("disabled", "");
-        } else {
+        const allSelectsFilled = Array.from(requiredSelectFields).every((field) => field.selectedIndex !== 0);
+
+        if (allInputsFilled && allSelectsFilled) {
           submitButton.removeAttribute("disabled");
+        } else {
+          submitButton.setAttribute("disabled", "");
         }
       });
   };
