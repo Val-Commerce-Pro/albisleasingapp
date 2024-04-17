@@ -47,8 +47,8 @@ const getPluginConfData = async () => {
 
 const getAlbisMethodsData = async (method, werte) => {
   try {
-    const shop = "commerce-albis-leasing.myshopify.com";
-    // const requestBody = werte ? { method, shop, werte } : { method, shop };
+    const shop = document.getElementById("ah-shop-domain").textContent;
+    // const shop = "commerce-albis-leasing.myshopify.com";
     const response = await fetch(
       `https://albisleasingapp.cpro-server.de/api/getMethodsData`,
       {
@@ -88,7 +88,6 @@ async function getLeasingRateTable() {
   };
   const leasingRates = await getAlbisMethodsData("getRate", productValues);
 
-  // console.log("leasingRates", leasingRates);
   let table = document
     .getElementById("preview-table")
     .getElementsByTagName("tbody")[0];

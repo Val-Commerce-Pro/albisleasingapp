@@ -10,6 +10,7 @@ import type {
   GetStelleAntrag,
   JsonRpcErrorResponse,
 } from "./types/methods";
+import { isJsonRpcErrorResponse } from "./utils/formatData";
 import { getAlbisMethodsData } from "./utils/getAlbisMethodsData";
 
 export const action: ActionFunction = async ({ request }) => {
@@ -25,11 +26,6 @@ export const action: ActionFunction = async ({ request }) => {
       });
 
     console.log("getStelleAntragData", getStelleAntragData);
-    function isJsonRpcErrorResponse(
-      object: any,
-    ): object is JsonRpcErrorResponse {
-      return "error" in object;
-    }
     if (isJsonRpcErrorResponse(getStelleAntragData)) {
       console.error("RPC Error:", getStelleAntragData);
       return json(getStelleAntragData, {

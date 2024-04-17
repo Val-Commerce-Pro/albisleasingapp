@@ -31,13 +31,11 @@ export const action: ActionFunction = async ({ request }) => {
         "Access-Control-Allow-Origin": "*",
       },
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error fetching data:", error);
-    return new Response("Internal Server Error", {
-      status: 500,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
+    return new Response(error.message || "An error occurred", {
+      status: error.statusCode || 500,
+      headers: { "Access-Control-Allow-Origin": "*" },
     });
   }
 };

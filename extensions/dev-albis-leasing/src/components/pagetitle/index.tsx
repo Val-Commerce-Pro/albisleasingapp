@@ -1,7 +1,6 @@
 interface PageTitleProps {
   title: string;
 }
- // TODO
 export const PageTitle = ({ title }: PageTitleProps) => {
   return (
     <div className="my-[32px]">

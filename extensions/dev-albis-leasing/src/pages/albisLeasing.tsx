@@ -90,6 +90,7 @@ export const AlbisLeasing = ({
       "getRate",
       werte,
     );
+    console.log("leasingRateData", leasingRateData);
     setLeasingRate(leasingRateData);
   };
 

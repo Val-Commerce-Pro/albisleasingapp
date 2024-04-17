@@ -72,7 +72,12 @@ export const getAlbisMethodsData = async ({
         }
       : credentials;
 
-  if (!requestCredentials) throw new Error(`Invalid credentials`);
+  if (!requestCredentials) {
+    return new Response("Invalid credentials", {
+      status: 401,
+      headers: { "Access-Control-Allow-Origin": "*" },
+    });
+  }
 
   const methodsPromise = await fetch(
     requestCredentials.apiLink,

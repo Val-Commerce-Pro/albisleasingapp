@@ -89,10 +89,7 @@ export const SectionCalculator = ({
         ...formattedCalcData,
       },
     };
-    // console.log("dataToLocalStorage", dataToLocalStorage);
-    // console.log("dataFromLocalStorage", dataFromLocalStorage);
     localStorage.setItem("cp@albisLeasing", JSON.stringify(dataToLocalStorage));
-
     handleGetRate(formattedCalcData);
   }
 
@@ -120,8 +117,8 @@ export const SectionCalculator = ({
           label="Finanzierungsbetrag (netto):"
           type="number"
           handleOnChange={handleInputChange}
-          handleOnBlur={() => handleSave()}
-          handleKeyDown={() => handleSave()}
+          handleOnBlur={handleSave}
+          handleKeyDown={handleSave}
           textFieldValue={formData.finanzierungsbetragNetto}
           disabled={!kundeKannFinanzierungsbetragAndern}
         />
@@ -130,8 +127,8 @@ export const SectionCalculator = ({
           label="Anzahlung"
           type="number"
           handleOnChange={handleInputChange}
-          handleOnBlur={() => handleSave()}
-          handleKeyDown={() => handleSave()}
+          handleOnBlur={handleSave}
+          handleKeyDown={handleSave}
           textFieldValue={formData.anzahlung}
         />
         {zahlungsweisen && (
@@ -148,7 +145,7 @@ export const SectionCalculator = ({
           <button
             type="button"
             className="text-white font-bold bg-orange-400 rounded-md p-[12px] w-[250px] hover:bg-orange-300"
-            onClick={() => handleSave()}
+            onClick={handleSave}
           >
             Berechnen
           </button>

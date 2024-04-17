@@ -8,7 +8,7 @@ import { TextField } from "../textfield";
 
 export const SectionInfoCompany = () => {
   const [rechtsformen, setRechtsformen] = useState<Rechtsformen | undefined>();
-  const initialState: CompanyInfoData = {  
+  const initialState: CompanyInfoData = {
     rechtsform: "1",
     firmenname: "",
     strasse: "",
@@ -17,14 +17,14 @@ export const SectionInfoCompany = () => {
     telefon: "",
     email: "",
     bank: "",
-  } 
+  };
 
   const [companyFormData, setCompanyFormData] = useState(() => {
     const storageDataAsString = localStorage.getItem("cp@albisLeasing");
     const stateInitialData: CompanyInfoData =
       storageDataAsString && Object.keys(storageDataAsString).length > 1
         ? { ...JSON.parse(storageDataAsString).companyInfoData }
-        : initialState
+        : initialState;
     return stateInitialData;
   });
 
@@ -32,30 +32,35 @@ export const SectionInfoCompany = () => {
     const { name, value } = event.target;
     setCompanyFormData((prev) => ({ ...prev, [name]: value }));
   }
-
+  /* Review */
   function handleSelectChange(event: ChangeEvent<HTMLSelectElement>) {
     const { name, value } = event.target;
     setCompanyFormData((prev) => {
-      const newState =  {...prev, [name]: value };
+      const newState = { ...prev, [name]: value };
 
       handleSelectSave(newState);
       return newState;
     });
   }
 
-  function handleSelectSave(companyInfoData=companyFormData) {
+  function handleSelectSave(companyInfoData = companyFormData) {
     const localStorageData = localStorage.getItem("cp@albisLeasing");
-    const localStorageJSON: LocalStorageI = JSON.parse(localStorageData ?? initialState.toString());
+    const localStorageJSON: LocalStorageI = JSON.parse(
+      localStorageData ?? initialState.toString(),
+    );
 
     localStorage.setItem(
       "cp@albisLeasing",
       JSON.stringify({ ...localStorageJSON, companyInfoData }),
     );
   }
+  /* end review */
 
   function handleSave() {
     const localStorageData = localStorage.getItem("cp@albisLeasing");
-    const localStorageJSON: LocalStorageI = JSON.parse(localStorageData ?? initialState.toString());
+    const localStorageJSON: LocalStorageI = JSON.parse(
+      localStorageData ?? initialState.toString(),
+    );
 
     localStorage.setItem(
       "cp@albisLeasing",
@@ -63,13 +68,12 @@ export const SectionInfoCompany = () => {
     );
   }
 
-  const fetchRechtsformen = async () => {
-    const rechtsformData: Rechtsformen =
-      await getAlbisMethodsData("getRechtsformen");
-    setRechtsformen(rechtsformData);
-  };
-
   useEffect(() => {
+    const fetchRechtsformen = async () => {
+      const rechtsformData: Rechtsformen =
+        await getAlbisMethodsData("getRechtsformen");
+      setRechtsformen(rechtsformData);
+    };
     fetchRechtsformen();
   }, []);
 

@@ -1,5 +1,6 @@
 import type { OptionsMethodData } from "../components/select";
 import type {
+  JsonRpcErrorResponse,
   ResultProduktgruppen,
   ResultVertragsarten,
   ResultZahlungsweisen,
@@ -53,3 +54,7 @@ export const getOptionsMethodData = (
   }));
   return optionsMethodData;
 };
+
+export function isJsonRpcErrorResponse(object: any): object is JsonRpcErrorResponse {
+  return "error" in object;
+}

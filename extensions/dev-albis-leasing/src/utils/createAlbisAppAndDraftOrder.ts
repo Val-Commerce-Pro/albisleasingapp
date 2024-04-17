@@ -10,8 +10,8 @@ export const createAlbisAppAndDraftOrder = async (
   lineItems: LineItem[],
 ) => {
   try {
-    // const shop = document.getElementById("shopDomain")?.textContent;
-    const shop = "commerce-albis-leasing.myshopify.com";
+    const shop = document.getElementById("shopDomain")?.textContent;
+    // const shop = "commerce-albis-leasing.myshopify.com";
     const body = JSON.stringify({
       shop,
       antragsdaten,
