@@ -5,6 +5,7 @@ import { getAlbisMethodsData } from "../../utils/getAlbisMethodsData";
 import { Box } from "../box";
 import { Select } from "../select";
 import { TextField } from "../textfield";
+import { isFormFilled } from "../../utils/formValidation";
 
 export const SectionInfoCompany = () => {
   const [rechtsformen, setRechtsformen] = useState<Rechtsformen | undefined>();
@@ -29,11 +30,13 @@ export const SectionInfoCompany = () => {
   });
 
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
+    isFormFilled();
     const { name, value } = event.target;
     setCompanyFormData((prev) => ({ ...prev, [name]: value }));
   }
   /* Review */
   function handleSelectChange(event: ChangeEvent<HTMLSelectElement>) {
+    isFormFilled();
     const { name, value } = event.target;
     setCompanyFormData((prev) => {
       const newState = { ...prev, [name]: value };
