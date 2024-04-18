@@ -30,6 +30,10 @@ export const AlbisRequest = ({
     "Deine Leasing Anfrage an Albis wurde erfolgreich versendet! Weitere Informationen erhalten Sie per Mail",
   );
 
+  useEffect(() => {
+    isFormFilled(true);
+ });
+
   const handleFormSubmit = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
@@ -158,7 +162,6 @@ export const AlbisRequest = ({
           type="button"
           data-modal-target="static-modal"
           id="modal-button"
-          disabled={true}
           data-modal-toggle="static-modal"
           className="text-white font-bold bg-orange-400 rounded-md p-[12px] w-[250px] hover:bg-orange-300 disabled:bg-gray-300 disabled:pointer-events-none"
         >Senden</button>
