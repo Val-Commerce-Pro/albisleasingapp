@@ -40,8 +40,7 @@ export interface DraftOrderInput {
 export async function createDraftOrder(shop: string, input: DraftOrderInput) {
   const graphQlClient = await getGraphqlClient(shop);
 
-  console.log("inside createDraftOrder - input: ", input);
-  await graphQlClient.request(
+  const response = await graphQlClient.request(
     `mutation draftOrderCreate($input: DraftOrderInput!) {
       draftOrderCreate(input: $input) {
         draftOrder {
@@ -78,4 +77,6 @@ export async function createDraftOrder(shop: string, input: DraftOrderInput) {
       },
     },
   );
+
+  return response;
 }

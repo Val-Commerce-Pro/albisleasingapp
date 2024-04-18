@@ -16,7 +16,6 @@ import { getAlbisMethodsData } from "./utils/getAlbisMethodsData";
 export const action: ActionFunction = async ({ request }) => {
   const data = await request.json();
   const { shop, antragsdaten, lineItems }: CreateAlbisAppAndOrder = data;
-  console.log("data CreateAlbisApp", data);
   try {
     const getStelleAntragData: GetStelleAntrag | JsonRpcErrorResponse =
       await getAlbisMethodsData({
@@ -79,7 +78,6 @@ export const action: ActionFunction = async ({ request }) => {
       lineItems: lineItems,
     };
 
-    console.log("before createDraftORder", input);
     const testDrafOrder = await createDraftOrder(shop, input);
     console.log("testDrafOrder", testDrafOrder);
 
