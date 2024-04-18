@@ -5,7 +5,11 @@ import { SectionCompanyManager } from "../components/sectionCompanyManager";
 import { SectionInfoCompany } from "../components/sectionInfoCompany";
 import { SectionLeasingData } from "../components/sectionLeasingData";
 import { Snackbar, openSnackbar } from "../components/snackbar";
-import { GetStelleAntrag, StelleAntrag } from "../types/albisMethods";
+import {
+  GetStelleAntrag,
+  JsonRpcErrorResponse,
+  StelleAntrag,
+} from "../types/albisMethods";
 import { ShoppingCart } from "../types/cartTypes";
 import { LocalStorageI, initialStorageState } from "../types/localStorage";
 import { PluginConfig } from "../types/pluginConfig";
@@ -13,8 +17,11 @@ import {
   LineItem,
   createAlbisAppAndDraftOrder,
 } from "../utils/createAlbisAppAndDraftOrder";
-import { formatDecimalNumber } from "../utils/formatValues";
 import { isFormFilled } from "../utils/formValidation";
+import {
+  formatDecimalNumber,
+  isJsonRpcErrorResponse,
+} from "../utils/formatValues";
 
 type AlbisRequestProps = {
   cartData: ShoppingCart;
@@ -25,19 +32,17 @@ export const AlbisRequest = ({
   pluginConfData,
   cartData,
 }: AlbisRequestProps) => {
-  const [responseSuccess, setResponseSuccess] = useState(true);
-  const [responseText, setResponseText] = useState(
-    "Deine Leasing Anfrage an Albis wurde erfolgreich versendet! Weitere Informationen erhalten Sie per Mail",
-  );
+  const [errorMsg, setErrorMsg] = useState("");
 
   useEffect(() => {
     isFormFilled(true);
- }, []);
+  }, []);
 
   const handleFormSubmit = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     isFormFilled();
+    console.log("handleFormSubmit rendered");
     event.preventDefault();
 
     const localStorageData = localStorage.getItem("cp@albisLeasing");
@@ -90,27 +95,23 @@ export const AlbisRequest = ({
       quantity: item.quantity,
     }));
     try {
-      const response: GetStelleAntrag = await createAlbisAppAndDraftOrder(
-        formData,
-        lineItems,
-      );
-      console.log("response", response);
-      if (!response.result) {
-        throw new Error(`HTTP error! Status: ${response}`);
+      const response: GetStelleAntrag | JsonRpcErrorResponse =
+        await createAlbisAppAndDraftOrder(formData, lineItems);
+
+      if (isJsonRpcErrorResponse(response)) {
+        setErrorMsg(response.error.message);
+      } else {
+        setErrorMsg("");
       }
 
-      setResponseSuccess(true);
-      setResponseText(
-        "Deine Leasing Anfrage an Albis wurde erfolgreich versendet! Weitere Informationen erhalten Sie per Mail",
-      );
+      console.log("response", response);
+
       openSnackbar();
       closeModal();
       //localStorage.clear();
       //TODO: reset form values
     } catch (error) {
       console.log("error", error);
-      setResponseSuccess(false);
-      // setResponseText(error as string);
       openSnackbar();
     }
   };
@@ -164,9 +165,11 @@ export const AlbisRequest = ({
           id="modal-button"
           data-modal-toggle="static-modal"
           className="text-white font-bold bg-orange-400 rounded-md p-[12px] w-[250px] hover:bg-orange-300 disabled:bg-gray-300 disabled:pointer-events-none"
-        >Senden</button>
+        >
+          Senden
+        </button>
       </form>
-      <Snackbar success={responseSuccess} text={responseText} />
+      <Snackbar success={!!errorMsg} text={errorMsg} />
       <Modal onSubmit={handleFormSubmit} />
     </div>
   );

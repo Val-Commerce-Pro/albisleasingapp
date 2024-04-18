@@ -52,9 +52,8 @@ export async function createDraftOrder(shop: string, input: DraftOrderInput) {
     {
       variables: {
         input: {
-          customerId: input.customerId
-            ? `gid://shopify/Customer/${input.customerId}`
-            : "",
+          customerId:
+            input.customerId && `gid://shopify/Customer/${input.customerId}`,
           note: input.note,
           email: input.email,
           taxExempt: true,

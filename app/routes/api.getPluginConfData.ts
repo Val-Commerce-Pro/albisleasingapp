@@ -12,7 +12,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
     if (!pluginConfData) {
       return new Response("Invalid Credentials", {
-        status: 404,
+        status: 401,
         headers: {
           "Access-Control-Allow-Origin": "*",
         },

@@ -58,7 +58,6 @@ export const SectionLeasingRates = ({
   return (
     <Box
       title={`Leasingraten (Finanzierungsbetrag: ${leasingValueData} €)`}
-      hasTooltip
       toolTipContent={`Bitte wählen Sie die gewünschte Vertragslaufzeit aus:`}
     >
       <div className="overflow-x-auto shadow-md sm:rounded-lg">

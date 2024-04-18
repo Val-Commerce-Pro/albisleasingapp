@@ -5,16 +5,10 @@ import { ToolTip } from "../tooltip";
 type BoxProps = {
   children: ReactNode;
   title?: string;
-  hasTooltip?: boolean;
   toolTipContent?: string;
 };
 
-export const Box = ({
-  children,
-  title,
-  hasTooltip = false,
-  toolTipContent,
-}: BoxProps) => {
+export const Box = ({ children, title, toolTipContent }: BoxProps) => {
   const [isHovered, setIsHovered] = useState(false);
   return (
     <div className="w-full h-full flex flex-col ">
@@ -23,7 +17,7 @@ export const Box = ({
           <h2 className="text-white font-semibold text-base text-center w-full">
             {title}
           </h2>
-          {hasTooltip && (
+          {toolTipContent && (
             <div
               className="ml-auto"
               onMouseOver={() => setIsHovered(true)}

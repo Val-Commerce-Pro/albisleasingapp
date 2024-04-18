@@ -25,26 +25,12 @@ export const SectionCalculator = ({
   zahlungsweisenPlugin,
   handleGetRate,
 }: SectionCalculatorProps) => {
-  const [formData, setFormData] = useState(() => {
-    const storageDataAsString = localStorage.getItem("cp@albisLeasing");
-    const stateInitialData: CalcData =
-      storageDataAsString && Object.keys(storageDataAsString).length > 1
-        ? { ...JSON.parse(storageDataAsString).calcData }
-        : {
-            objektVersicherungVorhanden: "nein",
-            finanzierungsbetragNetto: finanzierungsbetragNetto.toString(),
-            anzahlung: "0",
-            zahlungsweise: `${zahlungsweisenPlugin}`,
-          };
-    return stateInitialData;
+  const [formData, setFormData] = useState<CalcData>({
+    objektVersicherungVorhanden: "nein",
+    finanzierungsbetragNetto: finanzierungsbetragNetto.toString(),
+    anzahlung: "0",
+    zahlungsweise: `${zahlungsweisenPlugin}`,
   });
-
-  useEffect(() => {
-    localStorage.setItem(
-      "cp@albisLeasing",
-      JSON.stringify({ calcData: formData }),
-    );
-  }, [formData]);
 
   const [zahlungsweisen, setZahlungsweisen] = useState<
     GetZahlungsweisen | undefined
@@ -59,22 +45,14 @@ export const SectionCalculator = ({
     getAlbisData();
   }, []);
 
-  function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
-    const { name, value } = event.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  }
-
-  function handleSelectChange(event: ChangeEvent<HTMLSelectElement>) {
+  function handleOnChange(
+    event: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) {
     const { name, value } = event.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   }
 
   function handleSave() {
-    const dataFromLocalStorageAsString =
-      localStorage.getItem("cp@albisLeasing");
-    const dataFromLocalStorage = dataFromLocalStorageAsString
-      ? JSON.parse(dataFromLocalStorageAsString)
-      : {};
     const formattedCalcData: CalcData = {
       ...formData,
       finanzierungsbetragNetto: formData.finanzierungsbetragNetto.replace(
@@ -83,6 +61,13 @@ export const SectionCalculator = ({
       ),
       anzahlung: formData.anzahlung.replace(/[^\d]/g, ""),
     };
+
+    const dataFromLocalStorageAsString =
+      localStorage.getItem("cp@albisLeasing");
+    const dataFromLocalStorage = dataFromLocalStorageAsString
+      ? JSON.parse(dataFromLocalStorageAsString)
+      : {};
+
     const dataToLocalStorage = {
       ...dataFromLocalStorage,
       calcData: {
@@ -96,13 +81,12 @@ export const SectionCalculator = ({
   return (
     <Box
       title="Albis Leasingrechner"
-      hasTooltip
       toolTipContent="Rechnen Sie hier schnell und einfach die zu zahlende monatliche Leasingrate für den geplanten Einkaufswert aus:
   Kaufpreis (ohne MwSt.) als Finanzierungsbetrag eintragen:"
     >
       <div className="w-full h-full flex flex-col gap-[16px] p-[12px] overflow-x-auto shadow-md rounded-b-lg">
         <Select
-          handleChange={handleSelectChange}
+          handleChange={handleOnChange}
           name="objektVersicherungVorhanden"
           label="Objekt-Versicherung vorhanden:"
           selectedValue={formData.objektVersicherungVorhanden}
@@ -116,7 +100,7 @@ export const SectionCalculator = ({
           name="finanzierungsbetragNetto"
           label="Finanzierungsbetrag (netto):"
           type="number"
-          handleOnChange={handleInputChange}
+          handleOnChange={handleOnChange}
           handleOnBlur={handleSave}
           handleKeyDown={handleSave}
           textFieldValue={formData.finanzierungsbetragNetto}
@@ -126,14 +110,14 @@ export const SectionCalculator = ({
           name="anzahlung"
           label="Anzahlung"
           type="number"
-          handleOnChange={handleInputChange}
+          handleOnChange={handleOnChange}
           handleOnBlur={handleSave}
           handleKeyDown={handleSave}
           textFieldValue={formData.anzahlung}
         />
         {zahlungsweisen && (
           <Select
-            handleChange={handleSelectChange}
+            handleChange={handleOnChange}
             name="zahlungsweise"
             label="Zahlungsweise:"
             selectedValue={zahlungsweisenPlugin}

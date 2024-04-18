@@ -23,9 +23,9 @@ export type LeasingRate = {
 };
 
 export type RechtsformResult = {
-  id: number,
-  text: string,
-  crefo: string
+  id: number;
+  text: string;
+  crefo: string;
 };
 
 export type Rechtsformen = {
@@ -61,7 +61,6 @@ export type Werte = {
   provision?: string;
 };
 
-
 export type Geschaeftsfuehrer = {
   anrede: string;
   vorname: string;
@@ -71,7 +70,7 @@ export type Geschaeftsfuehrer = {
   ort: string;
   gebdat: string;
   telnr: string;
-}
+};
 
 export type Leasingnehmer = {
   name: string;
@@ -82,7 +81,7 @@ export type Leasingnehmer = {
   telefon: string;
   email: string;
   geschaeftsfuehrer: Geschaeftsfuehrer;
-}
+};
 
 export type StelleAntrag = {
   objekt: string;
@@ -99,4 +98,16 @@ export type StelleAntrag = {
   iban: string;
   service_pauschale: number;
   vertrag_an_ln: boolean;
+};
+
+interface RpcError {
+  code: number;
+  message: string;
+  data: unknown;
+}
+
+export interface JsonRpcErrorResponse {
+  id: number;
+  jsonrpc: string;
+  error: RpcError;
 }

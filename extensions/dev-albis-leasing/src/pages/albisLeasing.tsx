@@ -3,13 +3,17 @@ import { PageTitle } from "../components/pagetitle";
 import { SectionCalculator } from "../components/sectionCalculator";
 import { SectionCartItems } from "../components/sectionCartItems";
 import { SectionLeasingRates } from "../components/sectionLeasingRates";
-import { LeasingRate } from "../types/albisMethods";
+import { JsonRpcErrorResponse, LeasingRate } from "../types/albisMethods";
 import { ShoppingCart, ShoppingCartItem } from "../types/cartTypes";
 import { CalcData, LocalStorageI } from "../types/localStorage";
 import { PluginConfig } from "../types/pluginConfig";
-import { formatDecimalNumber } from "../utils/formatValues";
+import {
+  formatDecimalNumber,
+  isJsonRpcErrorResponse,
+} from "../utils/formatValues";
 import { getAlbisMethodsData } from "../utils/getAlbisMethodsData";
 import { deleteCartItem, updateCartData } from "../utils/shopifyAjaxApi";
+import { Snackbar } from "../components/snackbar";
 
 type AlbisLeasingProps = {
   cartData: ShoppingCart;
@@ -23,6 +27,7 @@ export const AlbisLeasing = ({
   const { modulEinstellungen } = pluginConfData;
   const { total_price } = cartData;
   const [leasingRate, setLeasingRate] = useState<LeasingRate | undefined>();
+  const [errorMsg, setErrorMsg] = useState("");
 
   useEffect(() => {
     const storageDataAsString = localStorage.getItem("cp@albisLeasing");
@@ -47,11 +52,14 @@ export const AlbisLeasing = ({
         provision: modulEinstellungen.provisionsangabe,
       };
 
-      const leasingRateData: LeasingRate = await getAlbisMethodsData(
-        "getRate",
-        werte,
-      );
-      setLeasingRate(leasingRateData);
+      const leasingRateData: LeasingRate | JsonRpcErrorResponse =
+        await getAlbisMethodsData("getRate", werte);
+
+      if (isJsonRpcErrorResponse(leasingRateData)) {
+        setErrorMsg(leasingRateData.error.message);
+      } else {
+        setLeasingRate(leasingRateData);
+      }
     };
     getAlbisData();
   }, [modulEinstellungen, total_price]);
@@ -86,49 +94,56 @@ export const AlbisLeasing = ({
       zahlweise: calcData.zahlungsweise,
       provision: modulEinstellungen.provisionsangabe,
     };
-    const leasingRateData: LeasingRate = await getAlbisMethodsData(
-      "getRate",
-      werte,
-    );
-    console.log("leasingRateData", leasingRateData);
-    setLeasingRate(leasingRateData);
+
+    const leasingRateData: LeasingRate | JsonRpcErrorResponse =
+      await getAlbisMethodsData("getRate", werte);
+
+    if (isJsonRpcErrorResponse(leasingRateData)) {
+      setErrorMsg(leasingRateData.error.message);
+    } else {
+      setErrorMsg("");
+      setLeasingRate(leasingRateData);
+    }
   };
 
   return (
-    <div className="max-w-[1280px] mx-auto p-[16px]">
-      <PageTitle title="Albis Leasing" />
-      <SectionCartItems
-        cartData={cartItems}
-        handleUpdateItemQuantity={handleUpdateItemQuantity}
-        handleDeleteCartItem={handleDeleteCartItem}
-      />
-      <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_0.6fr] gap-[8px] mt-[20px]">
-        <div className="order-2 lg:order-1">
-          {leasingRate && (
-            <SectionLeasingRates
-              leasingValue={leasingRate?.result.kaufpreis}
-              leasingRate={leasingRate?.result.raten}
+    <>
+      <div className="max-w-[1280px] mx-auto p-[16px]">
+        <PageTitle title="Albis Leasing" />
+        <SectionCartItems
+          cartData={cartItems}
+          handleUpdateItemQuantity={handleUpdateItemQuantity}
+          handleDeleteCartItem={handleDeleteCartItem}
+        />
+        <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_0.6fr] gap-[8px] mt-[20px]">
+          <div className="order-2 lg:order-1">
+            {leasingRate && (
+              <SectionLeasingRates
+                leasingValue={leasingRate?.result.kaufpreis}
+                leasingRate={leasingRate?.result.raten}
+              />
+            )}
+          </div>
+          <div className="order-1 lg:order-2">
+            <SectionCalculator
+              finanzierungsbetragNetto={total_price}
+              auswahlObjektVersicherungAnzeigen={
+                modulEinstellungen.auswahlObjektVersicherungAnzeigen
+              }
+              auswahlZahlungsweiseAnzeigen={
+                modulEinstellungen.auswahlZahlungsweiseAnzeigen
+              }
+              kundeKannFinanzierungsbetragAndern={
+                modulEinstellungen.kundeKannFinanzierungsbetragAndern
+              }
+              zahlungsweisenPlugin={modulEinstellungen.zahlungsweisen}
+              handleGetRate={handleGetRate}
             />
-          )}
-        </div>
-        <div className="order-1 lg:order-2">
-          <SectionCalculator
-            finanzierungsbetragNetto={total_price}
-            auswahlObjektVersicherungAnzeigen={
-              modulEinstellungen.auswahlObjektVersicherungAnzeigen
-            }
-            auswahlZahlungsweiseAnzeigen={
-              modulEinstellungen.auswahlZahlungsweiseAnzeigen
-            }
-            kundeKannFinanzierungsbetragAndern={
-              modulEinstellungen.kundeKannFinanzierungsbetragAndern
-            }
-            zahlungsweisenPlugin={modulEinstellungen.zahlungsweisen}
-            handleGetRate={handleGetRate}
-          />
+          </div>
         </div>
       </div>
-    </div>
+      <Snackbar success={!!errorMsg} text={errorMsg} />
+    </>
   );
 };
 
