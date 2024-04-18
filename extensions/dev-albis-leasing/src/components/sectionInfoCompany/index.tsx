@@ -118,6 +118,7 @@ export const SectionInfoCompany = () => {
           name="plz"
           label="Postleitzahl"
           type="number"
+          min={0}
           pattern="[0-9]{5}"
           handleOnChange={handleInputChange}
           handleOnBlur={handleSave}

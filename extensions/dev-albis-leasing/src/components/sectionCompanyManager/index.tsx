@@ -112,6 +112,7 @@ export const SectionCompanyManager = () => {
           name="plzGF"
           label="Postleitzahl (GF)"
           type="number"
+          min={0}
           pattern="[0-9]{5}"
           handleOnChange={handleInputChange}
           handleOnBlur={handleSave}

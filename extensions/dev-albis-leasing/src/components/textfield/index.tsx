@@ -5,6 +5,7 @@ type TextFieldProps = {
   name: string;
   pattern?: string;
   max?: string;
+  min?: number;
   textFieldValue?: string;
   handleOnChange: (event: ChangeEvent<HTMLInputElement>) => void;
   handleOnBlur: () => void;
@@ -22,6 +23,7 @@ export const TextField = ({
   type = "text",
   hidden = false,
   max,
+  min,
   textFieldValue,
   required = false,
   disabled = false,
@@ -37,6 +39,7 @@ export const TextField = ({
         name={name}
         type={type}
         max={max}
+        min={min}
         pattern={pattern}
         className={`h-[48px] w-full p-[12px] border rounded-md border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-300 ${hidden ? "hidden" : "visible"}`}
         onChange={handleOnChange}
