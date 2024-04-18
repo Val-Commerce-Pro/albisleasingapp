@@ -3,7 +3,7 @@ import { CompanyManagerInfoData, LocalStorageI } from "../../types/localStorage"
 import { Box } from "../box";
 import { Select } from "../select";
 import { TextField } from "../textfield";
-import { isDate21orMoreYearsOld } from "../../utils/formValidation";
+import { isDate21orMoreYearsOld, isFormFilled } from "../../utils/formValidation";
 
 export const SectionCompanyManager = () => {
     const initialState: CompanyManagerInfoData =  {
@@ -25,11 +25,13 @@ export const SectionCompanyManager = () => {
     });
 
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
+    isFormFilled();
     const { name, value } = event.target;
     setCompanyManagerFormData((prev) => ({ ...prev, [name]: value }));
   }
 
   function handleSelectChange(event: ChangeEvent<HTMLSelectElement>) {
+    isFormFilled();
     const { name, value } = event.target;
     setCompanyManagerFormData((prev) => {
         const newState =  {...prev, [name]: value };

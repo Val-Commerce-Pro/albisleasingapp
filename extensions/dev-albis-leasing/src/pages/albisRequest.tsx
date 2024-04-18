@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { Modal, closeModal, openModal } from "../components/modal";
 import { PageTitle } from "../components/pagetitle";
 import { SectionCompanyManager } from "../components/sectionCompanyManager";
@@ -14,6 +14,7 @@ import {
   createAlbisAppAndDraftOrder,
 } from "../utils/createAlbisAppAndDraftOrder";
 import { formatDecimalNumber } from "../utils/formatValues";
+import { isFormFilled } from "../utils/formValidation";
 
 type AlbisRequestProps = {
   cartData: ShoppingCart;
@@ -25,14 +26,18 @@ export const AlbisRequest = ({
   cartData,
 }: AlbisRequestProps) => {
   const [responseSuccess, setResponseSuccess] = useState(true);
-  const [senden] = useState("Senden");
   const [responseText, setResponseText] = useState(
     "Deine Leasing Anfrage an Albis wurde erfolgreich versendet! Weitere Informationen erhalten Sie per Mail",
   );
 
+  useEffect(() => {
+    isFormFilled(true);
+ }, []);
+
   const handleFormSubmit = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
+    isFormFilled();
     event.preventDefault();
 
     const localStorageData = localStorage.getItem("cp@albisLeasing");
@@ -111,6 +116,7 @@ export const AlbisRequest = ({
   };
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
+    isFormFilled();
     const { checked } = event.target;
     const localStorageData = localStorage.getItem("cp@albisLeasing");
     const localStorageJSON: LocalStorageI = JSON.parse(
@@ -127,7 +133,7 @@ export const AlbisRequest = ({
     <div className="max-w-[1280px] shadow-sm mx-auto p-[16px]">
       <PageTitle title="Albis Leasing Request" />
       <SectionLeasingData />
-      <form>
+      <form id="alr-form">
         <div className="mt-[20px]">
           <SectionInfoCompany />
         </div>
@@ -151,15 +157,14 @@ export const AlbisRequest = ({
             Gruppe dort verarbeitet werden.
           </label>
         </div>
-        <input
-          value={senden}
+        <button
           onClick={openModal}
           type="button"
           data-modal-target="static-modal"
           id="modal-button"
           data-modal-toggle="static-modal"
-          className="text-white font-bold bg-orange-400 rounded-md p-[12px] w-[250px] hover:bg-orange-300"
-        />
+          className="text-white font-bold bg-orange-400 rounded-md p-[12px] w-[250px] hover:bg-orange-300 disabled:bg-gray-300 disabled:pointer-events-none"
+        >Senden</button>
       </form>
       <Snackbar success={responseSuccess} text={responseText} />
       <Modal onSubmit={handleFormSubmit} />
