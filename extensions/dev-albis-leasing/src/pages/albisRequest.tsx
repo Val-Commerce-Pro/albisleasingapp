@@ -160,7 +160,7 @@ export const AlbisRequest = ({
           id="modal-button"
           disabled={true}
           data-modal-toggle="static-modal"
-          className="text-white font-bold bg-orange-400 rounded-md p-[12px] w-[250px] hover:bg-orange-300"
+          className="text-white font-bold bg-orange-400 rounded-md p-[12px] w-[250px] hover:bg-orange-300 disabled:bg-gray-300 disabled:pointer-events-none"
         >Senden</button>
       </form>
       <Snackbar success={responseSuccess} text={responseText} />
