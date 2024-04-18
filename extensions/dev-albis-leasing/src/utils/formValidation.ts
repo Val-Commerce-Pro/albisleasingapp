@@ -41,3 +41,24 @@ export const isFormFilled = (initial=false) => {
         }
       });
   };
+
+  export const resetForm = () => {
+    const form = document.getElementById('alr-form');
+
+    if (!form) return
+
+    const requiredInputFields = form.querySelectorAll<HTMLInputElement>('input[required]');
+    const requiredSelectFields = form.querySelectorAll<HTMLSelectElement>('select[required]');
+
+    requiredInputFields.forEach(function (input) {
+      if (input.type === "checkbox") {
+        input.checked = false;
+      }else {
+        input.value = "";
+      } 
+    });
+
+    requiredSelectFields.forEach(select => {
+      select.selectedIndex= 0;
+    });
+  }
