@@ -17,11 +17,11 @@ import {
   LineItem,
   createAlbisAppAndDraftOrder,
 } from "../utils/createAlbisAppAndDraftOrder";
-import { isFormFilled } from "../utils/formValidation";
 import {
   formatDecimalNumber,
   isJsonRpcErrorResponse,
 } from "../utils/formatValues";
+import { isFormFilled, resetForm } from "../utils/formValidation";
 
 type AlbisRequestProps = {
   cartData: ShoppingCart;
@@ -33,6 +33,11 @@ export const AlbisRequest = ({
   cartData,
 }: AlbisRequestProps) => {
   const [errorMsg, setErrorMsg] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [responseSuccess, setResponseSuccess] = useState(true);
+  const [responseText, setResponseText] = useState(
+    "Deine Leasing Anfrage an Albis wurde erfolgreich versendet! Weitere Informationen erhalten Sie per Mail",
+  );
 
   useEffect(() => {
     isFormFilled(true);
@@ -43,13 +48,13 @@ export const AlbisRequest = ({
   ) => {
     isFormFilled();
     event.preventDefault();
+    setIsLoading(true);
 
     const localStorageData = localStorage.getItem("cp@albisLeasing");
     const localStorageJSON: LocalStorageI = JSON.parse(
       localStorageData ?? initialStorageState.toString(),
     );
 
-    // Gather form data using FormData API
     const formData: StelleAntrag = {
       objekt: pluginConfData.modulEinstellungen.produktgruppeLabel,
       kaufpreis: formatDecimalNumber(
@@ -93,6 +98,8 @@ export const AlbisRequest = ({
       variantId: `gid://shopify/ProductVariant/${item.id}`,
       quantity: item.quantity,
     }));
+
+    setIsLoading(false);
     try {
       const response: GetStelleAntrag | JsonRpcErrorResponse =
         await createAlbisAppAndDraftOrder(formData, lineItems);
@@ -101,19 +108,22 @@ export const AlbisRequest = ({
         setErrorMsg(response.error.message);
       } else {
         setErrorMsg("");
+        setResponseSuccess(true);
+        setResponseText(
+          "Deine Leasing Anfrage an Albis wurde erfolgreich versendet! Weitere Informationen erhalten Sie per Mail",
+        );
+        openSnackbar();
+        closeModal();
+        localStorage.clear();
+        resetForm();
       }
-
-      console.log("response", response);
-
+    } catch (error) {
+      setResponseSuccess(false);
+      setResponseText(errorMsg);
       openSnackbar();
       closeModal();
-      //localStorage.clear();
-      //TODO: reset form values
-    } catch (error) {
-      console.log("error", error);
-      openSnackbar();
     }
-  };
+  }
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
     isFormFilled();
@@ -164,12 +174,10 @@ export const AlbisRequest = ({
           id="modal-button"
           data-modal-toggle="static-modal"
           className="text-white font-bold bg-orange-400 rounded-md p-[12px] w-[250px] hover:bg-orange-300 disabled:bg-gray-300 disabled:pointer-events-none"
-        >
-          Senden
-        </button>
+        >Senden</button>
+        <Modal onSubmit={handleFormSubmit} isLoading={isLoading} />
       </form>
-      <Snackbar success={!!errorMsg} text={errorMsg} />
-      <Modal onSubmit={handleFormSubmit} />
+      <Snackbar success={responseSuccess} text={responseText} />
     </div>
   );
 };

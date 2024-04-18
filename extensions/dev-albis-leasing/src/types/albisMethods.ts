@@ -34,11 +34,17 @@ export type Rechtsformen = {
   result: RechtsformResult[];
 };
 
+export type ResponseError = {
+  code: number;
+  data: string;
+  message: string;
+}
+
 export interface GetStelleAntrag {
   id: number;
   jsonrpc: string;
   result: number;
-  error?: string;
+  error?: ResponseError;
 }
 
 export type ResultZahlungsweisen = {
