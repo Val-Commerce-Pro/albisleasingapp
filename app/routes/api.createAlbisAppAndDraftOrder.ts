@@ -1,6 +1,8 @@
+import type { AntragDetails } from "@prisma/client";
 import type { ActionFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { createAntragDetails } from "~/models/antragDetails";
+import { createDbShopifyOrder } from "~/models/createDbShopifyOrder";
 import type { AntragDetailsData } from "~/models/types";
 import { completeDraftOrder } from "./shopify/graphql/completeDraftOrder";
 import type { DraftOrderInput } from "./shopify/graphql/createDraftOrder";
@@ -18,6 +20,16 @@ type DraftOrderResponse = {
   draftOrderCreate: {
     draftOrder: {
       id: string;
+    };
+  };
+};
+type CompleteDraftOrderResponse = {
+  draftOrderComplete: {
+    draftOrder: {
+      id: string;
+      order: {
+        id: string;
+      };
     };
   };
 };
@@ -62,7 +74,17 @@ export const action: ActionFunction = async ({ request }) => {
       gf_name: result.gf_name,
       gf_vname: result.gf_vname,
     };
-    await createAntragDetails(antragnrDetails);
+    const antragnrData: AntragDetails | null =
+      await createAntragDetails(antragnrDetails);
+
+    if (!antragnrData) {
+      return new Response("Error ao Criar Antragnr", {
+        status: 400,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+        },
+      });
+    }
 
     const input: DraftOrderInput = {
       note: `Albis Request Status: ${result.status_txt}`,
@@ -95,14 +117,25 @@ export const action: ActionFunction = async ({ request }) => {
         },
       });
     }
-    const { data }: { data?: DraftOrderResponse } = draftOrderResponse;
 
-    console.log("DraftOrderResponse data", data);
+    const { data: draftOrderData }: { data?: DraftOrderResponse } =
+      draftOrderResponse;
+    console.log("DraftOrderResponse data", draftOrderData);
     const completeOrderResponse = await completeDraftOrder(
       shop,
-      data?.draftOrderCreate.draftOrder.id,
+      draftOrderData?.draftOrderCreate.draftOrder.id,
     );
+    const {
+      data: CompleteDraftOrderData,
+    }: { data?: CompleteDraftOrderResponse } = completeOrderResponse;
     console.log("completeOrderResponse", completeOrderResponse);
+
+    const test = await createDbShopifyOrder(antragnrData.id, {
+      draftOrderId: draftOrderData?.draftOrderCreate.draftOrder.id ?? "",
+      orderId:
+        CompleteDraftOrderData?.draftOrderComplete.draftOrder.order.id ?? "",
+    });
+    console.log("SHopifyOrders saved into the BD", test);
 
     return json(getAntragDetailsData, {
       headers: {

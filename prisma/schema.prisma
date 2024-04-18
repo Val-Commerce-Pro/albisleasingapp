@@ -64,14 +64,23 @@ model ModulEinstellungen {
 }
 
 model AntragDetails {
-  id          Int     @id @default(autoincrement())
-  antragnr    Int     @unique
-  kaufpreis   Float
-  eingegangen String
-  ln_name     String
-  ln_telefon  String?
-  ln_mobil    String?
-  ln_email    String
-  gf_name     String
-  gf_vname    String
+  id            Int            @id @default(autoincrement())
+  antragnr      Int            @unique
+  kaufpreis     Float
+  eingegangen   String
+  ln_name       String
+  ln_telefon    String?
+  ln_mobil      String?
+  ln_email      String
+  gf_name       String
+  gf_vname      String
+  ShopifyOrders ShopifyOrders?
+}
+
+model ShopifyOrders {
+  id              Int           @id @default(autoincrement())
+  draftOrderId    String        @unique
+  orderId         String        @unique
+  AntragDetailsId Int           @unique
+  antragDetails   AntragDetails @relation(fields: [AntragDetailsId], references: [id])
 }
