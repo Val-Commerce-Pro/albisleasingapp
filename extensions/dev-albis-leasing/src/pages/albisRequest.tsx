@@ -100,12 +100,16 @@ export const AlbisRequest = ({
     }));
 
     setIsLoading(false);
-    try {
+
       const response: GetStelleAntrag | JsonRpcErrorResponse =
         await createAlbisAppAndDraftOrder(formData, lineItems);
 
       if (isJsonRpcErrorResponse(response)) {
         setErrorMsg(response.error.message);
+        setResponseSuccess(false);
+        setResponseText(errorMsg);
+        openSnackbar();
+        closeModal();
       } else {
         setErrorMsg("");
         setResponseSuccess(true);
@@ -117,12 +121,6 @@ export const AlbisRequest = ({
         localStorage.clear();
         resetForm();
       }
-    } catch (error) {
-      setResponseSuccess(false);
-      setResponseText(errorMsg);
-      openSnackbar();
-      closeModal();
-    }
   }
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
