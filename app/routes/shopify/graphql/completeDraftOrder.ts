@@ -1,6 +1,6 @@
 import { getGraphqlClient } from "./getGraphqlClient";
 
-export async function createDraftOrder(shop: string, draftOrderId: string) {
+export async function completeDraftOrder(shop: string, draftOrderId?: string) {
   const graphQlClient = await getGraphqlClient(shop);
 
   const response = await graphQlClient.request(

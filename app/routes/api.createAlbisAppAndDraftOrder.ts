@@ -2,6 +2,7 @@ import type { ActionFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { createAntragDetails } from "~/models/antragDetails";
 import type { AntragDetailsData } from "~/models/types";
+import { completeDraftOrder } from "./shopify/graphql/completeDraftOrder";
 import type { DraftOrderInput } from "./shopify/graphql/createDraftOrder";
 import { createDraftOrder } from "./shopify/graphql/createDraftOrder";
 import type { CreateAlbisAppAndOrder } from "./types/createAlbisAppAndOrder";
@@ -12,6 +13,14 @@ import type {
 } from "./types/methods";
 import { isJsonRpcErrorResponse } from "./utils/formatData";
 import { getAlbisMethodsData } from "./utils/getAlbisMethodsData";
+
+type DraftOrderResponse = {
+  draftOrderCreate: {
+    draftOrder: {
+      id: string;
+    };
+  };
+};
 
 export const action: ActionFunction = async ({ request }) => {
   const data = await request.json();
@@ -78,8 +87,22 @@ export const action: ActionFunction = async ({ request }) => {
       lineItems: lineItems,
     };
 
-    const testDrafOrder = await createDraftOrder(shop, input);
-    console.log("testDrafOrder", testDrafOrder);
+    const draftOrderResponse = await createDraftOrder(shop, input);
+    if (!draftOrderResponse) {
+      return json(draftOrderResponse, {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+        },
+      });
+    }
+    const { data }: { data?: DraftOrderResponse } = draftOrderResponse;
+
+    console.log("DraftOrderResponse data", data);
+    const completeOrderResponse = await completeDraftOrder(
+      shop,
+      data?.draftOrderCreate.draftOrder.id,
+    );
+    console.log("completeOrderResponse", completeOrderResponse);
 
     return json(getAntragDetailsData, {
       headers: {
