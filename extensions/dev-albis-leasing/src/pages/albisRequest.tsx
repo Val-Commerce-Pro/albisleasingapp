@@ -32,7 +32,7 @@ export const AlbisRequest = ({
 
   useEffect(() => {
     isFormFilled(true);
- });
+ }, []);
 
   const handleFormSubmit = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
