@@ -153,7 +153,6 @@ export default function Index() {
     benutzer,
     passwort,
   };
-  console.log("loaderData AAA", loaderData);
 
   return (
     <div className={styles.container}>
