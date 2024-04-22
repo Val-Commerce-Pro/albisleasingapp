@@ -21,3 +21,19 @@ export async function createDbShopifyOrder(
     return null;
   }
 }
+
+export async function getShopifyOrders(
+  AntragDetailsId: AntragDetails["id"],
+): Promise<ShopifyOrders | null> {
+  try {
+    const AntragDetails = await db.shopifyOrders.findUnique({
+      where: {
+        AntragDetailsId,
+      },
+    });
+    return AntragDetails;
+  } catch (error) {
+    console.error("Failed to retrieve ShopifyOrder", error);
+    return null;
+  }
+}

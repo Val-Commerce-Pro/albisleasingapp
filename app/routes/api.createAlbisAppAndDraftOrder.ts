@@ -1,6 +1,7 @@
 import type { AntragDetails } from "@prisma/client";
 import type { ActionFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
+// import { scheduleAntragCheck } from "~/cronJobs";
 import { createAntragDetails } from "~/models/antragDetails";
 import { createDbShopifyOrder } from "~/models/createDbShopifyOrder";
 import type { AntragDetailsData } from "~/models/types";
@@ -13,7 +14,10 @@ import type {
   GetStelleAntrag,
   JsonRpcErrorResponse,
 } from "./types/methods";
-import { isJsonRpcErrorResponse } from "./utils/formatData";
+import {
+  getCurrentFormattedTime,
+  isJsonRpcErrorResponse,
+} from "./utils/formatData";
 import { getAlbisMethodsData } from "./utils/getAlbisMethodsData";
 
 type DraftOrderResponse = {
@@ -45,7 +49,6 @@ export const action: ActionFunction = async ({ request }) => {
         antragsdaten,
       });
 
-    console.log("getStelleAntragData", getStelleAntragData);
     if (isJsonRpcErrorResponse(getStelleAntragData)) {
       console.error("RPC Error:", getStelleAntragData);
       return json(getStelleAntragData, {
@@ -54,7 +57,7 @@ export const action: ActionFunction = async ({ request }) => {
         },
       });
     }
-
+    //handle error with JsonRpcErrorResponse
     const getAntragDetailsData: GetAntragDetails = await getAlbisMethodsData({
       method: "getAntragDetails",
       shop,
@@ -63,9 +66,14 @@ export const action: ActionFunction = async ({ request }) => {
 
     const { result } = getAntragDetailsData;
 
+    console.log("getAntragDetailsData", getAntragDetailsData);
+
     const antragnrDetails: AntragDetailsData = {
       antragnr: result.antragnr,
       kaufpreis: result.kaufpreis,
+      status: result.status,
+      status_txt: result.status_txt,
+      complete: false,
       eingegangen: result.eingegangen,
       ln_name: result.ln_name,
       ln_telefon: result.ln_telefon,
@@ -73,6 +81,7 @@ export const action: ActionFunction = async ({ request }) => {
       ln_email: result.ln_email,
       gf_name: result.gf_name,
       gf_vname: result.gf_vname,
+      lastCheckAt: getCurrentFormattedTime(),
     };
     const antragnrData: AntragDetails | null =
       await createAntragDetails(antragnrDetails);
@@ -87,7 +96,7 @@ export const action: ActionFunction = async ({ request }) => {
     }
 
     const input: DraftOrderInput = {
-      note: `Albis Request Status: ${result.status_txt}`,
+      note: `Albis Leasing Request Status: ${result.status_txt} - Checked At - ${getCurrentFormattedTime()}`,
       email: result.ln_email,
       phone: result.ln_telefon,
       tags: "Albis Leasing",
@@ -108,7 +117,7 @@ export const action: ActionFunction = async ({ request }) => {
       customAttributes: [{ key: "name", value: result.gf_nname }],
       lineItems: lineItems,
     };
-
+    console.log("input createDraftOrder", input);
     const draftOrderResponse = await createDraftOrder(shop, input);
     if (!draftOrderResponse) {
       return json(draftOrderResponse, {
@@ -120,7 +129,6 @@ export const action: ActionFunction = async ({ request }) => {
 
     const { data: draftOrderData }: { data?: DraftOrderResponse } =
       draftOrderResponse;
-    console.log("DraftOrderResponse data", draftOrderData);
     const completeOrderResponse = await completeDraftOrder(
       shop,
       draftOrderData?.draftOrderCreate.draftOrder.id,
@@ -128,14 +136,14 @@ export const action: ActionFunction = async ({ request }) => {
     const {
       data: CompleteDraftOrderData,
     }: { data?: CompleteDraftOrderResponse } = completeOrderResponse;
-    console.log("completeOrderResponse", completeOrderResponse);
 
-    const test = await createDbShopifyOrder(antragnrData.id, {
+    await createDbShopifyOrder(antragnrData.id, {
       draftOrderId: draftOrderData?.draftOrderCreate.draftOrder.id ?? "",
       orderId:
         CompleteDraftOrderData?.draftOrderComplete.draftOrder.order.id ?? "",
     });
-    console.log("SHopifyOrders saved into the BD", test);
+
+    //scheduleAntragCheck(antragnrData, shop);
 
     return json(getAntragDetailsData, {
       headers: {
