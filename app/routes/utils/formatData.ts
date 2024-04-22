@@ -55,6 +55,23 @@ export const getOptionsMethodData = (
   return optionsMethodData;
 };
 
-export function isJsonRpcErrorResponse(object: any): object is JsonRpcErrorResponse {
+export function isJsonRpcErrorResponse(
+  object: any,
+): object is JsonRpcErrorResponse {
   return "error" in object;
+}
+
+export function appendUniqueNote(
+  existingNotes: string,
+  newNote: string,
+): string {
+  if (!existingNotes) return newNote;
+  if (!existingNotes.includes(newNote)) return `${existingNotes}\n${newNote}`;
+  return existingNotes;
+}
+
+export function getCurrentFormattedTime(): string {
+  const date = new Date();
+  const formattedDate = date.toDateString() + " " + date.toLocaleTimeString();
+  return formattedDate;
 }
