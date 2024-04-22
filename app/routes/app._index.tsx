@@ -79,6 +79,7 @@ export const loader: LoaderFunction = async ({
 }): Promise<PluginConfData> => {
   const { session } = await authenticate.admin(request);
   const pluginConfData = await getPluginConf(session.shop);
+  console.log("pluginConfData", pluginConfData);
   if (!pluginConfData)
     return getLoaderResponse({
       modulAktiv: {
@@ -103,7 +104,12 @@ export const loader: LoaderFunction = async ({
   };
   const { zahlungsweisen, produktgruppen, vertragsarten } =
     await getAllMethodData(credentials);
-
+  console.log(
+    "zahlungsweisen, produktgruppen, vertragsarten",
+    zahlungsweisen,
+    produktgruppen,
+    vertragsarten,
+  );
   const isCredentialsValid =
     !!zahlungsweisen.result &&
     !!produktgruppen.result &&
@@ -136,7 +142,6 @@ export const loader: LoaderFunction = async ({
     methodsData,
   });
 };
-
 export default function Index() {
   const loaderData = useLoaderData<PluginConfData>();
   const { modulAktiv, modulEinstellungen, modulZugangsdaten, methodsData } =
@@ -148,6 +153,7 @@ export default function Index() {
     benutzer,
     passwort,
   };
+  console.log("loaderData AAA", loaderData);
 
   return (
     <div className={styles.container}>
