@@ -10,8 +10,6 @@ type ModulAktivProps = {
 export const ModulAktiv = ({ initialValue }: ModulAktivProps) => {
   const submit = useSubmit();
 
-  console.log("ModulAktiv AAA", initialValue);
-
   const [isModulAktiv, setIsModulAktiv] = useState(initialValue);
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const data = {
