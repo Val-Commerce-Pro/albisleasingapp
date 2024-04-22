@@ -46,7 +46,5 @@ export async function getPluginConfToFrontStore(shop: string) {
     },
   };
 
-  // console.log("dataToFrontStore", dataToFrontStore);
-
   return { ...dataToFrontStore };
 }

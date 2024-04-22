@@ -32,8 +32,6 @@ const getPluginConfData = async () => {
     const parameters = new URLSearchParams({ shop });
     const requestUrl = `https://albisleasingapp.cpro-server.de/api/getPluginConfData?${parameters}`;
 
-    console.log("SHOP", shop, requestUrl);
-
     const response = await fetch(requestUrl, { method: "GET" });
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);

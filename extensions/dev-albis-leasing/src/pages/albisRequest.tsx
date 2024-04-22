@@ -42,7 +42,6 @@ export const AlbisRequest = ({
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     isFormFilled();
-    console.log("handleFormSubmit rendered");
     event.preventDefault();
 
     const localStorageData = localStorage.getItem("cp@albisLeasing");
