@@ -15,7 +15,6 @@ export const action: ActionFunction = async ({ request }) => {
     antragsdaten,
     antragnr,
   }: GetMethodsDataRequest = data;
-  console.log("getMethodsBodyData RENDED", data);
   try {
     const methodsData = await getAlbisMethodsData({
       method,
