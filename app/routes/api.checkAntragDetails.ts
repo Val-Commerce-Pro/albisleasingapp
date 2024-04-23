@@ -22,30 +22,29 @@ export const action: ActionFunction = async ({ request }) => {
   const { shop, antragnrData }: CheckAntrageDetailsBody = data;
   console.log("CheckAntragDetails route called", data);
   try {
-    const updatedAntragDetails: GetAntragDetails | JsonRpcErrorResponse =
+    const newAntragDetails: GetAntragDetails | JsonRpcErrorResponse =
       await getAlbisMethodsData({
         method: "getAntragDetails",
         shop,
         antragnr: antragnrData.antragnr,
       });
 
-    if (isJsonRpcErrorResponse(updatedAntragDetails)) {
-      console.error("RPC Error AntragDetails:", updatedAntragDetails);
-      return json(updatedAntragDetails, {
+    if (isJsonRpcErrorResponse(newAntragDetails)) {
+      console.error("RPC Error AntragDetails:", newAntragDetails);
+      return json(newAntragDetails, {
         headers: {
           "Access-Control-Allow-Origin": "*",
         },
       });
     }
-    const { result } = updatedAntragDetails;
+    const { result } = newAntragDetails;
     const newNote = checkAntragStatus(result.status, result.status_txt);
-
+    const checkDates = JSON.parse(antragnrData.lastCheckAt);
+    console.log("checkDates", checkDates);
     if (!newNote) {
       await updateAntragDetails({
-        lastCheckAt: JSON.stringify([
-          ...antragnrData.lastCheckAt,
-          getCurrentFormattedTime(),
-        ]),
+        antragnr: result.antragnr,
+        lastCheckAt: JSON.stringify([...checkDates, getCurrentFormattedTime()]),
       });
       return json(
         {
@@ -74,10 +73,7 @@ export const action: ActionFunction = async ({ request }) => {
       ln_telefon: result.ln_telefon,
       status: result.status,
       status_txt: result.status_txt,
-      lastCheckAt: JSON.stringify([
-        ...antragnrData.lastCheckAt,
-        getCurrentFormattedTime(),
-      ]),
+      lastCheckAt: JSON.stringify([...checkDates, getCurrentFormattedTime()]),
     });
     if (!updatedAntragData) {
       return new Response("Error processing updated Antrag Data", {

@@ -7,7 +7,6 @@ export async function createAntragDetails(antragData: AntragDetailsData) {
     const antragDetailsData = await db.antragDetails.create({
       data: {
         ...antragData,
-        lastCheckAt: antragData.lastCheckAt,
       },
     });
     return antragDetailsData;
@@ -21,11 +20,11 @@ export async function updateAntragDetails(
   antragData: Partial<AntragDetailsData>,
 ) {
   try {
+    if (!antragData.antragnr) throw new Error("Antragnr not found");
     const antragDetailsData = await db.antragDetails.update({
       where: { antragnr: antragData.antragnr },
       data: {
         ...antragData,
-        lastCheckAt: antragData.lastCheckAt,
       },
     });
     return antragDetailsData;
