@@ -73,5 +73,6 @@ export function appendUniqueNote(
 export function getCurrentFormattedTime(): string {
   const date = new Date();
   const formattedDate = date.toDateString() + " " + date.toLocaleTimeString();
+  console.log("formattedDate", formattedDate);
   return formattedDate;
 }

@@ -20,11 +20,8 @@ type CheckAntrageDetailsBody = {
 export const action: ActionFunction = async ({ request }) => {
   const data = await request.json();
   const { shop, antragnrData }: CheckAntrageDetailsBody = data;
-  console.log("CheckAntragDetails route called");
+  console.log("CheckAntragDetails route called", data);
   try {
-    if (!antragnrData || !Array.isArray(antragnrData.lastCheckAt))
-      throw new Error("lastCheckAt not found");
-
     const updatedAntragDetails: GetAntragDetails | JsonRpcErrorResponse =
       await getAlbisMethodsData({
         method: "getAntragDetails",
@@ -45,8 +42,10 @@ export const action: ActionFunction = async ({ request }) => {
 
     if (!newNote) {
       await updateAntragDetails({
-        // lastCheckAt: [...antragnrData.lastCheckAt, getCurrentFormattedTime()],
-        lastCheckAt: getCurrentFormattedTime(),
+        lastCheckAt: JSON.stringify([
+          ...antragnrData.lastCheckAt,
+          getCurrentFormattedTime(),
+        ]),
       });
       return json(
         {
@@ -75,7 +74,10 @@ export const action: ActionFunction = async ({ request }) => {
       ln_telefon: result.ln_telefon,
       status: result.status,
       status_txt: result.status_txt,
-      lastCheckAt: getCurrentFormattedTime(),
+      lastCheckAt: JSON.stringify([
+        ...antragnrData.lastCheckAt,
+        getCurrentFormattedTime(),
+      ]),
     });
     if (!updatedAntragData) {
       return new Response("Error processing updated Antrag Data", {
