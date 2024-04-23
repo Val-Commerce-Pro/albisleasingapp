@@ -75,6 +75,7 @@ export const SectionCalculator = ({
         ...formattedCalcData,
       },
     };
+    console.log("dataToLocalStorage", dataToLocalStorage);
     localStorage.setItem("cp@albisLeasing", JSON.stringify(dataToLocalStorage));
     handleGetRate(formattedCalcData);
   }
