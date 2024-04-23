@@ -9,7 +9,8 @@ export function scheduleAntragCheck(antragnrData, shop) {
     console.log(`Checking details for Antrag ${antragnrData.antragnr}`);
     try {
       const response = await fetch(
-        `http://localhost:3000/api/checkAntragDetails`,
+        // `http://localhost:3000/api/checkAntragDetails`,
+        `https://albisleasingapp.cpro-server.de/api/checkAntragDetails`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
