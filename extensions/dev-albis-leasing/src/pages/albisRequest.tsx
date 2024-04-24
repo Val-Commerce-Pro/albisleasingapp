@@ -1,10 +1,9 @@
 import { ChangeEvent, useEffect, useState } from "react";
-import { Modal, closeModal, openModal } from "../components/modal";
+import { Modal, openModal } from "../components/modal";
 import { PageTitle } from "../components/pagetitle";
 import { SectionCompanyManager } from "../components/sectionCompanyManager";
 import { SectionInfoCompany } from "../components/sectionInfoCompany";
 import { SectionLeasingData } from "../components/sectionLeasingData";
-import { Snackbar, openSnackbar } from "../components/snackbar";
 import {
   GetStelleAntrag,
   JsonRpcErrorResponse,
@@ -17,11 +16,12 @@ import {
   LineItem,
   createAlbisAppAndDraftOrder,
 } from "../utils/createAlbisAppAndDraftOrder";
-import { isFormFilled } from "../utils/formValidation";
 import {
   formatDecimalNumber,
   isJsonRpcErrorResponse,
 } from "../utils/formatValues";
+import { isFormFilled, resetForm } from "../utils/formValidation";
+import { useNavigate } from "react-router-dom";
 
 type AlbisRequestProps = {
   cartData: ShoppingCart;
@@ -33,6 +33,12 @@ export const AlbisRequest = ({
   cartData,
 }: AlbisRequestProps) => {
   const [errorMsg, setErrorMsg] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [responseSuccess, setResponseSuccess] = useState(true);
+  const [responseText, setResponseText] = useState(
+    "Deine Leasing Anfrage an Albis wurde erfolgreich versendet! Weitere Informationen erhalten Sie per Mail",
+  );
+  const navigate = useNavigate();
 
   useEffect(() => {
     isFormFilled(true);
@@ -43,13 +49,13 @@ export const AlbisRequest = ({
   ) => {
     isFormFilled();
     event.preventDefault();
+    setIsLoading(true);
 
     const localStorageData = localStorage.getItem("cp@albisLeasing");
     const localStorageJSON: LocalStorageI = JSON.parse(
       localStorageData ?? initialStorageState.toString(),
     );
 
-    // Gather form data using FormData API
     const formData: StelleAntrag = {
       objekt: pluginConfData.modulEinstellungen.produktgruppeLabel,
       kaufpreis: formatDecimalNumber(
@@ -93,25 +99,24 @@ export const AlbisRequest = ({
       variantId: `gid://shopify/ProductVariant/${item.id}`,
       quantity: item.quantity,
     }));
-    try {
-      const response: GetStelleAntrag | JsonRpcErrorResponse =
-        await createAlbisAppAndDraftOrder(formData, lineItems);
 
-      if (isJsonRpcErrorResponse(response)) {
-        setErrorMsg(response.error.message);
-      } else {
-        setErrorMsg("");
-      }
+    const response: GetStelleAntrag | JsonRpcErrorResponse =
+      await createAlbisAppAndDraftOrder(formData, lineItems);
 
-      console.log("response", response);
+    setIsLoading(false);
 
-      openSnackbar();
-      closeModal();
-      //localStorage.clear();
-      //TODO: reset form values
-    } catch (error) {
-      console.log("error", error);
-      openSnackbar();
+    if (isJsonRpcErrorResponse(response)) {
+      setErrorMsg(response.error.message);
+      setResponseSuccess(false);
+      setResponseText(response.error.message);
+    } else {
+      setErrorMsg("");
+      setResponseSuccess(true);
+      setResponseText(
+        "Deine Leasing Anfrage an Albis wurde erfolgreich versendet! Weitere Informationen erhalten Sie per Mail",
+      );
+      localStorage.clear();
+      resetForm();
     }
   };
 
@@ -134,13 +139,14 @@ export const AlbisRequest = ({
       <PageTitle title="Albis Leasing Request" />
       <SectionLeasingData />
       <form id="alr-form">
-        <div className="mt-[20px]">
-          <SectionInfoCompany />
+        <div className="grid grid-cols-2 gap-[8px]">
+          <div className="mt-[20px]">
+            <SectionInfoCompany />
+          </div>
+          <div className="mt-[20px]">
+            <SectionCompanyManager />
+          </div>
         </div>
-        <div className="mt-[20px]">
-          <SectionCompanyManager />
-        </div>
-
         <div className="p-[12px] flex">
           <input
             onChange={(e) => handleChange(e)}
@@ -157,19 +163,33 @@ export const AlbisRequest = ({
             Gruppe dort verarbeitet werden.
           </label>
         </div>
-        <button
-          onClick={openModal}
-          type="button"
-          data-modal-target="static-modal"
-          id="modal-button"
-          data-modal-toggle="static-modal"
-          className="text-white font-bold bg-orange-400 rounded-md p-[12px] w-[250px] hover:bg-orange-300 disabled:bg-gray-300 disabled:pointer-events-none"
-        >
-          Senden
-        </button>
+        <div className="flex justify-between items-center">
+          <button
+            onClick={openModal}
+            type="button"
+            data-modal-target="static-modal"
+            id="modal-button"
+            data-modal-toggle="static-modal"
+            className="text-white font-bold bg-orange-400 rounded-md p-[12px] w-[250px] hover:bg-orange-300 disabled:bg-gray-300 disabled:pointer-events-none"
+          >
+            Senden
+          </button>
+          <button
+            className="text-white font-bold bg-orange-400 rounded-md p-[12px] w-[150px] hover:bg-orange-300 disabled:bg-gray-300 disabled:pointer-events-none"
+            onClick={() => navigate("/pages/albis-leasing")}
+            type="button"
+          >
+            Zurück
+          </button>
+        </div>
+
+        <Modal
+          onSubmit={handleFormSubmit}
+          isLoading={isLoading}
+          success={responseSuccess}
+          text={responseText}
+        />
       </form>
-      <Snackbar success={!!errorMsg} text={errorMsg} />
-      <Modal onSubmit={handleFormSubmit} />
     </div>
   );
 };

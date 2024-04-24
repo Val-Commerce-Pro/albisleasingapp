@@ -83,6 +83,7 @@ export const SectionCalculator = ({
   return (
     <Box
       title="Albis Leasingrechner"
+      fill={true}
       toolTipContent="Rechnen Sie hier schnell und einfach die zu zahlende monatliche Leasingrate für den geplanten Einkaufswert aus:
   Kaufpreis (ohne MwSt.) als Finanzierungsbetrag eintragen:"
     >

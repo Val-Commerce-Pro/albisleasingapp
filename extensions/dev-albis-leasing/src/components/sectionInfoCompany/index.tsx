@@ -118,6 +118,7 @@ export const SectionInfoCompany = () => {
           name="plz"
           label="Postleitzahl"
           type="number"
+          min={0}
           pattern="[0-9]{5}"
           handleOnChange={handleInputChange}
           handleOnBlur={handleSave}
@@ -138,10 +139,11 @@ export const SectionInfoCompany = () => {
         <TextField
           name="telefon"
           label="Telefon"
-          type="tel"
+          type="text"
           handleOnChange={handleInputChange}
           handleOnBlur={handleSave}
           handleKeyDown={handleSave}
+          textFieldValue={companyFormData.telefon}
           required
         />
         <TextField
