@@ -37,6 +37,7 @@ export const SectionCalculator = ({
   >();
 
   useEffect(() => {
+    handleSave();
     const getAlbisData = async () => {
       const zahlungsweisenData: GetZahlungsweisen =
         await getAlbisMethodsData("getZahlungsweisen");
@@ -61,7 +62,6 @@ export const SectionCalculator = ({
       ),
       anzahlung: formData.anzahlung.replace(/[^\d]/g, ""),
     };
-
     const dataFromLocalStorageAsString =
       localStorage.getItem("cp@albisLeasing");
     const dataFromLocalStorage = dataFromLocalStorageAsString

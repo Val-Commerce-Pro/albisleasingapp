@@ -27,6 +27,7 @@ export async function updateAntragDetails(
         ...antragData,
       },
     });
+    console.log("antragDetailsData Partial", antragDetailsData);
     return antragDetailsData;
   } catch (error) {
     console.error("Failed to update AntragDetails", error);

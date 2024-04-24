@@ -37,15 +37,27 @@ export const action: ActionFunction = async ({ request }) => {
         },
       });
     }
+    const shopifyOrders = await getShopifyOrders(antragnrData.id);
+    if (!shopifyOrders) {
+      return new Response("Error processing shopify Orders Data", {
+        status: 500,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+        },
+      });
+    }
     const { result } = newAntragDetails;
-    const newNote = checkAntragStatus(result.status, result.status_txt);
+    const statusData = checkAntragStatus(result.status, result.status_txt);
     const checkDates = JSON.parse(antragnrData.lastCheckAt);
     console.log("checkDates", checkDates);
-    if (!newNote) {
+    const newLastCheckAt = [...checkDates, getCurrentFormattedTime()];
+    console.log("newLastCheckAt", newLastCheckAt);
+    if (!statusData.isStatusFinish) {
       await updateAntragDetails({
         antragnr: result.antragnr,
-        lastCheckAt: JSON.stringify([...checkDates, getCurrentFormattedTime()]),
+        lastCheckAt: JSON.stringify(newLastCheckAt),
       });
+      await addNoteToOrder(shop, shopifyOrders.orderId, statusData.statusNote);
       return json(
         {
           antragnr: result.antragnr,
@@ -83,17 +95,8 @@ export const action: ActionFunction = async ({ request }) => {
         },
       });
     }
-    const shopifyOrders = await getShopifyOrders(updatedAntragData.id);
-    if (!shopifyOrders) {
-      return new Response("Error processing shopify Orders Data", {
-        status: 500,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-        },
-      });
-    }
-
-    await addNoteToOrder(shop, shopifyOrders.orderId, newNote);
+    console.log("newNote", statusData.statusNote);
+    await addNoteToOrder(shop, shopifyOrders.orderId, statusData.statusNote);
 
     return json(
       {

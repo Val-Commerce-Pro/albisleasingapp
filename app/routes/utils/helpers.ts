@@ -16,13 +16,10 @@ import { getCurrentFormattedTime } from "./formatData";
 // };
 const statusToFinishLeasingRequest = [930, 970, 971, 972, 980, 996, 997];
 
-export const checkAntragStatus = (
-  status: number,
-  statusTxt: string,
-): string | false => {
+export const checkAntragStatus = (status: number, statusTxt: string) => {
   const isFinishStatus = statusToFinishLeasingRequest.includes(status);
-  return (
-    isFinishStatus &&
-    `Albis Leasing Request Status: ${statusTxt} - Checked at - ${getCurrentFormattedTime()}`
-  );
+  return {
+    isStatusFinish: isFinishStatus,
+    statusNote: `Albis Leasing Request Status: ${statusTxt} - Checked at - ${getCurrentFormattedTime()}`,
+  };
 };
