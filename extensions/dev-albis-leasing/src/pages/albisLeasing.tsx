@@ -4,6 +4,7 @@ import { SectionCalculator } from "../components/sectionCalculator";
 import { SectionCartItems } from "../components/sectionCartItems";
 import { SectionLeasingRates } from "../components/sectionLeasingRates";
 import { Snackbar } from "../components/snackbar";
+import { AlbisLeasingCtxProvider } from "../context/albisLeasing";
 import { JsonRpcErrorResponse, LeasingRate } from "../types/albisMethods";
 import { ShoppingCart, ShoppingCartItem } from "../types/cartTypes";
 import { CalcData, LocalStorageI } from "../types/localStorage";
@@ -14,6 +15,7 @@ import {
 } from "../utils/formatValues";
 import { getAlbisMethodsData } from "../utils/getAlbisMethodsData";
 import { deleteCartItem, updateCartData } from "../utils/shopifyAjaxApi";
+import { baseServerUrl } from "../utils/urls";
 
 type AlbisLeasingProps = {
   cartData: ShoppingCart;
@@ -106,8 +108,24 @@ export const AlbisLeasing = ({
     }
   };
 
+  const handleFakeClick = async () => {
+    const response = await fetch(`${baseServerUrl}/api/checkADFake`, {
+      method: "POST",
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    console.log("handleFakeClick", handleFakeClick);
+    const data = await response.json();
+    return data;
+  };
+
   return (
-    <>
+    <AlbisLeasingCtxProvider>
+      <button onClick={handleFakeClick} className="p-4">
+        FAKE
+      </button>
       <div className="max-w-[1280px] mx-auto p-[16px]">
         <PageTitle title="Albis Leasing" />
         <SectionCartItems
@@ -143,7 +161,7 @@ export const AlbisLeasing = ({
         </div>
       </div>
       <Snackbar success={!!errorMsg} text={errorMsg} />
-    </>
+    </AlbisLeasingCtxProvider>
   );
 };
 

@@ -1,4 +1,5 @@
 import { ChangeEvent, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Modal, openModal } from "../components/modal";
 import { PageTitle } from "../components/pagetitle";
 import { SectionCompanyManager } from "../components/sectionCompanyManager";
@@ -16,12 +17,11 @@ import {
   LineItem,
   createAlbisAppAndDraftOrder,
 } from "../utils/createAlbisAppAndDraftOrder";
+import { isFormFilled, resetForm } from "../utils/formValidation";
 import {
   formatDecimalNumber,
   isJsonRpcErrorResponse,
 } from "../utils/formatValues";
-import { isFormFilled, resetForm } from "../utils/formValidation";
-import { useNavigate } from "react-router-dom";
 
 type AlbisRequestProps = {
   cartData: ShoppingCart;
@@ -33,6 +33,7 @@ export const AlbisRequest = ({
   cartData,
 }: AlbisRequestProps) => {
   const [errorMsg, setErrorMsg] = useState("");
+  console.log("errorMsg", errorMsg);
   const [isLoading, setIsLoading] = useState(false);
   const [responseSuccess, setResponseSuccess] = useState(true);
   const [responseText, setResponseText] = useState(

@@ -1,4 +1,5 @@
 import { MockAntragsdaten } from "../mockData/mockData";
+import { baseServerUrl } from "./urls";
 
 export interface LineItem {
   variantId: string;
@@ -18,7 +19,7 @@ export const createAlbisAppAndDraftOrder = async (
       lineItems,
     });
     const response = await fetch(
-      `https://albisleasingapp.cpro-server.de/api/createAlbisAppAndDraftOrder`,
+      `${baseServerUrl}/api/createAlbisAppAndDraftOrder`,
       {
         method: "POST",
         body,

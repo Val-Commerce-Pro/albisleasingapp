@@ -1,5 +1,6 @@
 import { MockAntragsdaten } from "../mockData/mockData";
 import { Werte } from "../types/albisMethods";
+import { baseServerUrl } from "./urls";
 
 export const getAlbisMethodsData = async (
   method: string,
@@ -17,13 +18,10 @@ export const getAlbisMethodsData = async (
       antragsdaten,
       antragnr,
     });
-    const response = await fetch(
-      `https://albisleasingapp.cpro-server.de/api/getMethodsData`,
-      {
-        method: "POST",
-        body,
-      },
-    );
+    const response = await fetch(`${baseServerUrl}/api/getMethodsData`, {
+      method: "POST",
+      body,
+    });
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }

@@ -18,6 +18,7 @@ export async function completeDraftOrder(shop: string, draftOrderId?: string) {
     {
       variables: {
         id: draftOrderId,
+        paymentPending: true,
       },
     },
   );
