@@ -3,6 +3,7 @@ import { PageTitle } from "../components/pagetitle";
 import { SectionCalculator } from "../components/sectionCalculator";
 import { SectionCartItems } from "../components/sectionCartItems";
 import { SectionLeasingRates } from "../components/sectionLeasingRates";
+import { Snackbar } from "../components/snackbar";
 import { JsonRpcErrorResponse, LeasingRate } from "../types/albisMethods";
 import { ShoppingCart, ShoppingCartItem } from "../types/cartTypes";
 import { CalcData, LocalStorageI } from "../types/localStorage";
@@ -13,7 +14,6 @@ import {
 } from "../utils/formatValues";
 import { getAlbisMethodsData } from "../utils/getAlbisMethodsData";
 import { deleteCartItem, updateCartData } from "../utils/shopifyAjaxApi";
-import { Snackbar } from "../components/snackbar";
 
 type AlbisLeasingProps = {
   cartData: ShoppingCart;

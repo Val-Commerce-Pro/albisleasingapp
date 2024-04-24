@@ -37,7 +37,6 @@ export const SectionCalculator = ({
   >();
 
   useEffect(() => {
-    handleSave();
     const getAlbisData = async () => {
       const zahlungsweisenData: GetZahlungsweisen =
         await getAlbisMethodsData("getZahlungsweisen");

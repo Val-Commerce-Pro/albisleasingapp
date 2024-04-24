@@ -57,16 +57,25 @@ export const action: ActionFunction = async ({ request }) => {
         },
       });
     }
-    //handle error with JsonRpcErrorResponse
-    const getAntragDetailsData: GetAntragDetails = await getAlbisMethodsData({
-      method: "getAntragDetails",
-      shop,
-      antragnr: getStelleAntragData.result,
-    });
+    const newAntragDetails: GetAntragDetails | JsonRpcErrorResponse =
+      await getAlbisMethodsData({
+        method: "getAntragDetails",
+        shop,
+        antragnr: getStelleAntragData.result,
+      });
 
-    const { result } = getAntragDetailsData;
+    if (isJsonRpcErrorResponse(newAntragDetails)) {
+      console.error("RPC Error AntragDetails:", newAntragDetails);
+      return json(newAntragDetails, {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+        },
+      });
+    }
 
-    console.log("getAntragDetailsData", getAntragDetailsData);
+    const { result } = newAntragDetails;
+
+    console.log("new getAntragDetailsData", newAntragDetails);
 
     const antragnrDetails: AntragDetailsData = {
       antragnr: result.antragnr,
@@ -145,7 +154,7 @@ export const action: ActionFunction = async ({ request }) => {
 
     scheduleAntragCheck(antragnrData, shop);
 
-    return json(getAntragDetailsData, {
+    return json(newAntragDetails, {
       headers: {
         "Access-Control-Allow-Origin": "*",
       },
