@@ -16,7 +16,7 @@ export type CompanyManagerInfoData = {
   strasseGF: string;
   telGF: string;
   vorname: string;
-}
+};
 
 export type CompanyInfoData = {
   bank: string;
@@ -27,7 +27,7 @@ export type CompanyInfoData = {
   rechtsform: string;
   strasse: string;
   telefon: string;
-}
+};
 
 export interface LocalStorageI {
   calcData: CalcData;
@@ -42,13 +42,13 @@ export const initialStorageState: LocalStorageI = {
     objektVersicherungVorhanden: "",
     finanzierungsbetragNetto: "",
     anzahlung: "",
-    zahlungsweise: ""
+    zahlungsweise: "",
   },
   leasingRate: {
     laufzeit: 0,
     rate: 0,
     versicherung: 0,
-    schlusszahlung: undefined
+    schlusszahlung: undefined,
   },
   companyInfoData: {
     bank: "",
@@ -58,7 +58,7 @@ export const initialStorageState: LocalStorageI = {
     plz: "",
     rechtsform: "",
     strasse: "",
-    telefon: ""
+    telefon: "",
   },
   datenschutz: false,
   companyManagerInfoData: {
@@ -69,6 +69,6 @@ export const initialStorageState: LocalStorageI = {
     plzGF: "",
     strasseGF: "",
     telGF: "",
-    vorname: ""
-  }
-}
+    vorname: "",
+  },
+};

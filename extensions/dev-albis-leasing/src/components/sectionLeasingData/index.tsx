@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { GetZahlungsweisen } from "../../types/albisMethods";
-import { LocalStorageI } from "../../types/localStorage";
+import { initialStorageState, LocalStorageI } from "../../types/localStorage";
 import { formatDecimalNumber } from "../../utils/formatValues";
 import { Box } from "../box"
 import { getAlbisMethodsData } from "../../utils/getAlbisMethodsData";
@@ -21,7 +21,7 @@ export const SectionLeasingData = () => {
   }, []);
   
     const localStorageData = localStorage.getItem("cp@albisLeasing");
-    const localStorageJSON: LocalStorageI = JSON.parse(localStorageData ?? "No data");
+    const localStorageJSON: LocalStorageI = JSON.parse(localStorageData ?? initialStorageState.toString());
 
     return (
       <Box

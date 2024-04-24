@@ -139,10 +139,11 @@ export const SectionInfoCompany = () => {
         <TextField
           name="telefon"
           label="Telefon"
-          type="tel"
+          type="text"
           handleOnChange={handleInputChange}
           handleOnBlur={handleSave}
           handleKeyDown={handleSave}
+          textFieldValue={companyFormData.telefon}
           required
         />
         <TextField
