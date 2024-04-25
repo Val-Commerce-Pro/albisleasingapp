@@ -32,10 +32,8 @@ export const AlbisRequest = ({
   pluginConfData,
   cartData,
 }: AlbisRequestProps) => {
-  const [errorMsg, setErrorMsg] = useState("");
-  console.log("errorMsg", errorMsg);
   const [isLoading, setIsLoading] = useState(false);
-  const [responseSuccess, setResponseSuccess] = useState(true);
+  const [responseSuccess, setResponseSuccess] = useState(false);
   const [responseText, setResponseText] = useState(
     "Deine Leasing Anfrage an Albis wurde erfolgreich versendet! Weitere Informationen erhalten Sie per Mail",
   );
@@ -107,11 +105,9 @@ export const AlbisRequest = ({
     setIsLoading(false);
 
     if (isJsonRpcErrorResponse(response)) {
-      setErrorMsg(response.error.message);
       setResponseSuccess(false);
       setResponseText(response.error.message);
     } else {
-      setErrorMsg("");
       setResponseSuccess(true);
       setResponseText(
         "Deine Leasing Anfrage an Albis wurde erfolgreich versendet! Weitere Informationen erhalten Sie per Mail",

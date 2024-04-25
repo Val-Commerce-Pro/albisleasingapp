@@ -17,7 +17,8 @@ export const Modal = ({ onSubmit, isLoading, text, success }: ModalProps) => {
   function closeModal() {
     const modal = document.getElementById("static-modal");
     if (!modal) return;
-    modal.style.display = "none";
+    modal.classList.remove("flex");
+    modal.classList.add("hidden");
     setSubmitted(false);
   }
 
@@ -60,7 +61,7 @@ export const Modal = ({ onSubmit, isLoading, text, success }: ModalProps) => {
           <div className="flex gap-[8px] items-center justify-end p-[16px] md:p-[20px] border-t rounded-b-[4px] border-gray-600">
             <button
               onClick={closeModal}
-              disabled={success}
+              disabled={success || isLoading}
               data-modal-hide="static-modal"
               type="button"
               className="disabled:bg-gray-600 disabled:pointer-events-none h-[48px] py-[10px] px-[20px] ms-[12px] text-sm font-medium focus:outline-none rounded-lg border focus:z-10 focus:ring-4 focus:ring-gray-700 bg-gray-800 text-gray-400 border-gray-600 hover:text-white hover:bg-gray-700"
@@ -100,5 +101,6 @@ export const Modal = ({ onSubmit, isLoading, text, success }: ModalProps) => {
 export function openModal() {
   const modal = document.getElementById("static-modal");
   if (!modal) return;
-  modal.style.display = "flex";
+  modal.classList.remove("hidden");
+  modal.classList.add("flex");
 }

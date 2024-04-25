@@ -4,7 +4,6 @@ import { SectionCalculator } from "../components/sectionCalculator";
 import { SectionCartItems } from "../components/sectionCartItems";
 import { SectionLeasingRates } from "../components/sectionLeasingRates";
 import { Snackbar } from "../components/snackbar";
-import { AlbisLeasingCtxProvider } from "../context/albisLeasing";
 import { JsonRpcErrorResponse, LeasingRate } from "../types/albisMethods";
 import { ShoppingCart, ShoppingCartItem } from "../types/cartTypes";
 import { CalcData, LocalStorageI } from "../types/localStorage";
@@ -122,7 +121,7 @@ export const AlbisLeasing = ({
   };
 
   return (
-    <AlbisLeasingCtxProvider>
+    <>
       <button onClick={handleFakeClick} className="p-4">
         FAKE
       </button>
@@ -161,7 +160,7 @@ export const AlbisLeasing = ({
         </div>
       </div>
       <Snackbar success={!!errorMsg} text={errorMsg} />
-    </AlbisLeasingCtxProvider>
+    </>
   );
 };
 
