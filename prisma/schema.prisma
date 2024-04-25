@@ -86,5 +86,5 @@ model ShopifyOrders {
   draftOrderId  String        @unique
   orderId       String        @unique
   antragnr      Int           @unique
-  antragDetails AntragDetails @relation(fields: [antragnr], references: [id])
+  antragDetails AntragDetails @relation(fields: [antragnr], references: [antragnr])
 }

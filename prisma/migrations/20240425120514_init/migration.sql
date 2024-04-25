@@ -101,4 +101,4 @@ ALTER TABLE `ModulZugangsdaten` ADD CONSTRAINT `ModulZugangsdaten_modulAktivId_f
 ALTER TABLE `ModulEinstellungen` ADD CONSTRAINT `ModulEinstellungen_zugangsdatenId_fkey` FOREIGN KEY (`zugangsdatenId`) REFERENCES `ModulZugangsdaten`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `ShopifyOrders` ADD CONSTRAINT `ShopifyOrders_antragnr_fkey` FOREIGN KEY (`antragnr`) REFERENCES `AntragDetails`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `ShopifyOrders` ADD CONSTRAINT `ShopifyOrders_antragnr_fkey` FOREIGN KEY (`antragnr`) REFERENCES `AntragDetails`(`antragnr`) ON DELETE RESTRICT ON UPDATE CASCADE;
