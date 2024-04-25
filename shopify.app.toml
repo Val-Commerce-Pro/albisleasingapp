@@ -6,7 +6,7 @@ application_url = "https://minds-forest-customer-recreational.trycloudflare.com"
 embedded = true
 
 [build]
-automatically_update_urls_on_dev = true
+automatically_update_urls_on_dev = false
 dev_store_url = "commerce-albis-leasing.myshopify.com"
 include_config_on_deploy = true
 

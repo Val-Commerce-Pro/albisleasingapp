@@ -130,7 +130,7 @@ export const AlbisLeasing = ({
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
-    console.log("handleFakeClick", handleFakeClick);
+    console.log("handleFakeClick", response);
     const data = await response.json();
     return data;
   };

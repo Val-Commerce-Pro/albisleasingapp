@@ -5,6 +5,7 @@ import { updateAntragDetails } from "~/models/antragDetails";
 import { getShopifyOrders } from "~/models/createDbShopifyOrder";
 import { addNoteToOrder } from "./shopify/graphql/addNoteToOrder";
 import { cancelOrder } from "./shopify/graphql/orderCancel";
+import { orderMarkAsPaid } from "./shopify/graphql/orderMarkAsPaid";
 import type { GetAntragDetails, JsonRpcErrorResponse } from "./types/methods";
 import { isJsonRpcErrorResponse } from "./utils/formatData";
 import { getAlbisMethodsData } from "./utils/getAlbisMethodsData";
@@ -46,7 +47,9 @@ export const action: ActionFunction = async ({ request }) => {
     }
     const { result } = newAntragDetails;
     const statusData = checkAntragStatus(result.status, result.status_txt);
-    const checkDates = antragnrData.lastCheckAt ? JSON.parse(antragnrData.lastCheckAt): ""
+    const checkDates = antragnrData.lastCheckAt
+      ? JSON.parse(antragnrData.lastCheckAt)
+      : "";
     console.log("checkDates", checkDates);
     const newLastCheckAt = [...checkDates, getCurrentFormattedTime()];
     console.log("newLastCheckAt", newLastCheckAt);
@@ -101,11 +104,25 @@ export const action: ActionFunction = async ({ request }) => {
         const cancellingOrder = await cancelOrder(shop, shopifyOrders.orderId, {
           notifyCustomer: true,
           reason: "OTHER",
-          refund: true,
+          refund: false,
           restock: true,
         });
         console.log("cancelledOrder", cancellingOrder);
         break;
+      case "Paid":
+        const paidOrder = await orderMarkAsPaid(shop, shopifyOrders.orderId);
+        console.log("orderMarkAsPaid", paidOrder);
+        break;
+      case "Refund":
+        const refundedOrder = await cancelOrder(shop, shopifyOrders.orderId, {
+          notifyCustomer: true,
+          reason: "OTHER",
+          refund: true,
+          restock: true,
+        });
+        console.log("refundedOrder", refundedOrder);
+        break;
+
       default:
         console.log("No Action found");
         break;

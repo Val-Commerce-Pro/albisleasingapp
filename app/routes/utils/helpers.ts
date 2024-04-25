@@ -13,8 +13,23 @@
 
 export function getCurrentFormattedTime(): string {
   const date = new Date();
-  const formattedDate = date.toDateString() + " " + date.toLocaleTimeString();
-  console.log("formattedDate", formattedDate);
+  const options: Intl.DateTimeFormatOptions = {
+    timeZone: "Europe/Berlin",
+    weekday: "short",
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false,
+  };
+  const formatter = new Intl.DateTimeFormat("en-US", {
+    ...options,
+    timeZone: "Europe/Berlin",
+  });
+  const formattedDate = formatter.format(date);
+  console.log("formattedDate with timeZone Europe/Berlin:", formattedDate);
   return formattedDate;
 }
 
