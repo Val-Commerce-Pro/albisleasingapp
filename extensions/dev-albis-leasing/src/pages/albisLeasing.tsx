@@ -13,7 +13,11 @@ import {
   isJsonRpcErrorResponse,
 } from "../utils/formatValues";
 import { getAlbisMethodsData } from "../utils/getAlbisMethodsData";
-import { deleteCartItem, updateCartData } from "../utils/shopifyAjaxApi";
+import {
+  clearCartData,
+  deleteCartItem,
+  updateCartData,
+} from "../utils/shopifyAjaxApi";
 import { baseServerUrl } from "../utils/urls";
 
 type AlbisLeasingProps = {
@@ -107,12 +111,17 @@ export const AlbisLeasing = ({
     }
   };
 
+  /* TEsting part */
+
+  const [teest, setTeest] = useState({
+    antragnrFront: 500766,
+    statusFront: 930,
+    statusTxtFront: "Cancel",
+  });
+
   const handleFakeClick = async () => {
-    const body = JSON.stringify({
-      antragnrFront: 500766,
-      statusFront: 930,
-      statusTxtFront: "Cancel",
-    });
+    const body = JSON.stringify({ ...teest });
+    console.log("teest", teest);
     const response = await fetch(`${baseServerUrl}/api/checkADFake`, {
       method: "POST",
       body,
@@ -125,12 +134,54 @@ export const AlbisLeasing = ({
     const data = await response.json();
     return data;
   };
+  const handleClearClick = async () => {
+    const clearCartDa = await clearCartData();
+    console.log("handleClearClick", clearCartDa);
+  };
 
   return (
     <>
-      <button onClick={handleFakeClick} className="p-4">
+      <button onClick={handleFakeClick} className="p-4 border-2">
         FAKE
       </button>
+      <button onClick={handleClearClick} className="p-4 border-2">
+        CLEAR CART
+      </button>
+      <form>
+        <input
+          type="text"
+          placeholder="antragnrFront"
+          value={teest.antragnrFront}
+          onChange={(e) =>
+            setTeest((prev) => ({
+              ...prev,
+              antragnrFront: Number(e.target.value),
+            }))
+          }
+        />
+        <input
+          type="text"
+          placeholder="statusFront"
+          value={teest.statusFront}
+          onChange={(e) =>
+            setTeest((prev) => ({
+              ...prev,
+              statusFront: Number(e.target.value),
+            }))
+          }
+        />
+        <input
+          type="text"
+          placeholder="statusTxtFront"
+          value={teest.statusTxtFront}
+          onChange={(e) =>
+            setTeest((prev) => ({
+              ...prev,
+              statusTxtFront: e.target.value,
+            }))
+          }
+        />
+      </form>
       <div className="max-w-[1280px] mx-auto p-[16px]">
         <PageTitle title="Albis Leasing" />
         <SectionCartItems

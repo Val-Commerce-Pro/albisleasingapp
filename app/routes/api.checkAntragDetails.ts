@@ -35,7 +35,7 @@ export const action: ActionFunction = async ({ request }) => {
         },
       });
     }
-    const shopifyOrders = await getShopifyOrders(antragnrData.id);
+    const shopifyOrders = await getShopifyOrders(antragnrData.antragnr);
     if (!shopifyOrders) {
       return new Response("Error processing shopify Orders Data", {
         status: 500,
@@ -46,7 +46,7 @@ export const action: ActionFunction = async ({ request }) => {
     }
     const { result } = newAntragDetails;
     const statusData = checkAntragStatus(result.status, result.status_txt);
-    const checkDates = JSON.parse(antragnrData.lastCheckAt);
+    const checkDates = antragnrData.lastCheckAt ? JSON.parse(antragnrData.lastCheckAt): ""
     console.log("checkDates", checkDates);
     const newLastCheckAt = [...checkDates, getCurrentFormattedTime()];
     console.log("newLastCheckAt", newLastCheckAt);
