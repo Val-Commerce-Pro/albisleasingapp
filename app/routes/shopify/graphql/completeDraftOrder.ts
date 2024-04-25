@@ -5,10 +5,10 @@ export async function completeDraftOrder(shop: string, draftOrderId?: string) {
 
   const response = await graphQlClient.request(
     `#graphql
-    mutation draftOrderComplete($id: ID!) {
-      draftOrderComplete(id: $id) {
+    mutation draftOrderComplete($id: ID!, $paymentPending: Boolean!) {
+      draftOrderComplete(id: $id, paymentPending: $paymentPending) {
         draftOrder {
-          id
+          id,
           order {
             id
           }
