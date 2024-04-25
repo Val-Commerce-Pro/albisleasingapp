@@ -86,11 +86,11 @@ CREATE TABLE `ShopifyOrders` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `draftOrderId` VARCHAR(191) NOT NULL,
     `orderId` VARCHAR(191) NOT NULL,
-    `AntragDetailsId` INTEGER NOT NULL,
+    `antragnr` INTEGER NOT NULL,
 
     UNIQUE INDEX `ShopifyOrders_draftOrderId_key`(`draftOrderId`),
     UNIQUE INDEX `ShopifyOrders_orderId_key`(`orderId`),
-    UNIQUE INDEX `ShopifyOrders_AntragDetailsId_key`(`AntragDetailsId`),
+    UNIQUE INDEX `ShopifyOrders_antragnr_key`(`antragnr`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -101,4 +101,4 @@ ALTER TABLE `ModulZugangsdaten` ADD CONSTRAINT `ModulZugangsdaten_modulAktivId_f
 ALTER TABLE `ModulEinstellungen` ADD CONSTRAINT `ModulEinstellungen_zugangsdatenId_fkey` FOREIGN KEY (`zugangsdatenId`) REFERENCES `ModulZugangsdaten`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `ShopifyOrders` ADD CONSTRAINT `ShopifyOrders_AntragDetailsId_fkey` FOREIGN KEY (`AntragDetailsId`) REFERENCES `AntragDetails`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `ShopifyOrders` ADD CONSTRAINT `ShopifyOrders_antragnr_fkey` FOREIGN KEY (`antragnr`) REFERENCES `AntragDetails`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

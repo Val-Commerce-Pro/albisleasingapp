@@ -5,9 +5,9 @@ import { updateAntragDetails } from "~/models/antragDetails";
 import { getShopifyOrders } from "~/models/createDbShopifyOrder";
 import { addNoteToOrder } from "./shopify/graphql/addNoteToOrder";
 // import type { GetAntragDetails, JsonRpcErrorResponse } from "./types/methods";
-import { getCurrentFormattedTime } from "./utils/formatData";
 // import { getAlbisMethodsData } from "./utils/getAlbisMethodsData";
-import { checkAntragStatus } from "./utils/helpers";
+import { cancelOrder } from "./shopify/graphql/orderCancel";
+import { checkAntragStatus, getCurrentFormattedTime } from "./utils/helpers";
 
 // type CheckAntrageDetailsBody = {
 //   shop: string;
@@ -15,12 +15,19 @@ import { checkAntragStatus } from "./utils/helpers";
 // };
 
 export const action: ActionFunction = async ({ request }) => {
+  const data = await request.json();
+  const {
+    antragnrFront,
+    statusFront,
+    statusTxtFront,
+  }: { antragnrFront: number; statusFront: number; statusTxtFront: string } =
+    data;
   console.log("CheckADFAke route called");
   const antragnrData = {
     id: 1,
     jsonrpc: "2.0",
     result: {
-      antragnr: 500765,
+      antragnr: antragnrFront ?? 500765,
       objekt: "EDV EDV (Hard- und Software)",
       kaufpreis: 1625.0,
       mietsz: 0.0,
@@ -87,7 +94,7 @@ export const action: ActionFunction = async ({ request }) => {
     //     },
     //   });
     // }
-    const shopifyOrders = await getShopifyOrders(26);
+    const shopifyOrders = await getShopifyOrders(antragnrData.result.antragnr);
     if (!shopifyOrders) {
       return new Response("Error processing shopify Orders Data", {
         status: 500,
@@ -97,7 +104,7 @@ export const action: ActionFunction = async ({ request }) => {
       });
     }
     const { result } = antragnrData;
-    const statusData = checkAntragStatus(980, "abgerechnet");
+    const statusData = checkAntragStatus(statusFront, statusTxtFront);
     const checkDates = ["mock Data"];
     console.log("checkDates", checkDates);
     const newLastCheckAt = [...checkDates, getCurrentFormattedTime()];
@@ -133,8 +140,8 @@ export const action: ActionFunction = async ({ request }) => {
       ln_mobil: result.ln_mobil,
       ln_name: result.ln_name,
       ln_telefon: result.ln_telefon,
-      status: 980,
-      status_txt: "abgerechnet",
+      status: statusFront,
+      status_txt: statusTxtFront,
       lastCheckAt: JSON.stringify([...checkDates, getCurrentFormattedTime()]),
     });
     if (!updatedAntragData) {
@@ -147,6 +154,22 @@ export const action: ActionFunction = async ({ request }) => {
     }
     console.log("newNote", statusData.statusNote);
     await addNoteToOrder(shop, shopifyOrders.orderId, statusData.statusNote);
+
+    switch (statusData.action) {
+      case "Cancel":
+        const cancellingOrder = await cancelOrder(shop, shopifyOrders.orderId, {
+          notifyCustomer: true,
+          reason: "OTHER",
+          refund: true,
+          restock: true,
+        });
+        console.log("cancelledOrder", cancellingOrder);
+        break;
+      default:
+        console.log("No Action found");
+        break;
+    }
+    console.log("CheckAntragDetails FAKE Final func");
 
     return json(
       {

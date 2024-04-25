@@ -11,13 +11,38 @@
 //   "996": "wird storniert",
 //   "997": "storniert",
 
-import { getCurrentFormattedTime } from "./formatData";
+export function getCurrentFormattedTime(): string {
+  const date = new Date();
+  const formattedDate = date.toDateString() + " " + date.toLocaleTimeString();
+  console.log("formattedDate", formattedDate);
+  return formattedDate;
+}
 
-const statusToFinishLeasingRequest = [980, 996, 997];
+type FinishStatus = "Cancel" | "Paid" | "Refund" | "None";
 
-export const checkAntragStatus = (status: number, statusTxt: string) => {
+const statusToFinishLeasingRequest: Record<string, FinishStatus> = {
+  "930": "Cancel",
+  "980": "Paid",
+  "996": "Refund",
+  "997": "Refund",
+};
+
+type CheckAntragStatusResponse = {
+  isStatusFinish: boolean;
+  statusNote: string;
+  action: FinishStatus;
+};
+
+export const checkAntragStatus = (
+  status: number,
+  statusTxt: string,
+): CheckAntragStatusResponse => {
+  const statusKey = status.toString();
+  const isStatusFinish = !!statusToFinishLeasingRequest[statusKey];
+
   return {
-    isStatusFinish: statusToFinishLeasingRequest.includes(status),
-    statusNote: `Albis Leasing Request Status: ${statusTxt} - Checked at - ${getCurrentFormattedTime()}`,
+    isStatusFinish: isStatusFinish,
+    statusNote: `Albis Leasing Request Status: ${statusTxt} - Checked at ${getCurrentFormattedTime()}`,
+    action: isStatusFinish ? statusToFinishLeasingRequest[statusKey] : "None",
   };
 };

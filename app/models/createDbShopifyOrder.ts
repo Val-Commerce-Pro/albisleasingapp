@@ -2,7 +2,7 @@ import type { AntragDetails, ShopifyOrders } from "@prisma/client";
 import db from "../db.server";
 
 export async function createDbShopifyOrder(
-  antragDataId: AntragDetails["id"],
+  antragnr: AntragDetails["antragnr"],
   orders: Pick<ShopifyOrders, "draftOrderId" | "orderId">,
 ) {
   try {
@@ -11,7 +11,7 @@ export async function createDbShopifyOrder(
         orderId: orders.orderId,
         draftOrderId: orders.draftOrderId,
         antragDetails: {
-          connect: { id: antragDataId },
+          connect: { antragnr },
         },
       },
     });
@@ -23,12 +23,12 @@ export async function createDbShopifyOrder(
 }
 
 export async function getShopifyOrders(
-  AntragDetailsId: AntragDetails["id"],
+  antragnr: AntragDetails["antragnr"],
 ): Promise<ShopifyOrders | null> {
   try {
     const AntragDetails = await db.shopifyOrders.findUnique({
       where: {
-        AntragDetailsId,
+        antragnr,
       },
     });
     return AntragDetails;

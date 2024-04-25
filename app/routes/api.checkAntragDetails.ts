@@ -4,13 +4,11 @@ import { json } from "@remix-run/node";
 import { updateAntragDetails } from "~/models/antragDetails";
 import { getShopifyOrders } from "~/models/createDbShopifyOrder";
 import { addNoteToOrder } from "./shopify/graphql/addNoteToOrder";
+import { cancelOrder } from "./shopify/graphql/orderCancel";
 import type { GetAntragDetails, JsonRpcErrorResponse } from "./types/methods";
-import {
-  getCurrentFormattedTime,
-  isJsonRpcErrorResponse,
-} from "./utils/formatData";
+import { isJsonRpcErrorResponse } from "./utils/formatData";
 import { getAlbisMethodsData } from "./utils/getAlbisMethodsData";
-import { checkAntragStatus } from "./utils/helpers";
+import { checkAntragStatus, getCurrentFormattedTime } from "./utils/helpers";
 
 type CheckAntrageDetailsBody = {
   shop: string;
@@ -98,6 +96,21 @@ export const action: ActionFunction = async ({ request }) => {
     console.log("newNote", statusData.statusNote);
     await addNoteToOrder(shop, shopifyOrders.orderId, statusData.statusNote);
 
+    switch (statusData.action) {
+      case "Cancel":
+        const cancellingOrder = await cancelOrder(shop, shopifyOrders.orderId, {
+          notifyCustomer: true,
+          reason: "OTHER",
+          refund: true,
+          restock: true,
+        });
+        console.log("cancelledOrder", cancellingOrder);
+        break;
+      default:
+        console.log("No Action found");
+        break;
+    }
+    console.log("CheckAntragDetails Final func");
     return json(
       {
         antragnr: result.antragnr,

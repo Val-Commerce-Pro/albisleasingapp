@@ -69,10 +69,3 @@ export function appendUniqueNote(
   if (!existingNotes.includes(newNote)) return `${existingNotes}\n${newNote}`;
   return existingNotes;
 }
-
-export function getCurrentFormattedTime(): string {
-  const date = new Date();
-  const formattedDate = date.toDateString() + " " + date.toLocaleTimeString();
-  console.log("formattedDate", formattedDate);
-  return formattedDate;
-}

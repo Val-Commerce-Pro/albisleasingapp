@@ -108,8 +108,14 @@ export const AlbisLeasing = ({
   };
 
   const handleFakeClick = async () => {
+    const body = JSON.stringify({
+      antragnrFront: 500766,
+      statusFront: 930,
+      statusTxtFront: "Cancel",
+    });
     const response = await fetch(`${baseServerUrl}/api/checkADFake`, {
       method: "POST",
+      body,
     });
 
     if (!response.ok) {

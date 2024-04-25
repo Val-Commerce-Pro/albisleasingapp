@@ -14,11 +14,9 @@ import type {
   GetStelleAntrag,
   JsonRpcErrorResponse,
 } from "./types/methods";
-import {
-  getCurrentFormattedTime,
-  isJsonRpcErrorResponse,
-} from "./utils/formatData";
+import { isJsonRpcErrorResponse } from "./utils/formatData";
 import { getAlbisMethodsData } from "./utils/getAlbisMethodsData";
+import { getCurrentFormattedTime } from "./utils/helpers";
 
 type DraftOrderResponse = {
   draftOrderCreate: {
@@ -146,7 +144,7 @@ export const action: ActionFunction = async ({ request }) => {
       data: CompleteDraftOrderData,
     }: { data?: CompleteDraftOrderResponse } = completeOrderResponse;
 
-    await createDbShopifyOrder(antragnrData.id, {
+    await createDbShopifyOrder(antragnrData.antragnr, {
       draftOrderId: draftOrderData?.draftOrderCreate.draftOrder.id ?? "",
       orderId:
         CompleteDraftOrderData?.draftOrderComplete.draftOrder.order.id ?? "",

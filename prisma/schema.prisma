@@ -82,9 +82,9 @@ model AntragDetails {
 }
 
 model ShopifyOrders {
-  id              Int           @id @default(autoincrement())
-  draftOrderId    String        @unique
-  orderId         String        @unique
-  AntragDetailsId Int           @unique
-  antragDetails   AntragDetails @relation(fields: [AntragDetailsId], references: [id])
+  id            Int           @id @default(autoincrement())
+  draftOrderId  String        @unique
+  orderId       String        @unique
+  antragnr      Int           @unique
+  antragDetails AntragDetails @relation(fields: [antragnr], references: [id])
 }
