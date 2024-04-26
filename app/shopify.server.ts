@@ -1,4 +1,4 @@
-import { restResources } from "@shopify/shopify-api/rest/admin/2024-01";
+import { restResources } from "@shopify/shopify-api/rest/admin/2024-04";
 import "@shopify/shopify-app-remix/adapters/node";
 import {
   AppDistribution,
@@ -24,14 +24,6 @@ const shopify = shopifyApp({
       deliveryMethod: DeliveryMethod.Http,
       callbackUrl: "/webhooks",
     },
-    CARTS_CREATE: {
-      deliveryMethod: DeliveryMethod.Http,
-      callbackUrl: "/webhooks",
-    },
-    CARTS_UPDATE: {
-      deliveryMethod: DeliveryMethod.Http,
-      callbackUrl: "/webhooks",
-    },
   },
   hooks: {
     afterAuth: async ({ session }) => {
@@ -42,7 +34,8 @@ const shopify = shopifyApp({
     v3_webhookAdminContext: true,
     v3_authenticatePublic: true,
     unstable_newEmbeddedAuthStrategy: true,
-  },
+    v3_lineItemBilling: true,
+    },
   ...(process.env.SHOP_CUSTOM_DOMAIN
     ? { customShopDomains: [process.env.SHOP_CUSTOM_DOMAIN] }
     : {}),

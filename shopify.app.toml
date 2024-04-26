@@ -2,7 +2,7 @@
 
 client_id = "d26fcc8d70e2ee344e86b88ff3ea8a89"
 name = "albis"
-application_url = "https://minds-forest-customer-recreational.trycloudflare.com"
+application_url = "https://albisleasingapp.cpro-server.de"
 embedded = true
 
 [build]
@@ -16,13 +16,13 @@ scopes = "write_draft_orders,write_orders,write_products"
 
 [auth]
 redirect_urls = [
-  "https://minds-forest-customer-recreational.trycloudflare.com/auth/callback",
-  "https://minds-forest-customer-recreational.trycloudflare.com/auth/shopify/callback",
-  "https://minds-forest-customer-recreational.trycloudflare.com/api/auth/callback"
+  "https://albisleasingapp.cpro-server.de/auth/callback",
+  "https://albisleasingapp.cpro-server.de/auth/shopify/callback",
+  "https://albisleasingapp.cpro-server.de/api/auth/callback"
 ]
 
 [webhooks]
-api_version = "2024-01"
+api_version = "2024-04"
 
 [pos]
 embedded = false
