@@ -30,6 +30,7 @@ export const SectionCalculator = ({
     finanzierungsbetragNetto: finanzierungsbetragNetto.toString(),
     anzahlung: "0",
     zahlungsweise: `${zahlungsweisenPlugin}`,
+    zahlungsweiseLabel: "",
   });
 
   const [zahlungsweisen, setZahlungsweisen] = useState<
@@ -42,16 +43,35 @@ export const SectionCalculator = ({
       const zahlungsweisenData: GetZahlungsweisen =
         await getAlbisMethodsData("getZahlungsweisen");
       setZahlungsweisen(zahlungsweisenData);
+      setFormData((prev) => ({
+        ...prev,
+        zahlungsweiseLabel:
+          zahlungsweisenPlugin === "1"
+            ? zahlungsweisenData.result[0].bezeichnung
+            : zahlungsweisenData.result[1].bezeichnung,
+      }));
     };
     getAlbisData();
   }, []);
 
-  function handleOnChange(
-    event: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-  ) {
+  function handleOnChange(event: ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   }
+
+  const handleSelectOnChange = (e: ChangeEvent<HTMLSelectElement>): void => {
+    console.log(e);
+    const { name, value } = e.target;
+    if (name === "zahlungsweise") {
+      const label = e.target.options[e.target.selectedIndex].text;
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+        zahlungsweiseLabel: label,
+      }));
+      return;
+    }
+  };
 
   function handleSave() {
     const formattedCalcData: CalcData = {
@@ -88,7 +108,7 @@ export const SectionCalculator = ({
     >
       <div className="w-full h-full flex flex-col gap-[16px] p-[12px] overflow-x-auto shadow-md rounded-b-lg">
         <Select
-          handleChange={handleOnChange}
+          handleChange={handleSelectOnChange}
           name="objektVersicherungVorhanden"
           label="Objekt-Versicherung vorhanden:"
           selectedValue={formData.objektVersicherungVorhanden}
@@ -119,7 +139,7 @@ export const SectionCalculator = ({
         />
         {zahlungsweisen && (
           <Select
-            handleChange={handleOnChange}
+            handleChange={handleSelectOnChange}
             name="zahlungsweise"
             label="Zahlungsweise:"
             selectedValue={zahlungsweisenPlugin}
