@@ -70,7 +70,10 @@ export const Modal = ({ onSubmit, isLoading, text, success }: ModalProps) => {
             </button>
             {submitted && !isLoading && success ? (
               <button
-                onClick={() => navigate("/")}
+                onClick={() => {
+                  navigate("/");
+                  location.reload();
+                }}
                 data-modal-hide="static-modal"
                 type="submit"
                 className="min-w-[145px] h-[48px] text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-[20px] py-[10px] text-center bg-blue-600 hover:bg-blue-700 focus:ring-blue-800"
